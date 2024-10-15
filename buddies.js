@@ -84,7 +84,7 @@ const mainScript = () => {
     if( viewport.w > 991){
       let tlTrigger = new gsap.timeline({
         scrollTrigger: {
-          trigger: '.home-partner',
+          trigger: '.home-conquer',
           start: "top bottom+=50%",
           end: "bottom top",
           once: true,
@@ -100,22 +100,24 @@ const mainScript = () => {
     function setup (){
       $('.home-conquer-faqs-title').on('click', function(){
         let index = $(this).index();
-        if($(this).hasClass('active')){
-          $('.home-conquer-faqs-title').removeClass('active');
+        console.log(index)
+        if($(this).closest('.home-conquer-faqs-item').hasClass('active')){
+          $('.home-conquer-faqs-item').removeClass('active');
           $('.home-conquer-faqs-content').slideUp();
         }
         else{
-          $('.home-conquer-faqs-title').removeClass('active');
+          $('.home-conquer-faqs-item').removeClass('active');
           $('.home-conquer-faqs-content').slideUp();
-          $(this).addClass('active');
-          $(this).find('.home-conquer-faqs-content').slideDown();
+          $(this).closest('.home-conquer-faqs-item').addClass('active');
+          console.log($(this).closest('.home-conquer-faqs-item').find('.home-conquer-faqs-content'))
+          $(this).closest('.home-conquer-faqs-item').find('.home-conquer-faqs-content').slideDown();
         }
 
       })
     }
   }
   homePartner();
-
+homeConquer();
   };
   const pageName = $(".main").attr("name-space");
   if (pageName) {
