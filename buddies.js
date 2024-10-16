@@ -98,6 +98,7 @@ const mainScript = () => {
       setup();
     }
     function setup (){
+      
       $('.home-conquer-faqs-title').on('click', function(){
         let index = $(this).index();
         console.log(index)
@@ -115,6 +116,8 @@ const mainScript = () => {
 
       })
     }
+    $('.home-conquer-faqs-item').eq(0).addClass('active');
+    $('.home-conquer-faqs-content').eq(0).slideDown();
   }
   function homeTesti(){
     
