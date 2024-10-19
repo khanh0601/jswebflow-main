@@ -4,6 +4,45 @@ const mainScript = () => {
   const parseRem = (input) => {
     return (input / 10) * parseFloat($("html").css("font-size"));
   };
+  function globalScript(){
+    // loadingPage();
+
+    // if ($(".hide-def-div").length > 0) {
+    //   $(".hide-def-div").removeClass("hide-def-div");
+    // }
+  }
+  class Loading {
+    constructor() {
+        this.tlLoading;
+        this.isLoaded = sessionStorage.getItem("isLoaded") == 'true' ? true : false;
+    }
+    init() {
+      let tl = new gsap.timeline({
+        onStart : () => {
+          lenis.stop();
+          $(".loading-page").removeClass("loaded");
+        },
+        onComplete: () =>{
+          lenis.start();
+          $('.main-wrap').removeClass('hide-def-div')
+          $(".loading-page").addClass("loaded");
+        }
+      });
+      tl  
+      .from('.loading-page .loading-page-inner', {duration: 1,autoAlpha: 0,ease: "power1.out",})
+      .to('.loading-page .loading-page-inner', {duration: 1,autoAlpha: 0,ease: "power1.out",})
+    }
+    animHero(){
+        console.log('hero loaded')
+        // if ($('[data-barba-namespace="home"]').length) {
+        //     homeHeroCanvas.init();
+        //     homeHero.play();
+        // } else if ($('[data-barba-namespace="about"]').length) {
+        //     aboutHero.play()
+        // }
+    }
+}
+let loading = new Loading()
   let lenis = new Lenis({});
   gsap.registerPlugin(ScrollTrigger);
   function raf(time) {
@@ -40,29 +79,25 @@ const mainScript = () => {
       $(this).find('.ic-ham-open').addClass('active');
     }
    })
-  SCRIPT.homeScript = () => {
-    console.log('khanh123')
-    function homePartner(){
-      
-      if($(window).width()>991){
-       
-      let tlTrigger = new gsap.timeline({
-        scrollTrigger: {
-          trigger: '.home-partner',
-          start: "top bottom+=100%",
-          end: "bottom top",
-          once: true,
-          onEnter: () => {
-            setup();
-          },
-        }
-      })
-      
+    class HomePartner{
+      constructor() {
+        this.tlTrigger;
       }
-      else{
-            setup();
+      setTrigger(){
+        this.tlTrigger = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.home-partner',
+            start: "top bottom+=100%",
+            end: "bottom top",
+            once: true,
+            onEnter: () => {
+              this.setup();
+            },
+          }
+        })
       }
-      function setup() {
+      
+      setup() {
         let allCms = $('.home-partner-cms');
         allCms.each((idx, item) => {
           let $originalListBrand = $(item).find(".home-partner-list");
@@ -93,7 +128,9 @@ const mainScript = () => {
         })
         
       }
+      
     }
+  let homePartner = new HomePartner();
   function homeConquer(){
     
     if( viewport.w > 991){
@@ -262,14 +299,62 @@ const mainScript = () => {
     })
     }
   }
-homePartner();
-homeConquer();
-homeTesti();
-homeBlog();
-  };
-  const pageName = $(".main").attr("name-space");
-  if (pageName) {
-    SCRIPT[`${pageName}Script`]();
-  }
+
+  const SCRIPTS = {
+    home: {
+        namespace: 'home',
+        afterEnter() {
+            console.log('home afterEnter');
+            // homeHero.setup();
+            homePartner.setTrigger();
+        },
+        beforeLeave() {
+            console.log('home clean')
+        }
+    },
+}
+const VIEWS = Object.values(SCRIPTS);
+barba.init({
+  preventRunning: true,
+  sync: true,
+  debug: true,
+  transitions: [{
+      name: 'default-transition',
+      sync: true,
+      once(data) {
+          globalScript();
+          loading.init();
+      },
+      beforeLeave({current}) {
+          lenis.stop()
+      },
+      async leave(data) {
+          // footer.destroy();
+          // // console.log('leave global')
+          // await pageTrans.leaveAnim(data).then(() => {
+          //     console.log('trans enter')
+          //     pageTrans.enterAnim(data)
+          // })
+      },
+      afterLeave(data) {
+          console.log('after leave global')
+      },
+      beforeEnter(data){
+          lenis.start();
+          console.log('before enter')
+      },
+      enter(data) {
+          
+          console.log('enter global')
+      },
+      afterEnter(data) {
+          // Trans
+
+          console.log('after enter global')
+          // footerSocialMouse()
+      },
+  }],
+  views: VIEWS
+})
 };
 window.onload = mainScript;
