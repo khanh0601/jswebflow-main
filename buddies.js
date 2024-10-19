@@ -14,7 +14,22 @@ const mainScript = () => {
     w: window.innerWidth,
     h: window.innerHeight
 }
-  requestAnimationFrame(raf)
+  requestAnimationFrame(raf);
+  
+  lenis.on("scroll", function (inst) {
+    if (inst.scroll > $(".kv-header").height() * 0.75) {
+      console.log(inst.direction)
+      if (inst.direction >= 1) {
+        $(".kv-header").addClass("on-hide");
+      } else if(inst.direction<=-1 ) {
+        $(".kv-header").removeClass("on-hide");
+      }
+      $(".kv-header").addClass("on-scroll");
+    } else {
+      $(".kv-header").removeClass("on-scroll");
+      $(".kv-header").removeClass("on-hide");
+    }
+  });
    $('.header-ham').on('click',function(){
     $('.header-menu-wrap').toggleClass('active');
     $(this).find('.ic').removeClass('active');
@@ -34,7 +49,7 @@ const mainScript = () => {
       let tlTrigger = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-partner',
-          start: "top bottom+=50%",
+          start: "top bottom+=100%",
           end: "bottom top",
           once: true,
           onEnter: () => {
@@ -146,7 +161,7 @@ const mainScript = () => {
   }
      var swiperTesti = new  Swiper(".home-testi-cms ", {
       slidesPerView: 1,
-      spaceBetween: 28,
+      spaceBetween: parseRem(28),
       pagination: {
         el: ".swiper-pagination",
         // able click
@@ -182,9 +197,75 @@ const mainScript = () => {
     })
     }
   }
+   function homeBlog(){
+    
+    if( viewport.w > 991){
+      let tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.home-blog',
+          start: "top bottom+=50%",
+          end: "bottom top",
+          once: true,
+          onEnter: () => {
+            setup();
+          },
+        }
+      })
+    }
+    else{
+      setup();
+    }
+  function setup (){
+      const paginationDiv = document.createElement('div');
+  paginationDiv.classList.add('swiper-pagination');
+  const swiper = document.querySelector('.swiper.home-blog-cms');
+  if (swiper) {
+    swiper.appendChild(paginationDiv);
+  }
+     var swiperTesti = new  Swiper(".home-blog-cms ", {
+      slidesPerView: 4,
+      spaceBetween: parseRem(28),
+      pagination: {
+        el: ".swiper-pagination",
+        // able click
+        clickable: true
+      },
+      on: {
+        init: function () {
+          if (this.activeIndex == 0) {
+            $('.home-blog-main-control-prev').css('opacity', '.3');
+          }
+        },
+        slideChange: function () {
+          if (this.activeIndex == 0) {
+            $('.home-blog-main-control-prev').css('opacity', '.3');
+          }
+          else{
+            $('.home-blog-main-control-prev').css('opacity', '1');
+          }
+          console.log(this.activeIndex)
+          if (this.activeIndex == this.slides.length - 4) {
+
+            $('.home-blog-main-control-next').css('opacity', '.3');
+          }
+          else{
+            $('.home-blog-main-control-next').css('opacity', '1');
+          }
+        },
+      },
+    });
+    $('.home-blog-main-control-prev').on('click', function(){
+      swiperTesti.slidePrev();
+    })
+    $('.home-blog-main-control-next').on('click', function(){
+      swiperTesti.slideNext();
+    })
+    }
+  }
 homePartner();
 homeConquer();
 homeTesti();
+homeBlog();
   };
   const pageName = $(".main").attr("name-space");
   if (pageName) {
