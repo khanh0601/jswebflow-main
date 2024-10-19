@@ -103,6 +103,8 @@ let loading = new Loading()
   gsap.registerPlugin(ScrollTrigger);
   function raf(time) {
     lenis.raf(time)
+    // console.log($('body').height())
+    console.log($('body').height())
     requestAnimationFrame(raf)
   }
   const viewport = {
@@ -113,7 +115,7 @@ let loading = new Loading()
   
   lenis.on("scroll", function (inst) {
     if (inst.scroll > $(".kv-header").height() * 0.75) {
-      console.log(inst.direction)
+      // console.log(inst.direction)
       if (inst.direction >= 1) {
         $(".kv-header").addClass("on-hide");
       } else if(inst.direction<=-1 ) {
@@ -143,7 +145,7 @@ let loading = new Loading()
         this.tlTrigger = new gsap.timeline({
           scrollTrigger: {
             trigger: '.home-partner',
-            start: "top bottom+=100%",
+            start: "top bottom+=50%",
             end: "bottom top",
             once: true,
             onEnter: () => {
@@ -169,7 +171,7 @@ let loading = new Loading()
         $(".home-partner-cms").each((idx, item) => {
           $(item).on("pointerenter", function (e) {
             gsap.to($(item), {
-              x: -parseRem(30),
+              x: -parseRem(20),
               duration: 1.2,
               ease: "power1.out",
             });
@@ -207,7 +209,6 @@ let loading = new Loading()
      setup (){
         $('.home-conquer-faqs-title').on('click', function(){
           let index = $(this).index();
-          console.log(index)
           if($(this).closest('.home-conquer-faqs-item').hasClass('active')){
             $('.home-conquer-faqs-item').removeClass('active');
             $('.home-conquer-faqs-content').slideUp();
