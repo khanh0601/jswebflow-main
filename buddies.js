@@ -11,6 +11,60 @@ const mainScript = () => {
     //   $(".hide-def-div").removeClass("hide-def-div");
     // }
   }
+  function scrollTop() {
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    } else {
+        window.addEventListener('pageshow', function(event) {
+            if (!event.persisted) {
+                window.scrollTo(0, 0);
+            }
+        });
+    }
+    window.scrollTo(0, 0);
+}
+ function scrollTop() {
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        } else {
+            window.addEventListener('pageshow', function(event) {
+                if (!event.persisted) {
+                    window.scrollTo(0, 0);
+                }
+            });
+        }
+        window.scrollTo(0, 0);
+    }
+  function resetScroll() {
+    if (window.location.hash !== '') {
+        console.log('has hash')
+        if ($(window.location.hash).length >=1) {
+            console.log('dom hash')
+            window.scrollTo(0, $(window.location.hash).offset().top)
+            setTimeout(() => {
+                window.scrollTo(0, $(window.location.hash).offset().top)
+            }, 300);
+        } else {
+            scrollTop()
+        }
+    } else if (window.location.search !== '') {
+        let searchObj = JSON.parse('{"' + decodeURI(location.search.substring(1)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
+        console.log('has search')
+        if (searchObj.sc) {
+            if ($(`#${searchObj.sc}`).length >=1) {
+                console.log('dom search')
+                window.scrollTo(0, $(`#${searchObj.sc}`).offset().top)
+                setTimeout(() => {
+                    window.scrollTo(0, $(`#${searchObj.sc}`).offset().top)
+                }, 300);
+            } else {
+                scrollTop()
+            }
+        }
+    } else {
+        scrollTop()
+    }
+}
   class Loading {
     constructor() {
         this.tlLoading;
@@ -21,10 +75,12 @@ const mainScript = () => {
         onStart : () => {
           lenis.stop();
           $(".loading-page").removeClass("loaded");
+          setTimeout(function(){
+            $('.main-wrap').removeClass('hide-def-div')
+          },1000)
         },
         onComplete: () =>{
           lenis.start();
-          $('.main-wrap').removeClass('hide-def-div')
           $(".loading-page").addClass("loaded");
         }
       });
@@ -91,12 +147,12 @@ let loading = new Loading()
             end: "bottom top",
             once: true,
             onEnter: () => {
+              console.log('onEnter');
               this.setup();
             },
           }
         })
       }
-      
       setup() {
         let allCms = $('.home-partner-cms');
         allCms.each((idx, item) => {
@@ -131,175 +187,173 @@ let loading = new Loading()
       
     }
   let homePartner = new HomePartner();
-  function homeConquer(){
-    
-    if( viewport.w > 991){
-      let tlTrigger = new gsap.timeline({
+  class HomeConquer{
+    constructor(){
+      this.tlTrigger;
+    }
+    setTrigger(){
+      this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-conquer',
           start: "top bottom+=50%",
-          end: "bottom top",
           once: true,
           onEnter: () => {
-            setup();
-          },
-        }
+            this.setup();
+          }
+        },
       })
     }
-    else{
-      setup();
-    }
-    function setup (){
-      
-      $('.home-conquer-faqs-title').on('click', function(){
-        let index = $(this).index();
-        console.log(index)
-        if($(this).closest('.home-conquer-faqs-item').hasClass('active')){
-          $('.home-conquer-faqs-item').removeClass('active');
-          $('.home-conquer-faqs-content').slideUp();
-        }
-        else{
-          $('.home-conquer-faqs-item').removeClass('active');
-          $('.home-conquer-faqs-content').slideUp();
-          $(this).closest('.home-conquer-faqs-item').addClass('active');
-          console.log($(this).closest('.home-conquer-faqs-item').find('.home-conquer-faqs-content'))
-          $(this).closest('.home-conquer-faqs-item').find('.home-conquer-faqs-content').slideDown();
-        }
-
-      })
-    }
+   
+     setup (){
+        $('.home-conquer-faqs-title').on('click', function(){
+          let index = $(this).index();
+          console.log(index)
+          if($(this).closest('.home-conquer-faqs-item').hasClass('active')){
+            $('.home-conquer-faqs-item').removeClass('active');
+            $('.home-conquer-faqs-content').slideUp();
+          }
+          else{
+            $('.home-conquer-faqs-item').removeClass('active');
+            $('.home-conquer-faqs-content').slideUp();
+            $(this).closest('.home-conquer-faqs-item').addClass('active');
+            console.log($(this).closest('.home-conquer-faqs-item').find('.home-conquer-faqs-content'))
+            $(this).closest('.home-conquer-faqs-item').find('.home-conquer-faqs-content').slideDown();
+          }
+    })
     $('.home-conquer-faqs-item').eq(0).addClass('active');
     $('.home-conquer-faqs-content').eq(0).slideDown();
   }
-  function homeTesti(){
-    
-    if( viewport.w > 991){
-      let tlTrigger = new gsap.timeline({
+  }
+  let homeConquer = new HomeConquer();
+  class HomeTesti{
+    constructor(){
+      this.tlTrigger;
+    }
+    setTrigger(){
+      this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-testi',
           start: "top bottom+=50%",
-          end: "bottom top",
           once: true,
           onEnter: () => {
-            setup();
-          },
-        }
+            console.log('update')
+            this.setup();
+          }
+        },
+        
       })
     }
-    else{
-      setup();
-    }
-    function setup (){
-      const paginationDiv = document.createElement('div');
-  paginationDiv.classList.add('swiper-pagination');
-  const swiper = document.querySelector('.swiper.home-testi-cms');
-  if (swiper) {
-    swiper.appendChild(paginationDiv);
-  }
-     var swiperTesti = new  Swiper(".home-testi-cms ", {
-      slidesPerView: 1,
-      spaceBetween: parseRem(28),
-      pagination: {
-        el: ".swiper-pagination",
-        // able click
-        clickable: true
-      },
-      on: {
-        init: function () {
-          if (this.activeIndex == 0) {
-            $('.home-testi-main-control-prev').css('opacity', '.3');
-          }
-        },
-        slideChange: function () {
-          if (this.activeIndex == 0) {
-            $('.home-testi-main-control-prev').css('opacity', '.3');
-          }
-          else{
-            $('.home-testi-main-control-prev').css('opacity', '1');
-          }
-          if (this.activeIndex == this.slides.length - 1) {
-            $('.home-testi-main-control-next').css('opacity', '.3');
-          }
-          else{
-            $('.home-testi-main-control-next').css('opacity', '1');
-          }
-        },
-      },
-    });
-    $('.home-testi-main-control-prev').on('click', function(){
-      swiperTesti.slidePrev();
-    })
-    $('.home-testi-main-control-next').on('click', function(){
-      swiperTesti.slideNext();
-    })
-    }
-  }
-   function homeBlog(){
     
-    if( viewport.w > 991){
-      let tlTrigger = new gsap.timeline({
+   setup (){
+      const paginationDiv = document.createElement('div');
+      paginationDiv.classList.add('swiper-pagination');
+      const swiper = document.querySelector('.swiper.home-testi-cms');
+      if (swiper) {
+        swiper.appendChild(paginationDiv);
+      }
+        var swiperTesti = new  Swiper(".home-testi-cms ", {
+          slidesPerView: 1,
+          spaceBetween: parseRem(28),
+          pagination: {
+            el: ".swiper-pagination",
+            // able click
+            clickable: true
+          },
+          on: {
+            init: function () {
+              if (this.activeIndex == 0) {
+                $('.home-testi-main-control-prev').css('opacity', '.3');
+              }
+            },
+            slideChange: function () {
+              if (this.activeIndex == 0) {
+                $('.home-testi-main-control-prev').css('opacity', '.3');
+              }
+              else{
+                $('.home-testi-main-control-prev').css('opacity', '1');
+              }
+              if (this.activeIndex == this.slides.length - 1) {
+                $('.home-testi-main-control-next').css('opacity', '.3');
+              }
+              else{
+                $('.home-testi-main-control-next').css('opacity', '1');
+              }
+            },
+          },
+        });
+        $('.home-testi-main-control-prev').on('click', function(){
+          swiperTesti.slidePrev();
+        })
+        $('.home-testi-main-control-next').on('click', function(){
+          swiperTesti.slideNext();
+        })
+      }
+  }
+  let homeTesti = new HomeTesti();
+   class HomeBlog{
+    constructor () {
+      this.tlTrigger;
+    }
+    setTrigger(){
+      this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
-          trigger: '.home-blog',
+          trigger: '.home-conquer',
           start: "top bottom+=50%",
-          end: "bottom top",
           once: true,
           onEnter: () => {
-            setup();
-          },
-        }
+            this.setup();
+          }
+        },
       })
     }
-    else{
-      setup();
+  setup (){
+    const paginationDiv = document.createElement('div');
+    paginationDiv.classList.add('swiper-pagination');
+    const swiper = document.querySelector('.swiper.home-blog-cms');
+    if (swiper) {
+      swiper.appendChild(paginationDiv);
     }
-  function setup (){
-      const paginationDiv = document.createElement('div');
-  paginationDiv.classList.add('swiper-pagination');
-  const swiper = document.querySelector('.swiper.home-blog-cms');
-  if (swiper) {
-    swiper.appendChild(paginationDiv);
-  }
-     var swiperTesti = new  Swiper(".home-blog-cms ", {
-      slidesPerView: 4,
-      spaceBetween: parseRem(28),
-      pagination: {
-        el: ".swiper-pagination",
-        // able click
-        clickable: true
-      },
-      on: {
-        init: function () {
-          if (this.activeIndex == 0) {
-            $('.home-blog-main-control-prev').css('opacity', '.3');
-          }
+      var swiperTesti = new  Swiper(".home-blog-cms ", {
+        slidesPerView: 4,
+        spaceBetween: parseRem(28),
+        pagination: {
+          el: ".swiper-pagination",
+          // able click
+          clickable: true
         },
-        slideChange: function () {
-          if (this.activeIndex == 0) {
-            $('.home-blog-main-control-prev').css('opacity', '.3');
-          }
-          else{
-            $('.home-blog-main-control-prev').css('opacity', '1');
-          }
-          console.log(this.activeIndex)
-          if (this.activeIndex == this.slides.length - 4) {
+        on: {
+          init: function () {
+            if (this.activeIndex == 0) {
+              $('.home-blog-main-control-prev').css('opacity', '.3');
+            }
+          },
+          slideChange: function () {
+            if (this.activeIndex == 0) {
+              $('.home-blog-main-control-prev').css('opacity', '.3');
+            }
+            else{
+              $('.home-blog-main-control-prev').css('opacity', '1');
+            }
+            console.log(this.activeIndex)
+            if (this.activeIndex == this.slides.length - 4) {
 
-            $('.home-blog-main-control-next').css('opacity', '.3');
-          }
-          else{
-            $('.home-blog-main-control-next').css('opacity', '1');
-          }
+              $('.home-blog-main-control-next').css('opacity', '.3');
+            }
+            else{
+              $('.home-blog-main-control-next').css('opacity', '1');
+            }
+          },
         },
-      },
-    });
-    $('.home-blog-main-control-prev').on('click', function(){
-      swiperTesti.slidePrev();
-    })
-    $('.home-blog-main-control-next').on('click', function(){
-      swiperTesti.slideNext();
-    })
+      });
+      $('.home-blog-main-control-prev').on('click', function(){
+        swiperTesti.slidePrev();
+      })
+      $('.home-blog-main-control-next').on('click', function(){
+        swiperTesti.slideNext();
+      })
     }
   }
-
+let homeBlog = new HomeBlog();
   const SCRIPTS = {
     home: {
         namespace: 'home',
@@ -307,6 +361,9 @@ let loading = new Loading()
             console.log('home afterEnter');
             // homeHero.setup();
             homePartner.setTrigger();
+            homeTesti.setTrigger();
+            homeConquer.setTrigger();
+            homeBlog.setTrigger();
         },
         beforeLeave() {
             console.log('home clean')
@@ -322,6 +379,7 @@ barba.init({
       name: 'default-transition',
       sync: true,
       once(data) {
+        resetScroll();
           globalScript();
           loading.init();
       },
