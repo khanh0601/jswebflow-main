@@ -9,19 +9,111 @@ const mainScript = () => {
     // if ($(".hide-def-div").length > 0) {
     //   $(".hide-def-div").removeClass("hide-def-div");
     // }
-  }
-  function scrollTop() {
-    if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-    } else {
-        window.addEventListener('pageshow', function(event) {
-            if (!event.persisted) {
-                window.scrollTo(0, 0);
-            }
-        });
+    const paginationDiv = document.createElement('div');
+    paginationDiv.classList.add('swiper-pagination');
+    const swiper = document.querySelector('.swiper.home-testi-cms');
+    if (swiper) {
+      swiper.appendChild(paginationDiv);
     }
-    window.scrollTo(0, 0);
-}
+      var swiperTesti = new  Swiper(".home-testi-cms ", {
+        slidesPerView: 1,
+        spaceBetween: parseRem(28),
+        pagination: {
+          el: ".swiper-pagination",
+          // able click
+          clickable: true
+        },
+        on: {
+          init: function () {
+            if (this.activeIndex == 0) {
+              $('.home-testi-main-control-prev').css('opacity', '.3');
+            }
+          },
+          slideChange: function () {
+            if (this.activeIndex == 0) {
+              $('.home-testi-main-control-prev').css('opacity', '.3');
+            }
+            else{
+              $('.home-testi-main-control-prev').css('opacity', '1');
+            }
+            if (this.activeIndex == this.slides.length - 1) {
+              $('.home-testi-main-control-next').css('opacity', '.3');
+            }
+            else{
+              $('.home-testi-main-control-next').css('opacity', '1');
+            }
+          },
+        },
+      });
+      $('.home-testi-main-control-prev').on('click', function(){
+        swiperTesti.slidePrev();
+      })
+      $('.home-testi-main-control-next').on('click', function(){
+        swiperTesti.slideNext();
+      })
+      const paginationDiv2 = document.createElement('div');
+      paginationDiv2.classList.add('swiper-pagination');
+      const swiper2 = document.querySelector('.swiper.home-blog-cms');
+      if (swiper2) {
+        swiper2.appendChild(paginationDiv2);
+      }
+        var swiperTesti = new  Swiper(".home-blog-cms ", {
+          slidesPerView: 1,
+          spaceBetween: parseRem(16),
+          pagination: {
+            el: ".swiper-pagination",
+            // able click
+            clickable: true
+          },
+          breakpoints: {
+            768: {
+              spaceBetween: parseRem(20),
+              slidesPerView: 2,
+            },
+            991: {
+              spaceBetween: parseRem(28),
+              slidesPerView: 4,
+            },
+          },
+          on: {
+            init: function () {
+              if (this.activeIndex == 0) {
+                $('.home-blog-main-control-prev').css('opacity', '.3');
+              }
+            },
+            slideChange: function () {
+              if (this.activeIndex == 0) {
+                $('.home-blog-main-control-prev').css('opacity', '.3');
+              }
+              else{
+                $('.home-blog-main-control-prev').css('opacity', '1');
+              }
+              console.log(this.activeIndex)
+              let lengthReal = this.slides.length - 4;
+              if(viewport.w <991 && viewport.w > 767){
+                lengthReal = this.slides.length - 2;
+              }
+              else if( viewport.w <=767){
+                lengthReal = this.slides.length - 1;
+              }
+              if (this.activeIndex == lengthReal) {
+  
+                $('.home-blog-main-control-next').css('opacity', '.3');
+              }
+              else{
+                $('.home-blog-main-control-next').css('opacity', '1');
+              }
+            },
+          },
+        });
+        $('.home-blog-main-control-prev').on('click', function(){
+          swiperTesti.slidePrev();
+        })
+        $('.home-blog-main-control-next').on('click', function(){
+          swiperTesti.slideNext();
+        })
+  }
+
  function scrollTop() {
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
@@ -101,18 +193,18 @@ const mainScript = () => {
     }
 }
 let loading = new Loading()
-  let lenis = new Lenis({});
+barba.use(barbaPrefetch);
   gsap.registerPlugin(ScrollTrigger);
-  function raf(time) {
-    lenis.raf(time)
-    // console.log($('body').height())
-    requestAnimationFrame(raf)
-  }
+  const lenis = new Lenis()
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.ticker.add((time)=>{
+      lenis.raf(time * 1000)
+  })
   const viewport = {
     w: window.innerWidth,
     h: window.innerHeight
 }
-  requestAnimationFrame(raf);
+  // requestAnimationFrame(raf);
   
   lenis.on("scroll", function (inst) {
     if (inst.scroll > $(".kv-header").height() * 0.75) {
@@ -324,48 +416,7 @@ let loading = new Loading()
     }
     
    setup (){
-    const paginationDiv = document.createElement('div');
-      paginationDiv.classList.add('swiper-pagination');
-      const swiper = document.querySelector('.swiper.home-testi-cms');
-      if (swiper) {
-        swiper.appendChild(paginationDiv);
-      }
-        var swiperTesti = new  Swiper(".home-testi-cms ", {
-          slidesPerView: 1,
-          spaceBetween: parseRem(28),
-          pagination: {
-            el: ".swiper-pagination",
-            // able click
-            clickable: true
-          },
-          on: {
-            init: function () {
-              if (this.activeIndex == 0) {
-                $('.home-testi-main-control-prev').css('opacity', '.3');
-              }
-            },
-            slideChange: function () {
-              if (this.activeIndex == 0) {
-                $('.home-testi-main-control-prev').css('opacity', '.3');
-              }
-              else{
-                $('.home-testi-main-control-prev').css('opacity', '1');
-              }
-              if (this.activeIndex == this.slides.length - 1) {
-                $('.home-testi-main-control-next').css('opacity', '.3');
-              }
-              else{
-                $('.home-testi-main-control-next').css('opacity', '1');
-              }
-            },
-          },
-        });
-        $('.home-testi-main-control-prev').on('click', function(){
-          swiperTesti.slidePrev();
-        })
-        $('.home-testi-main-control-next').on('click', function(){
-          swiperTesti.slideNext();
-        })
+   
     const title = new SplitType('.home-testi-title', {types: 'lines, words', lineClass: 'kv-line heading-line'});
     const sub = new SplitType('.home-testi-sub', {types: 'lines, words', lineClass: 'kv-line '});
     let tlFade = new gsap.timeline({
@@ -535,67 +586,7 @@ let loading = new Loading()
         }}, '<=.2')
         }
       })
-    const paginationDiv = document.createElement('div');
-    paginationDiv.classList.add('swiper-pagination');
-    const swiper = document.querySelector('.swiper.home-blog-cms');
-    if (swiper) {
-      swiper.appendChild(paginationDiv);
-    }
-      var swiperTesti = new  Swiper(".home-blog-cms ", {
-        slidesPerView: 1,
-        spaceBetween: parseRem(16),
-        pagination: {
-          el: ".swiper-pagination",
-          // able click
-          clickable: true
-        },
-        breakpoints: {
-          768: {
-            spaceBetween: parseRem(20),
-            slidesPerView: 2,
-          },
-          991: {
-            spaceBetween: parseRem(28),
-            slidesPerView: 4,
-          },
-        },
-        on: {
-          init: function () {
-            if (this.activeIndex == 0) {
-              $('.home-blog-main-control-prev').css('opacity', '.3');
-            }
-          },
-          slideChange: function () {
-            if (this.activeIndex == 0) {
-              $('.home-blog-main-control-prev').css('opacity', '.3');
-            }
-            else{
-              $('.home-blog-main-control-prev').css('opacity', '1');
-            }
-            console.log(this.activeIndex)
-            let lengthReal = this.slides.length - 4;
-            if(viewport.w <991 && viewport.w > 767){
-              lengthReal = this.slides.length - 2;
-            }
-            else if( viewport.w <=767){
-              lengthReal = this.slides.length - 1;
-            }
-            if (this.activeIndex == lengthReal) {
-
-              $('.home-blog-main-control-next').css('opacity', '.3');
-            }
-            else{
-              $('.home-blog-main-control-next').css('opacity', '1');
-            }
-          },
-        },
-      });
-      $('.home-blog-main-control-prev').on('click', function(){
-        swiperTesti.slidePrev();
-      })
-      $('.home-blog-main-control-next').on('click', function(){
-        swiperTesti.slideNext();
-      })
+  
     }
   }
 let homeBlog = new HomeBlog();
