@@ -153,13 +153,13 @@ let loading = new Loading()
        let tlBody  = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-hero-body',
-          start: 'top top+=85%',
+          start: 'top top+=55%',
           once: true
         }
        })
        tlBody
-        .from('.home-hero-body', {autoAlpha: 0,y: 60, duration: .8, clearProps: 'all'})
-        .from('.home-hero-body img', {autoAlpha: 0,scale: 0,stagger: {
+        .from('.home-hero-body-bg', {autoAlpha: 0,y: 60, duration: .6, clearProps: 'all'})
+        .from('.home-hero-body img', {autoAlpha: 0,scale: 0,transformOrigin: 'center',stagger: {
           amount: .4,
           from: 'random'
       }, duration: 1.8, clearProps: 'all', ease: 'expo.out'},'<=.3')
@@ -242,9 +242,10 @@ let loading = new Loading()
         const title = new SplitType('.home-conquer-title', {types: 'lines, words', lineClass: 'kv-line heading-line'})
         let tlFade = new gsap.timeline({
           scrollTrigger : {
-            trigger: '.home-conquer-title',
+            trigger: '.home-conquer-title-wrap',
             start : 'top top+=65%',
             once: true,
+            markers: true
           },
           onComplete : () => {
             // title.revert();
@@ -324,7 +325,7 @@ let loading = new Loading()
     }
     
    setup (){
-      const paginationDiv = document.createElement('div');
+    const paginationDiv = document.createElement('div');
       paginationDiv.classList.add('swiper-pagination');
       const swiper = document.querySelector('.swiper.home-testi-cms');
       if (swiper) {
@@ -366,7 +367,50 @@ let loading = new Loading()
         $('.home-testi-main-control-next').on('click', function(){
           swiperTesti.slideNext();
         })
+    const title = new SplitType('.home-testi-title', {types: 'lines, words', lineClass: 'kv-line heading-line'});
+    const sub = new SplitType('.home-testi-sub', {types: 'lines, words', lineClass: 'kv-line '});
+    let tlFade = new gsap.timeline({
+      scrollTrigger : {
+        trigger: '.home-testi-title-wrap',
+        start : 'top top+=65%',
+        once: true,
+      },
+      onComplete: () => {
+        sub.revert();
       }
+    })
+    tlFade
+          .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+          .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+    let tlFadeItem = new gsap.timeline({
+      scrollTrigger : {
+        trigger: '.home-testi-main',
+        start : 'top top+=70%',
+        once: true,
+      },
+      onComplete: () => {
+        // sub.revert();
+      }
+    })
+    let allItems = $('.home-testi-item');
+    allItems.each((idx, item) => {
+      let content = new SplitType($(item).find('.home-testi-item-content-txt'), {types: 'lines, words', lineClass: 'kv-line '});
+      let name = new SplitType($(item).find('.home-testi-item-content-name'), {types: 'lines, words', lineClass: 'kv-line '});
+      let decs = new SplitType($(item).find('.home-testi-item-content-desc'), {types: 'lines, words', lineClass: 'kv-line '});
+     if(idx<2){
+      tlFadeItem
+      .from(item, {autoAlpha: 0, y: 60, duration: .6,  },  `${idx*.1}`)
+      .from($(item).find('.home-testi-item-content-ic'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'}, '<=0')
+      .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4}, '<=.2')
+      .from(name.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6}, '<=.2')
+      .from(decs.words, {autoAlpha: 0, yPercent: 100, stagger: .02, duration: .6,  onComplete: ()=>{
+        content.revert();
+        name.revert();
+        decs.revert();
+      }}, '<=.2',)
+     }
+    })
+    }
   }
   let homeTesti = new HomeTesti();
   class HomeOpp{
@@ -386,18 +430,57 @@ let loading = new Loading()
       })
     }
     setup(){
+      function countUpTo(maxNumber, item) {
+        var currentNumber = 0;
+        let width = $(item).width();
+        console.log(item);
+        $(item).css('width', width);
+        // Tạo hàm chạy liên tục với khoảng thời gian 100ms
+        var interval = setInterval(function() {
+            if (currentNumber <= maxNumber) {
+                $(item).text(currentNumber);
+                currentNumber++;
+            } else {
+                clearInterval(interval); // Dừng khi đạt tới số maxNumber
+            }
+        }, 30); // Thời gian mỗi lần tăng (100ms ở đây)
+    }
       const title = new SplitType('.home-oppo-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
       let tlFade = new gsap.timeline({
         scrollTrigger : {
-          trigger: '.home-oppo-title',
+          trigger: '.home-oppo-title-wrap',
           start : 'top top+=65%',
           once: true,
         }
       })
       tlFade
-        .from(title.words,{autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
-        .from('.home-oppo-tags-item', {autoAlpha: 0, yPercent: 50, stagger: .1, duration: .4, clearProps: 'all'}, '<=.2')
+        .from(title.words,{autoAlpha: 0, yPercent: 60, stagger: .02, duration: .8})
+        .from('.home-oppo-tags-item', {autoAlpha: 0, yPercent: 80, stagger: .1, duration: .4, clearProps: 'all'}, '<=.2')
+      
+      let allItems = $('.home-oppo-count-item');
+      allItems.each((idx, item) => {
+      const content = new SplitType('.home-oppo-count-item-sub', {types: 'lines words', lineClass: 'kv-line '});
+        let tlItem = new gsap.timeline({
+          scrollTrigger : {
+            trigger: '.home-oppo-count-wrap',
+            start : 'top top+=75%',
+            once: true,
+            onComplete: () => {
+              content.revert()
+            }
+          }
+        })
+        let number = parseInt($(item).find('.span-number-count').text());
+        tlItem
+          .from($(item).find('.home-oppo-count-item-title'), {autoAlpha: 0, yPercent: 60, duration: .6, onStart: () => {
+            countUpTo(number, $(item).find('.span-number-count'));
+          }})
+          // .from('.home-oppo-count-item-title', {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<=.0')
+          .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<=.2')
+         
+      })
     }
+   
   }
   let homeOpp = new HomeOpp();
   
@@ -418,6 +501,41 @@ let loading = new Loading()
       })
     }
   setup (){
+    const title = new SplitType('.home-blog-title', {types: 'lines, words', lineClass: 'kv-line heading-line'});
+    let tlFade = new gsap.timeline({
+      scrollTrigger : {
+        trigger: '.home-blog-title',
+        start : 'top top+=65%',
+        once: true,
+      },
+      onComplete: () => {
+        // sub.revert();
+      }
+    })
+    tlFade
+          .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+    let tlFadeItem = new gsap.timeline({
+      scrollTrigger : {
+        trigger: '.home-blog-post',
+        start : 'top top+=65%',
+        once: true,
+      },
+      onComplete: () => {
+        // sub.revert();
+      }
+    })
+      let allItems = $('.home-blog-item');
+      allItems.each((idx, item) => {
+        let content = new SplitType($(item).find('.home-blog-item-title'), {types: 'lines, words', lineClass: 'kv-line '});
+        if(idx<=5){
+        tlFadeItem
+        .from($(item).find('.home-blog-item-thumb'), {autoAlpha: 0, y: 60, duration: .6, clearProps: 'all' },  `${idx*.2}`)
+        .from($(item).find('.home-blog-item-date-wrap'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'}, '<=.2')
+        .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4, onComplete: () => {
+          content.revert();
+        }}, '<=.2')
+        }
+      })
     const paginationDiv = document.createElement('div');
     paginationDiv.classList.add('swiper-pagination');
     const swiper = document.querySelector('.swiper.home-blog-cms');
@@ -482,6 +600,42 @@ let loading = new Loading()
     }
   }
 let homeBlog = new HomeBlog();
+class CTA {
+  constructor(){
+    this.tlTrigger
+  }
+  setTrigger(){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.home-cta',
+        start: "top bottom+=200%",
+        once: true,
+        onEnter: () => {
+          this.setup();
+          console.log('cta')
+        }
+      },
+    })
+  }
+  setup(){
+    const title = new SplitType('.homt-cta-title', {types: 'lines, words', lineClass: 'kv-line '});
+    let tlFade = new gsap.timeline({
+      scrollTrigger : {
+        trigger: '.homt-cta-title',
+        start : 'top top+=65%',
+        once: true,
+      },
+      onComplete: () => {
+        title.revert();
+      }
+    })
+    tlFade
+    .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .4})
+    .from('.home-cta-btn', {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'},'<=.4')
+          
+  }
+}
+let cta = new CTA()
   const SCRIPTS = {
     home: {
         namespace: 'home',
@@ -493,6 +647,8 @@ let homeBlog = new HomeBlog();
             homeTesti.setTrigger();
             homeConquer.setTrigger();
             homeBlog.setTrigger();
+          cta.setTrigger();
+
         },
         beforeLeave() {
             console.log('home clean')
@@ -511,7 +667,6 @@ barba.init({
         resetScroll();
           globalScript();
           loading.init();
-          
       },
       beforeLeave({current}) {
           lenis.stop()
