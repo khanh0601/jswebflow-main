@@ -245,7 +245,6 @@ let loading = new Loading()
             trigger: '.home-conquer-title-wrap',
             start : 'top top+=65%',
             once: true,
-            markers: true
           },
           onComplete : () => {
             // title.revert();
