@@ -1,4 +1,3 @@
-console.log('khanh')
 const mainScript = () => {
   const SCRIPT = {};
   const parseRem = (input) => {
@@ -73,6 +72,7 @@ const mainScript = () => {
     init() {
       let tl = new gsap.timeline({
         onStart : () => {
+        gsap.to('.kv-header-wrap', {autoAlpha: 0,yPercent: -100})
           lenis.stop();
           $(".loading-page").removeClass("loaded");
           setTimeout(function(){
@@ -82,6 +82,7 @@ const mainScript = () => {
         onComplete: () =>{
           lenis.start();
           $(".loading-page").addClass("loaded");
+          this.animHero();
         }
       });
       tl  
@@ -90,12 +91,13 @@ const mainScript = () => {
     }
     animHero(){
         console.log('hero loaded')
-        // if ($('[data-barba-namespace="home"]').length) {
-        //     homeHeroCanvas.init();
-        //     homeHero.play();
-        // } else if ($('[data-barba-namespace="about"]').length) {
-        //     aboutHero.play()
-        // }
+        // $('.kv-header-wrap').removeClass('hide-def-div')
+        gsap.to('.kv-header-wrap', {autoAlpha: 1,yPercent: 0, duration: .6, ease: 'none'})
+        if ($('[data-barba-namespace="home"]').length) {
+            homeHero.play();
+        } else if ($('[data-barba-namespace="about"]').length) {
+            aboutHero.play()
+        }
     }
 }
 let loading = new Loading()
@@ -104,7 +106,6 @@ let loading = new Loading()
   function raf(time) {
     lenis.raf(time)
     // console.log($('body').height())
-    console.log($('body').height())
     requestAnimationFrame(raf)
   }
   const viewport = {
@@ -127,16 +128,47 @@ let loading = new Loading()
       $(".kv-header").removeClass("on-hide");
     }
   });
-   $('.header-ham').on('click',function(){
-    $('.header-menu-wrap').toggleClass('active');
-    $(this).find('.ic').removeClass('active');
-    if($('.header-menu-wrap').hasClass('active')){
-      $(this).find('.ic-ham-close').addClass('active');
-    }
-    else{
-      $(this).find('.ic-ham-open').addClass('active');
-    }
+   $('.home-header-toggle').on('click',function(){
+    $('.kv-header').toggleClass('active');
+    
    })
+   class HomeHero {
+      constructor() {
+        this.tlFade
+      }
+      setup(){
+        const title = new SplitType('.home-hero-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
+        const sub = new SplitType('.home-hero-sub', {types: 'lines words', lineClass: 'kv-line'})
+        this.tlFade = new gsap.timeline({
+          paused: true,
+          onComplete : () => {
+            // title.revert();
+            sub.revert();
+          }
+        })
+        this.tlFade
+            .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+            .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+            .from('.home-hero-btn', {autoAlpha: 0, yPercent: 30, duration: .4, clearProps: 'all'}, '<=.2')
+       let tlBody  = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.home-hero-body',
+          start: 'top top+=85%',
+          once: true
+        }
+       })
+       tlBody
+        .from('.home-hero-body', {autoAlpha: 0,y: 60, duration: .8, clearProps: 'all'})
+        .from('.home-hero-body img', {autoAlpha: 0,scale: 0,stagger: {
+          amount: .4,
+          from: 'random'
+      }, duration: 1.8, clearProps: 'all', ease: 'expo.out'},'<=.3')
+      }
+      play(){
+        this.tlFade.play();
+      }
+   }
+   let homeHero = new HomeHero();
     class HomePartner{
       constructor() {
         this.tlTrigger;
@@ -207,8 +239,51 @@ let loading = new Loading()
     }
    
      setup (){
+        const title = new SplitType('.home-conquer-title', {types: 'lines, words', lineClass: 'kv-line heading-line'})
+        let tlFade = new gsap.timeline({
+          scrollTrigger : {
+            trigger: '.home-conquer-title',
+            start : 'top top+=65%',
+            once: true,
+          },
+          onComplete : () => {
+            // title.revert();
+          }
+        })
+        tlFade
+          .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+        let allItems = $('.home-conquer-faqs-item');
+        let tlFadeItem = new gsap.timeline({
+          scrollTrigger : {
+            trigger: '.home-conquer-faqs-main',
+            start : 'top top+=65%',
+            once: true,
+          }
+        })
+        tlFadeItem
+          .from('.home-conquer-faqs-img-list', {autoAlpha: 0, y: 50, duration: .5, clearProps: 'all'})
+        allItems.each((idx, item) => {
+          let titleItem = new SplitType($(item).find('.home-conquer-faqs-title-txt'), {types: 'lines, words', lineClass: 'kv-line'});
+         tlFadeItem
+            .from(titleItem.words, {autoAlpha: 0, yPercent: 100, stagger: .02, duration: .6, onComplete: () => {
+              titleItem.revert();
+            }},idx==0?'<=.2':`<=${idx*.1}`)
+            .from($(item).find('.div-line-wrap'), { scaleX: 0, transformOrigin: 'left', duration: .8, clearProps: 'all'}, '<=0')
+            .from($(item).find('.home-conquer-faqs-title-ic'), {autoAlpha: 0, yPercent: 80, duration: .3, clearProps: 'all'}, '<=.2')
+            if (idx == 0 ){
+              let contentItem =  new SplitType($(item).find('.home-conquer-faqs-content-txt'), {types: 'lines, words', lineClass: 'kv-line'}); 
+              tlFadeItem
+              .from(contentItem.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .3, onComplete: () => {
+                contentItem.revert();
+              }},'<=.2')
+            }
+           
+        })
         $('.home-conquer-faqs-title').on('click', function(){
-          let index = $(this).index();
+          let index = $(this).closest('.home-conquer-faqs-item').index();
+          console.log(index)
+          $('.home-conquer-faqs-img-item').removeClass('active')
+          $('.home-conquer-faqs-img-item').eq(index).addClass('active')
           if($(this).closest('.home-conquer-faqs-item').hasClass('active')){
             $('.home-conquer-faqs-item').removeClass('active');
             $('.home-conquer-faqs-content').slideUp();
@@ -220,9 +295,12 @@ let loading = new Loading()
             console.log($(this).closest('.home-conquer-faqs-item').find('.home-conquer-faqs-content'))
             $(this).closest('.home-conquer-faqs-item').find('.home-conquer-faqs-content').slideDown();
           }
-    })
-    $('.home-conquer-faqs-item').eq(0).addClass('active');
-    $('.home-conquer-faqs-content').eq(0).slideDown();
+        })
+        $('.home-conquer-faqs-item').eq(0).addClass('active');
+        $('.home-conquer-faqs-content').eq(0).slideDown();
+        $('.home-conquer-faqs-img-item').removeClass('active')
+        $('.home-conquer-faqs-img-item').eq(0).addClass('active')
+
   }
   }
   let homeConquer = new HomeConquer();
@@ -291,6 +369,38 @@ let loading = new Loading()
       }
   }
   let homeTesti = new HomeTesti();
+  class HomeOpp{
+    constructor(){
+      this.tlTrigger;
+    }
+    setTrigger(){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.home-oppo',
+          start: "top bottom+=50%",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        },
+      })
+    }
+    setup(){
+      const title = new SplitType('.home-oppo-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+      let tlFade = new gsap.timeline({
+        scrollTrigger : {
+          trigger: '.home-oppo-title',
+          start : 'top top+=65%',
+          once: true,
+        }
+      })
+      tlFade
+        .from(title.words,{autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+        .from('.home-oppo-tags-item', {autoAlpha: 0, yPercent: 50, stagger: .1, duration: .4, clearProps: 'all'}, '<=.2')
+    }
+  }
+  let homeOpp = new HomeOpp();
+  
    class HomeBlog{
     constructor () {
       this.tlTrigger;
@@ -315,12 +425,22 @@ let loading = new Loading()
       swiper.appendChild(paginationDiv);
     }
       var swiperTesti = new  Swiper(".home-blog-cms ", {
-        slidesPerView: 4,
-        spaceBetween: parseRem(28),
+        slidesPerView: 1,
+        spaceBetween: parseRem(16),
         pagination: {
           el: ".swiper-pagination",
           // able click
           clickable: true
+        },
+        breakpoints: {
+          768: {
+            spaceBetween: parseRem(20),
+            slidesPerView: 2,
+          },
+          991: {
+            spaceBetween: parseRem(28),
+            slidesPerView: 4,
+          },
         },
         on: {
           init: function () {
@@ -336,7 +456,14 @@ let loading = new Loading()
               $('.home-blog-main-control-prev').css('opacity', '1');
             }
             console.log(this.activeIndex)
-            if (this.activeIndex == this.slides.length - 4) {
+            let lengthReal = this.slides.length - 4;
+            if(viewport.w <991 && viewport.w > 767){
+              lengthReal = this.slides.length - 2;
+            }
+            else if( viewport.w <=767){
+              lengthReal = this.slides.length - 1;
+            }
+            if (this.activeIndex == lengthReal) {
 
               $('.home-blog-main-control-next').css('opacity', '.3');
             }
@@ -360,8 +487,9 @@ let homeBlog = new HomeBlog();
         namespace: 'home',
         afterEnter() {
             console.log('home afterEnter');
-            // homeHero.setup();
+            homeHero.setup();
             homePartner.setTrigger();
+            homeOpp.setTrigger();
             homeTesti.setTrigger();
             homeConquer.setTrigger();
             homeBlog.setTrigger();
@@ -383,6 +511,7 @@ barba.init({
         resetScroll();
           globalScript();
           loading.init();
+          
       },
       beforeLeave({current}) {
           lenis.stop()
