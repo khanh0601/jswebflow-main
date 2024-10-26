@@ -57,7 +57,7 @@ const mainScript = () => {
       if (swiper2) {
         swiper2.appendChild(paginationDiv2);
       }
-        var swiperTesti = new  Swiper(".home-blog-cms ", {
+        var swiperBlog = new  Swiper(".home-blog-cms ", {
           slidesPerView: 1,
           spaceBetween: parseRem(16),
           pagination: {
@@ -107,10 +107,10 @@ const mainScript = () => {
           },
         });
         $('.home-blog-main-control-prev').on('click', function(){
-          swiperTesti.slidePrev();
+          swiperBlog.slidePrev();
         })
         $('.home-blog-main-control-next').on('click', function(){
-          swiperTesti.slideNext();
+          swiperBlog.slideNext();
         })
   }
 
@@ -156,14 +156,22 @@ const mainScript = () => {
         scrollTop()
     }
 }
+function removeAllScrollTrigger() {
+  let triggers = ScrollTrigger.getAll();
+  triggers.forEach(trigger => {
+      trigger.kill();
+  });
+}
   class Loading {
     constructor() {
         this.tlLoading;
         this.isLoaded = sessionStorage.getItem("isLoaded") == 'true' ? true : false;
     }
     init() {
+      
       let tl = new gsap.timeline({
         onStart : () => {
+          
         gsap.to('.kv-header-wrap', {autoAlpha: 0,yPercent: -100})
           lenis.stop();
           $(".loading-page").removeClass("loaded");
@@ -178,17 +186,16 @@ const mainScript = () => {
         }
       });
       tl  
-      .from('.loading-page .loading-page-inner', {duration: 1,autoAlpha: 0,ease: "power1.out",})
-      .to('.loading-page .loading-page-inner', {duration: 1,autoAlpha: 0,ease: "power1.out",})
+      .fromTo('.loading-page .loading-page-inner',{autoAlpha: 0}, {duration: 1,autoAlpha: 1,ease: "power1.out",})
+      .to('.loading-page .loading-page-inner', {duration: 1,autoAlpha: 0,ease: "power1.out"})
     }
     animHero(){
         console.log('hero loaded')
-        // $('.kv-header-wrap').removeClass('hide-def-div')
         gsap.to('.kv-header-wrap', {autoAlpha: 1,yPercent: 0, duration: .6, ease: 'none'})
         if ($('[data-barba-namespace="home"]').length) {
             homeHero.play();
-        } else if ($('[data-barba-namespace="about"]').length) {
-            aboutHero.play()
+        } else if ($('[data-barba-namespace="contact"]').length) {
+            contactHero.play()
         }
     }
 }
@@ -221,9 +228,21 @@ barba.use(barbaPrefetch);
     }
   });
    $('.home-header-toggle').on('click',function(){
+    if(!$('.kv-header').hasClass('active')){
+      lenis.stop();
+    }
+    else{
+      lenis.start();
+    }
     $('.kv-header').toggleClass('active');
     
    })
+  //  if( viewport.w <= 991){
+    $('.header-menu-has-sub').on('click', function(){
+      console.log('khanh')
+      $(this).find('.header-menu-sub').slideToggle();
+    })
+  //  }
    class HomeHero {
       constructor() {
         this.tlFade
@@ -235,7 +254,7 @@ barba.use(barbaPrefetch);
           paused: true,
           onComplete : () => {
             // title.revert();
-            sub.revert();
+            // sub.revert();
           }
         })
         this.tlFade
@@ -257,6 +276,7 @@ barba.use(barbaPrefetch);
       }, duration: 1.8, clearProps: 'all', ease: 'expo.out'},'<=.3')
       }
       play(){
+        console.log('homeHerro play')
         this.tlFade.play();
       }
    }
@@ -358,7 +378,7 @@ barba.use(barbaPrefetch);
           let titleItem = new SplitType($(item).find('.home-conquer-faqs-title-txt'), {types: 'lines, words', lineClass: 'kv-line'});
          tlFadeItem
             .from(titleItem.words, {autoAlpha: 0, yPercent: 100, stagger: .02, duration: .6, onComplete: () => {
-              titleItem.revert();
+              // titleItem.revert();
             }},idx==0?'<=.2':`<=${idx*.1}`)
             .from($(item).find('.div-line-wrap'), { scaleX: 0, transformOrigin: 'left', duration: .8, clearProps: 'all'}, '<=0')
             .from($(item).find('.home-conquer-faqs-title-ic'), {autoAlpha: 0, yPercent: 80, duration: .3, clearProps: 'all'}, '<=.2')
@@ -366,7 +386,7 @@ barba.use(barbaPrefetch);
               let contentItem =  new SplitType($(item).find('.home-conquer-faqs-content-txt'), {types: 'lines, words', lineClass: 'kv-line'}); 
               tlFadeItem
               .from(contentItem.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .3, onComplete: () => {
-                contentItem.revert();
+                // contentItem.revert();
               }},'<=.2')
             }
            
@@ -426,7 +446,7 @@ barba.use(barbaPrefetch);
         once: true,
       },
       onComplete: () => {
-        sub.revert();
+        // sub.revert();
       }
     })
     tlFade
@@ -442,22 +462,34 @@ barba.use(barbaPrefetch);
         // sub.revert();
       }
     })
+
     let allItems = $('.home-testi-item');
     allItems.each((idx, item) => {
       let content = new SplitType($(item).find('.home-testi-item-content-txt'), {types: 'lines, words', lineClass: 'kv-line '});
       let name = new SplitType($(item).find('.home-testi-item-content-name'), {types: 'lines, words', lineClass: 'kv-line '});
       let decs = new SplitType($(item).find('.home-testi-item-content-desc'), {types: 'lines, words', lineClass: 'kv-line '});
      if(idx<2){
+      let tlFadeItemContent = new gsap.timeline({
+        scrollTrigger : {
+          trigger: $(item).find('.home-testi-item-content-txt'),
+          start : 'top top+=80%',
+          once: true,
+        },
+        onComplete: () => {
+          // sub.revert();
+        }
+      })
       tlFadeItem
       .from(item, {autoAlpha: 0, y: 60, duration: .6,  },  `${idx*.1}`)
       .from($(item).find('.home-testi-item-content-ic'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'}, '<=0')
-      .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4}, '<=.2')
-      .from(name.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6}, '<=.2')
+      tlFadeItemContent
+      .from(content.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .4}, '<=.2')
+      .from(name.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6}, '<=.4')
       .from(decs.words, {autoAlpha: 0, yPercent: 100, stagger: .02, duration: .6,  onComplete: ()=>{
-        content.revert();
-        name.revert();
-        decs.revert();
-      }}, '<=.2',)
+        // content.revert();
+        // name.revert();
+        // decs.revert();
+      }}, '<=.4',)
      }
     })
     }
@@ -480,12 +512,13 @@ barba.use(barbaPrefetch);
       })
     }
     setup(){
-      function countUpTo(maxNumber, item) {
+      function countUpTo(maxNumber, item,duration) {
         var currentNumber = 0;
         let width = $(item).width();
         console.log(item);
         $(item).css('width', width);
         // Tạo hàm chạy liên tục với khoảng thời gian 100ms
+        var intervalTime = duration / maxNumber;
         var interval = setInterval(function() {
             if (currentNumber <= maxNumber) {
                 $(item).text(currentNumber);
@@ -493,7 +526,7 @@ barba.use(barbaPrefetch);
             } else {
                 clearInterval(interval); // Dừng khi đạt tới số maxNumber
             }
-        }, 30); // Thời gian mỗi lần tăng (100ms ở đây)
+        }, intervalTime); // Thời gian mỗi lần tăng (100ms ở đây)
     }
       const title = new SplitType('.home-oppo-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
       let tlFade = new gsap.timeline({
@@ -505,7 +538,7 @@ barba.use(barbaPrefetch);
       })
       tlFade
         .from(title.words,{autoAlpha: 0, yPercent: 60, stagger: .02, duration: .8})
-        .from('.home-oppo-tags-item', {autoAlpha: 0, yPercent: 80, stagger: .1, duration: .4, clearProps: 'all'}, '<=.2')
+        .from('.home-oppo-tags-item', {autoAlpha: 0, yPercent: 80, stagger: .08, duration: .4, clearProps: 'all'}, '<=.2')
       
       let allItems = $('.home-oppo-count-item');
       allItems.each((idx, item) => {
@@ -516,14 +549,14 @@ barba.use(barbaPrefetch);
             start : 'top top+=75%',
             once: true,
             onComplete: () => {
-              content.revert()
+              // content.revert()
             }
           }
         })
         let number = parseInt($(item).find('.span-number-count').text());
         tlItem
           .from($(item).find('.home-oppo-count-item-title'), {autoAlpha: 0, yPercent: 60, duration: .6, onStart: () => {
-            countUpTo(number, $(item).find('.span-number-count'));
+            countUpTo(number, $(item).find('.span-number-count'), 1000);
           }})
           // .from('.home-oppo-count-item-title', {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<=.0')
           .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<=.2')
@@ -582,7 +615,7 @@ barba.use(barbaPrefetch);
         .from($(item).find('.home-blog-item-thumb'), {autoAlpha: 0, y: 60, duration: .6, clearProps: 'all' },  `${idx*.2}`)
         .from($(item).find('.home-blog-item-date-wrap'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'}, '<=.2')
         .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4, onComplete: () => {
-          content.revert();
+          // content.revert();
         }}, '<=.2')
         }
       })
@@ -590,6 +623,100 @@ barba.use(barbaPrefetch);
     }
   }
 let homeBlog = new HomeBlog();
+class ContactHero {
+  constructor(){
+    this.tlFade;
+  }
+   setup(){
+      const title = new SplitType('.contact-hero-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+      const sub = new SplitType('.contact-hero-sub', {types: 'lines words', lineClass: 'kv-line '});
+      this.tlFade = new gsap.timeline({
+        paused: true,
+        onComplete : () => {
+        }
+      })
+      this.tlFade
+            .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+            .from(sub.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<=.2')
+            .from('.contact-form', {autoAlpha: 0, y: 100, duration: 1, clearProps: 'all'}, '<=.3')
+      $('input[name="Course"]').on('click', function() {
+        var selectedValue = $(this).val();
+        var numberOnly = selectedValue.match(/\d+/)[0]; // Lấy phần số đầu tiên trong chuỗi
+        $('.money-number').text(numberOnly);
+    })
+    function checkSuccess(){
+      if ($('.contact-form-main-inner').css('display') === 'none') {
+        $('.form-contact-success').addClass('active');
+      } else {
+          // console.log("Phần tử đang hiển thị.");
+      }
+      requestAnimationFrame(checkSuccess)
+    }
+    requestAnimationFrame(checkSuccess);
+    let animSuccess = new gsap.timeline({
+      repeat: -1,
+    })
+    animSuccess
+    .fromTo('.ic-eye2', {autoAlpha: 1}, {autoAlpha: 1, duration: .8})
+    .fromTo('.ic-eye', {autoAlpha: 1}, {autoAlpha: 1, duration: .8}, "<=0")
+      .fromTo('.ic-mouse', {'strokeDasharray': '0px 60px'}, {'strokeDasharray': '60px 60px', duration: 1, ease: 'power1.out'},'<=.2')
+    .fromTo('.ic-eye2', {autoAlpha: 0}, {autoAlpha: 1, duration: .8}, '<=.8')
+    .fromTo('.ic-eye', {autoAlpha: 0}, {autoAlpha: 1, duration: .8}, '<=.2')
+    $('.form-contact-success-ic').each((idx, item) => {
+      let tlIc = gsap.timeline({
+          repeat: -1,
+        });
+      tlIc.fromTo(
+          item, 
+          { rotation: 0 }, 
+          { rotation: 720, duration: 2, ease: 'power2.out' }
+      );
+      tlIc.fromTo(
+        item, 
+        { rotation: 720 }, 
+        { rotation: 0, duration: 2, ease: 'power2.out' }
+    );
+  });
+
+    }
+    play(){
+      console.log('contact play')
+      this.tlFade.play()
+    }
+}
+let contactHero = new ContactHero();
+class Footer {
+  constructor(){
+    this.tlFade;
+    this.tlTrigger;
+  }
+  setTrigger(){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.kv-footer',
+        start: 'top bottom',
+        end: 'bottom top',
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+  setup(){
+    this.tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.footer-menu',
+        start: 'top top+=85%',
+        once: true,
+      }
+    })
+    this.tlFade
+    .from('.footer-item-txt', {autoAlpha: 0, yPercent: 100, duration: .6, stagger: .04, clearProps: 'all'})
+    .from('.footer-social', {autoAlpha: 0, yPercent: 60, duration: .6, stagger: .04, clearProps: 'all'},'<=.5')
+  }
+}
+let footer = new Footer();
 class CTA {
   constructor(){
     this.tlTrigger
@@ -616,7 +743,7 @@ class CTA {
         once: true,
       },
       onComplete: () => {
-        title.revert();
+        // title.revert();
       }
     })
     tlFade
@@ -637,13 +764,23 @@ let cta = new CTA()
             homeTesti.setTrigger();
             homeConquer.setTrigger();
             homeBlog.setTrigger();
-          cta.setTrigger();
+            cta.setTrigger();
 
         },
         beforeLeave() {
             console.log('home clean')
         }
     },
+    contact: {
+        namespace: 'contact',
+        afterEnter() {
+            console.log('about afterEnter');
+            contactHero.setup();
+        },
+        beforeLeave() {
+            console.log('about clean')
+        }
+    }
 }
 const VIEWS = Object.values(SCRIPTS);
 barba.init({
@@ -654,12 +791,21 @@ barba.init({
       name: 'default-transition',
       sync: true,
       once(data) {
+        removeAllScrollTrigger();
         resetScroll();
           globalScript();
           loading.init();
+          footer.setTrigger();
       },
       beforeLeave({current}) {
-          lenis.stop()
+        removeAllScrollTrigger();
+        resetScroll();
+        globalScript();
+        location.reload();
+        loading.init();
+        footer.setTrigger();
+          lenis.stop();  
+
       },
       async leave(data) {
           // footer.destroy();
