@@ -685,6 +685,65 @@ class ContactHero {
     }
 }
 let contactHero = new ContactHero();
+class AboutFounder{
+  constructor(){
+    this.tlTrigger;
+  }
+  setTrigger(){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-founder',
+        start: "top bottom+=50%",
+        end: "bottom top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      },
+    })
+  }
+  setup(){
+    let allItems = $('.about-journey-item-wrap')
+    allItems.each((idx, item) => {
+      let tlFade  = new gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: 'top+=55% center',
+          end: 'bottom+=45% center',
+          scrub: true,
+        }
+      })
+      tlFade.to(item, {autoAlpha: 0, scale: .9})
+    })
+    $('.about-journey-item-line-label').each((idx, item) => {
+      console.log($(item).height())
+      let tlFadeLabel = new gsap.timeline({
+        scrollTrigger: {
+          trigger: $(item).closest('.about-journey-item-wrap'),
+          start: 'top center',
+          end: 'bottom+=45% center',
+          scrub: true,
+        }
+      })
+      tlFadeLabel.fromTo(item,{scaleY: 0, transformOrigin: 'top'}, {scaleY: 1})
+    })
+    // $('.line-abl').each((idx, item) => {
+    //   console.log($(item).height())
+    //   let tlFadeLine = new gsap.timeline({
+    //     scrollTrigger: {
+    //       trigger: $(item).closest('.about-journey-item-wrap'),
+    //       start: 'top  top+=30%',
+    //       end: 'bottom top+=30%',
+    //       scrub: true,
+    //       markers: true
+    //     }
+    //   })
+    //   tlFadeLine.fromTo(item,{scaleY: 0, transformOrigin: 'top'}, {scaleY: 1})
+    // })
+    
+  }
+}
+let aboutFounder = new AboutFounder();
 class Footer {
   constructor(){
     this.tlFade;
@@ -774,13 +833,23 @@ let cta = new CTA()
     contact: {
         namespace: 'contact',
         afterEnter() {
-            console.log('about afterEnter');
+            console.log('contact afterEnter');
             contactHero.setup();
         },
         beforeLeave() {
-            console.log('about clean')
+            console.log('contact clean')
         }
-    }
+    },
+    about: {
+      namespace: 'about',
+      afterEnter() {
+          console.log('about afterEnter');
+          aboutFounder.setTrigger();
+      },
+      beforeLeave() {
+          console.log('about clean')
+      }
+  }
 }
 const VIEWS = Object.values(SCRIPTS);
 barba.init({
