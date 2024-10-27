@@ -358,7 +358,7 @@ barba.use(barbaPrefetch);
         let tlFade = new gsap.timeline({
           scrollTrigger : {
             trigger: '.home-conquer-title-wrap',
-            start : 'top top+=65%',
+            start : $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
             once: true,
           },
           onComplete : () => {
@@ -371,7 +371,7 @@ barba.use(barbaPrefetch);
         let tlFadeItem = new gsap.timeline({
           scrollTrigger : {
             trigger: '.home-conquer-faqs-main',
-            start : 'top top+=65%',
+            start : $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
             once: true,
           }
         })
@@ -388,9 +388,10 @@ barba.use(barbaPrefetch);
             if (idx == 0 ){
               let contentItem =  new SplitType($(item).find('.home-conquer-faqs-content-txt'), {types: 'lines, words', lineClass: 'kv-line'}); 
               tlFadeItem
+              .from('.home-conquer-faqs-content-img', {autoAlpha: 0, y: 40, duration: 1.2, clearProps: 'all'},'<=.2')
               .from(contentItem.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .3, onComplete: () => {
                 // contentItem.revert();
-              }},'<=.2')
+              }},'<=0')
             }
            
         })
@@ -445,7 +446,7 @@ barba.use(barbaPrefetch);
     let tlFade = new gsap.timeline({
       scrollTrigger : {
         trigger: '.home-testi-title-wrap',
-        start : 'top top+=65%',
+        start : $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       },
       onComplete: () => {
@@ -475,7 +476,7 @@ barba.use(barbaPrefetch);
       let tlFadeItemContent = new gsap.timeline({
         scrollTrigger : {
           trigger: $(item).find('.home-testi-item-content-txt'),
-          start : 'top top+=80%',
+          start :$(window).width() > 767 ? "top top+=80%" : "top top+=25%",
           once: true,
         },
         onComplete: () => {
@@ -535,7 +536,7 @@ barba.use(barbaPrefetch);
       let tlFade = new gsap.timeline({
         scrollTrigger : {
           trigger: '.home-oppo-title-wrap',
-          start : 'top top+=65%',
+          start : $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
           once: true,
         }
       })
@@ -549,7 +550,7 @@ barba.use(barbaPrefetch);
         let tlItem = new gsap.timeline({
           scrollTrigger : {
             trigger: '.home-oppo-count-wrap',
-            start : 'top top+=75%',
+            start : $(window).width() > 767 ? "top top+=75%" : "top top+=30%",
             once: true,
             onComplete: () => {
               // content.revert()
@@ -591,7 +592,7 @@ barba.use(barbaPrefetch);
     let tlFade = new gsap.timeline({
       scrollTrigger : {
         trigger: '.home-blog-title',
-        start : 'top top+=65%',
+        start : $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       },
       onComplete: () => {
@@ -603,7 +604,7 @@ barba.use(barbaPrefetch);
     let tlFadeItem = new gsap.timeline({
       scrollTrigger : {
         trigger: '.home-blog-post',
-        start : 'top top+=65%',
+        start : $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       },
       onComplete: () => {
@@ -736,7 +737,7 @@ setup(){
   let tlFade = new gsap.timeline({
     scrollTrigger: {
       trigger: '.about-develop-title-wrap',
-      start: 'top top+=65%',
+      start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
       once: true,
     }
   })
@@ -750,7 +751,7 @@ setup(){
     let tlFadeItem = new gsap.timeline({
       scrollTrigger: {
         trigger: item,
-        start: 'top top+=65%',
+        start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       }
     })
@@ -786,7 +787,7 @@ class AboutFounder{
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-founder-title-wrap',
-        start: 'top top+=65%',
+        start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       }
     })
@@ -801,7 +802,7 @@ class AboutFounder{
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: item,
-          start: 'top top+=65%',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
           once: true,
         }
       })
@@ -817,7 +818,7 @@ class AboutFounder{
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: item,
-          start: 'top top+=65%',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
           once: true,
         }
       })
@@ -829,7 +830,7 @@ class AboutFounder{
     let tlJourneyEnd = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-journey-item-content',
-        start: 'top top+=65%',
+        start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       }
     })
@@ -955,7 +956,7 @@ class AboutMentor {
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-mentor-title-wrap',
-        start: 'top top+=65%',
+        start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       }
     })
@@ -970,7 +971,7 @@ class AboutMentor {
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: item,
-          start: 'top top+=65%',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
           once: true,
         }
       })
@@ -1005,7 +1006,7 @@ class AboutMember {
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-member-title-wrap',
-        start: 'top top+=65%',
+        start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       }
     })
@@ -1020,7 +1021,7 @@ class AboutMember {
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: item,
-          start: 'top top+=65%',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
           once: true,
         }
       })
@@ -1054,7 +1055,7 @@ class AboutPartner{
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-partner-title-wrap',
-        start: 'top top+=65%',
+        start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       }
     })
@@ -1063,7 +1064,7 @@ class AboutPartner{
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-partner-list',
-          start: 'top top+=65%',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
           once: true,
         }
       })
@@ -1096,7 +1097,7 @@ class AboutJoin{
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-join-content',
-        start: 'top top+=65%',
+        start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       }
     })
@@ -1162,7 +1163,7 @@ class CTA {
     let tlFade = new gsap.timeline({
       scrollTrigger : {
         trigger: '.homt-cta-title',
-        start : 'top top+=65%',
+        start : $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
         once: true,
       },
       onComplete: () => {
