@@ -197,6 +197,9 @@ function removeAllScrollTrigger() {
         } else if ($('[data-barba-namespace="contact"]').length) {
             contactHero.play()
         }
+        else if ($('[data-barba-namespace="about"]').length) {
+          aboutHero.play()
+      }
     }
 }
 let loading = new Loading()
@@ -685,6 +688,30 @@ class ContactHero {
     }
 }
 let contactHero = new ContactHero();
+class AboutHero{
+  constructor(){
+    this.tlFade;
+  }
+  setup(){
+    const title = new SplitType('.about-hero-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+    const sub = new SplitType('.about-hero-sub', {types: 'lines words', lineClass: 'kv-line '});
+    const label = new SplitType('.about-hero-label', {types: 'lines words', lineClass: 'kv-line '});
+    this.tlFade = new gsap.timeline({
+      paused: true,
+      onComplete : () => {
+      }
+    })
+    this.tlFade
+         .from(label.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4})
+          .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .025, duration: .6}, '<=.2')
+          .from(sub.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4}, '<=.1')
+  }
+  play(){
+    console.log('about play')
+    this.tlFade.play()
+  }
+}
+let aboutHero = new AboutHero()
 class AboutFounder{
   constructor(){
     this.tlTrigger;
@@ -727,20 +754,76 @@ class AboutFounder{
       })
       tlFadeLabel.fromTo(item,{scaleY: 0, transformOrigin: 'top'}, {scaleY: 1})
     })
-    // $('.line-abl').each((idx, item) => {
-    //   console.log($(item).height())
-    //   let tlFadeLine = new gsap.timeline({
-    //     scrollTrigger: {
-    //       trigger: $(item).closest('.about-journey-item-wrap'),
-    //       start: 'top  top+=30%',
-    //       end: 'bottom top+=30%',
-    //       scrub: true,
-    //       markers: true
-    //     }
-    //   })
-    //   tlFadeLine.fromTo(item,{scaleY: 0, transformOrigin: 'top'}, {scaleY: 1})
-    // })
-    
+    $('.line-abl').each((idx, item) => {
+      console.log($(item).height())
+      let tlFadeLine = new gsap.timeline({
+        scrollTrigger: {
+          trigger: $(item).closest('.about-journey-item-wrap'),
+          start: 'top  center',
+          end: 'bottom+=45% center',
+          scrub: true,
+        }
+      })
+    let height = $(item).find('svg').height();
+
+      tlFadeLine.fromTo(item,{'strokeDasharray': `0 ${height}`}, {'strokeDasharray': `${height} ${height}`})
+    })
+    $('.about-journey-item-year').each((idx, item) => {
+      console.log($(item).height())
+      let tlFadeLine = new gsap.timeline({
+        scrollTrigger: {
+          trigger: $(item).closest('.about-journey-item-wrap'),
+          start: 'top-=40%  center-=20%',
+          end: 'bottom-=40% center-=20%',
+          scrub: true,
+        }
+      })
+      tlFadeLine
+            .fromTo(item, {autoAlpha: 0, y: 40},{autoAlpha: 1, y: 0},)
+    })
+    let tlFadeLineEnd = new gsap.timeline({
+      scrollTrigger: {
+        trigger: $(' .about-journey-item-wrap-end .about-journey-item'),
+        start: 'top center',
+        end: 'center center',
+        scrub: true,
+      }
+    })
+    tlFadeLineEnd
+          .fromTo($('.about-journey-item-wrap-end .about-journey-item-time'), {autoAlpha: 0, y: 60},{autoAlpha: 1, y: 0},)
+    $('.line-abl-top').each((idx, item) => {
+      console.log($(item).height())
+      if($(item).closest('.about-journey-item-wrap').length > 0){
+        let tlFadeLine = new gsap.timeline({
+          scrollTrigger: {
+            trigger: $(item).closest('.about-journey-item-wrap'),
+            start: 'top-=50%  bottom',
+            end: 'bottom+=35% bottom',
+            scrub: true,
+          },
+         
+        })
+      let height = $(item).find('svg').height();
+  
+        tlFadeLine
+            .fromTo(item,{'strokeDasharray': `0 ${height*2}`}, {'strokeDasharray': `${height*2} ${height*2}`})
+      }
+      else{
+        let tlFadeLine = new gsap.timeline({
+          scrollTrigger: {
+            trigger: $(item).closest('.about-journey-item-wrap-end'),
+            start: 'top-=100%  bottom',
+            end: 'bottom-=20% bottom',
+            scrub: true,
+  
+          },
+         
+        })
+      let height = $(item).find('svg').height();
+  
+        tlFadeLine.fromTo(item,{'strokeDasharray': `0 ${height*2}`}, {'strokeDasharray': `${height*2} ${height*2}`})
+      }
+    })
   }
 }
 let aboutFounder = new AboutFounder();
@@ -844,6 +927,7 @@ let cta = new CTA()
       namespace: 'about',
       afterEnter() {
           console.log('about afterEnter');
+          aboutHero.setup();
           aboutFounder.setTrigger();
       },
       beforeLeave() {
