@@ -1182,12 +1182,22 @@ let cta = new CTA()
         afterEnter() {
             console.log('home afterEnter');
             homeHero.setup();
-            homePartner.setTrigger();
-            homeOpp.setTrigger();
-            homeTesti.setTrigger();
-            homeConquer.setTrigger();
-            homeBlog.setTrigger();
-            cta.setTrigger();
+            if(viewport.w>991){
+              homePartner.setTrigger();
+              homeOpp.setTrigger();
+              homeTesti.setTrigger();
+              homeConquer.setTrigger();
+              homeBlog.setTrigger();
+              cta.setTrigger();
+            }
+            else{
+              homePartner.setup();
+              homeOpp.setup();
+              homeTesti.setup();
+              homeConquer.setup();
+              homeBlog.setup();
+              cta.setup();
+            }
 
         },
         beforeLeave() {
