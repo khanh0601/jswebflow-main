@@ -550,7 +550,7 @@ barba.use(barbaPrefetch);
         let tlItem = new gsap.timeline({
           scrollTrigger : {
             trigger: '.home-oppo-count-wrap',
-            start : $(window).width() > 767 ? "top top+=75%" : "top top+=30%",
+            start : $(window).width() > 767 ? "top top+=75%" : "top top+=20%",
             once: true,
             onComplete: () => {
               // content.revert()
@@ -616,7 +616,7 @@ barba.use(barbaPrefetch);
         let content = new SplitType($(item).find('.home-blog-item-title'), {types: 'lines, words', lineClass: 'kv-line '});
         if(idx<=5){
         tlFadeItem
-        .from($(item).find('.home-blog-item-thumb'), {autoAlpha: 0, y: 60, duration: .6, clearProps: 'all' },  `${idx*.2}`)
+        .from($(item).find('.home-blog-item-thumb'), {autoAlpha: 0, y: 60, duration:1.2, clearProps: 'all' },  `${idx*.2}`)
         .from($(item).find('.home-blog-item-date-wrap'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'},'<=.6')
         .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4, onComplete: () => {
           // content.revert();
@@ -1163,7 +1163,7 @@ class CTA {
     let tlFade = new gsap.timeline({
       scrollTrigger : {
         trigger: '.homt-cta-title',
-        start : $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+        start : $(window).width() > 767 ? "top top+=65%" : "top top+=20%",
         once: true,
       },
       onComplete: () => {
