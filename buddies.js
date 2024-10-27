@@ -712,6 +712,56 @@ class AboutHero{
   }
 }
 let aboutHero = new AboutHero()
+class AboutDevelop{
+  constructor(){
+    this.tlTrigger
+  }
+  setTrigger(){
+  this.tlTrigger = new gsap.timeline({
+    scrollTrigger: {
+      trigger: '.about-develop',
+      start: "top bottom+=50%",
+      // end: "bottom top",
+      once: true,
+      onEnter: () => {
+        console.log('develop')
+        this.setup();
+      }
+    },
+  })
+}
+setup(){
+  const title = new SplitType('.about-develop-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
+  const sub = new SplitType('.about-develop-sub', {types: 'lines words', lineClass: 'kv-line'})
+  let tlFade = new gsap.timeline({
+    scrollTrigger: {
+      trigger: '.about-develop-title-wrap',
+      start: 'top top+=65%',
+      once: true,
+    }
+  })
+  tlFade
+    .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+    .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+  let allItems = $('.about-develop-item');
+  allItems.each((idx, item) => {
+  let titleItem = new SplitType($(item).find('.about-develop-item-title'), {types: 'lines words', lineClass: 'kv-line'})
+  let subItem = new SplitType($(item).find('.about-develop-item-sub'), {types: 'lines words', lineClass: 'kv-line'})
+    let tlFadeItem = new gsap.timeline({
+      scrollTrigger: {
+        trigger: item,
+        start: 'top top+=65%',
+        once: true,
+      }
+    })
+    tlFadeItem
+    .from($(item).find('.about-develop-item-ic'), {autoAlpha: 0, y: 60, duration: .6}, `<= ${idx*.2}`)
+    .from(titleItem.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<.2')
+    .from(subItem.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+  })
+}
+}
+let aboutDevelop = new AboutDevelop();
 class AboutFounder{
   constructor(){
     this.tlTrigger;
@@ -730,6 +780,63 @@ class AboutFounder{
     })
   }
   setup(){
+    const title = new SplitType('.about-founder-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
+    const sub = new SplitType('.about-founder-sub', {types: 'lines words', lineClass: 'kv-line'})
+    const label = new SplitType('.about-founder-label', {types: 'lines words', lineClass: 'kv-line'})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-founder-title-wrap',
+        start: 'top top+=65%',
+        once: true,
+      }
+    })
+    tlFade
+      .from(label.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4})
+      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .025, duration: .6}, '<=.2')
+      .from(sub.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4}, '<=.1')
+    let mainItems = $('.about-founder-main');
+    mainItems.each((idx, item) => {
+      let titleItem = new SplitType($(item).find('.about-founder-main-item-name'), {types: 'lines words', lineClass: 'kv-line'})
+      let subItem = new SplitType($(item).find('.about-founder-main-item-sub'), {types: 'lines words', lineClass: 'kv-line'})
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: 'top top+=65%',
+          once: true,
+        }
+      })
+      tlFadeItem
+        .from($(item).find('.about-founder-main-item-img'), {autoAlpha: 0, y: 60, duration: .6}, `${idx*.2}`)
+        .from(titleItem.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, )
+        .from(subItem.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3}, '<=.2')
+        .from($(item).find('.about-founder-main-item-social-inner'), {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3}, '<=.2')
+    })
+    let allTitleJourney = $('.about-journey-pa-title');
+    allTitleJourney.each((idx, item) => {
+      let titleItemJourney = new SplitType(item, {types: 'lines words', lineClass: 'kv-line'})
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: 'top top+=65%',
+          once: true,
+        }
+      })
+      // console.log($(item).closest('.about-journey-pa-title-wap'))
+      tlFadeItem
+        .from($(item).closest('.about-journey-item-inner-people').find('.about-journey-logo').find('.about-journey-logo-item'),{x:-20, autoAlpha: 0,duration: .6, stagger: .2})
+        .from(titleItemJourney.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .6}, '<=0')
+    })
+    let tlJourneyEnd = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-journey-item-content',
+        start: 'top top+=65%',
+        once: true,
+      }
+    })
+    let journeyEndSub = new SplitType($('.about-journey-item-content-sub'), {types: 'lines words', lineClass: 'kv-line'})
+    tlJourneyEnd
+      .from('.about-journey-item-content-title-wrap', {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'})
+      .from(journeyEndSub.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .4}, '<=.3')
     let allItems = $('.about-journey-item-wrap')
     allItems.each((idx, item) => {
       let tlFade  = new gsap.timeline({
@@ -755,7 +862,6 @@ class AboutFounder{
       tlFadeLabel.fromTo(item,{scaleY: 0, transformOrigin: 'top'}, {scaleY: 1})
     })
     $('.line-abl').each((idx, item) => {
-      console.log($(item).height())
       let tlFadeLine = new gsap.timeline({
         scrollTrigger: {
           trigger: $(item).closest('.about-journey-item-wrap'),
@@ -769,7 +875,6 @@ class AboutFounder{
       tlFadeLine.fromTo(item,{'strokeDasharray': `0 ${height}`}, {'strokeDasharray': `${height} ${height}`})
     })
     $('.about-journey-item-year').each((idx, item) => {
-      console.log($(item).height())
       let tlFadeLine = new gsap.timeline({
         scrollTrigger: {
           trigger: $(item).closest('.about-journey-item-wrap'),
@@ -827,6 +932,182 @@ class AboutFounder{
   }
 }
 let aboutFounder = new AboutFounder();
+class AboutMentor {
+  constructor(){
+    this.tlTrigger;
+  }
+  setTrigger(){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-mentor',
+        start: "top bottom+=50%",
+        end: "bottom top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      },
+    })
+  }
+  setup(){
+    const title = new SplitType('.about-mentor-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
+    const sub = new SplitType('.about-mentor-sub', {types: 'lines words', lineClass: 'kv-line'})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-mentor-title-wrap',
+        start: 'top top+=65%',
+        once: true,
+      }
+    })
+    tlFade
+      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+      .from('.about-mentor-title-wrap .line-staight', {autoAlpha: 0, scaleY: 0,transformOrigin: 'top', duration: .5},"<=0")
+      .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+    let allItems = $('.about-mentor-item');
+    allItems.each((idx, item) => {
+    let titleItem = new SplitType($(item).find('.about-mentor-item-name'), {types: 'lines words', lineClass: 'kv-line'})
+    let subItem = new SplitType($(item).find('.about-mentor-item-postion'), {types: 'lines words', lineClass: 'kv-line'})
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: 'top top+=65%',
+          once: true,
+        }
+      })
+      tlFadeItem
+      .from($(item).find('.about-mentor-item-img'), {autoAlpha: 0,scale: 0, duration: .8})
+      .from(titleItem.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6},'<=.2' )
+      .from(subItem.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6},"<=.3")
+    })
+  }
+}
+let aboutMentor = new AboutMentor()
+class AboutMember {
+  constructor(){
+    this.tlTrigger;
+  }
+  setTrigger(){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-member',
+        start: "top bottom+=50%",
+        end: "bottom top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      },
+    })
+  }
+  setup(){
+    const title = new SplitType('.about-member-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
+    const sub = new SplitType('.about-member-sub', {types: 'lines words', lineClass: 'kv-line'})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-member-title-wrap',
+        start: 'top top+=65%',
+        once: true,
+      }
+    })
+    tlFade
+      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+      .from('.about-member-title-wrap .line-staight', {autoAlpha: 0, scaleY: 0,transformOrigin: 'top', duration: .5},"<=0")
+      .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+    let allItems = $('.about-member-item');
+    allItems.each((idx, item) => {
+    let titleItem = new SplitType($(item).find('.about-member-item-name'), {types: 'lines words', lineClass: 'kv-line'})
+    let subItem = new SplitType($(item).find('.about-member-item-position'), {types: 'lines words', lineClass: 'kv-line'})
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: 'top top+=65%',
+          once: true,
+        }
+      })
+      tlFadeItem
+      .from($(item).find('.about-member-item-img'), {autoAlpha: 0,scale: 0, duration: .8})
+      .from(titleItem.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6},'<=.2' )
+      .from(subItem.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6},"<=.2")
+    })
+  }
+}
+let aboutMember = new AboutMember()
+class AboutPartner{
+  constructor(){
+    this.tlTrigger;
+  }
+  setTrigger(){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-partner',
+        start: "top bottom+=50%",
+        end: "bottom top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      },
+    })
+  }
+  setup(){
+    const title = new SplitType('.about-partner-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-partner-title-wrap',
+        start: 'top top+=65%',
+        once: true,
+      }
+    })
+    tlFade
+      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.about-partner-list',
+          start: 'top top+=65%',
+          once: true,
+        }
+      })
+      tlFadeItem
+        .from('.about-partner-item', {autoAlpha: 0, y: 60, stagger: .2, duration: .6})
+    
+}
+}
+let aboutPartner = new AboutPartner();
+class AboutJoin{
+  constructor(){
+    this.tlTrigger;
+  }
+  setTrigger(){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-join',
+        start: "top bottom+=50%",
+        end: "bottom top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      },
+    })
+  }
+  setup(){
+    const title = new SplitType('.about-join-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
+    const sub = new SplitType('.about-join-sub', {types: 'lines words', lineClass: 'kv-line'})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.about-join-content',
+        start: 'top top+=65%',
+        once: true,
+      }
+    })
+    tlFade
+      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+      .from('.about-join-content-img', {autoAlpha: 0, y: 60, duration: .6},'<=0')
+      .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+      .from('.about-join-btn-wrap .btn', {autoAlpha: 0, yPercent: 50, stagger: .2, duration: .3},"<=.3")
+  }
+}
+let aboutJoin = new AboutJoin();
 class Footer {
   constructor(){
     this.tlFade;
@@ -928,6 +1209,11 @@ let cta = new CTA()
       afterEnter() {
           console.log('about afterEnter');
           aboutHero.setup();
+          aboutDevelop.setTrigger();
+          aboutMentor.setTrigger();
+          aboutMember.setTrigger();
+          aboutPartner.setTrigger();
+          aboutJoin.setTrigger();
           aboutFounder.setTrigger();
       },
       beforeLeave() {
