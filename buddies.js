@@ -616,7 +616,7 @@ barba.use(barbaPrefetch);
         if(idx<=5){
         tlFadeItem
         .from($(item).find('.home-blog-item-thumb'), {autoAlpha: 0, y: 60, duration: .6, clearProps: 'all' },  `${idx*.2}`)
-        .from($(item).find('.home-blog-item-date-wrap'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'}, '<=.2')
+        .from($(item).find('.home-blog-item-date-wrap'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'},'<=.6')
         .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4, onComplete: () => {
           // content.revert();
         }}, '<=.2')
