@@ -253,6 +253,9 @@ barba.use(barbaPrefetch);
       setup(){
         const title = new SplitType('.home-hero-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
         const sub = new SplitType('.home-hero-sub', {types: 'lines words', lineClass: 'kv-line'})
+        gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+        gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
+        gsap.set('.home-hero-btn', {autoAlpha: 0, yPercent: 30})
         this.tlFade = new gsap.timeline({
           paused: true,
           onComplete : () => {
@@ -261,9 +264,9 @@ barba.use(barbaPrefetch);
           }
         })
         this.tlFade
-            .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
-            .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
-            .from('.home-hero-btn', {autoAlpha: 0, yPercent: 30, duration: .4, clearProps: 'all'}, '<=.2')
+            .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+            .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3},"<=.3")
+            .to('.home-hero-btn', {autoAlpha: 1, yPercent: 0, duration: .4, clearProps: 'all'}, '<=.2')
        let tlBody  = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-hero-body',
@@ -271,9 +274,11 @@ barba.use(barbaPrefetch);
           once: true
         }
        })
+       gsap.set('.home-hero-body-bg', {autoAlpha: 0, y: 60})
+       gsap.set('.home-hero-body img', {autoAlpha: 0, scale: 0})
        tlBody
-        .from('.home-hero-body-bg', {autoAlpha: 0,y: 60, duration: .6, clearProps: 'all'})
-        .from('.home-hero-body img', {autoAlpha: 0,scale: 0,transformOrigin: 'center',stagger: {
+        .to('.home-hero-body-bg', {autoAlpha: 1 ,y: 0, duration: .6, clearProps: 'all'})
+        .to('.home-hero-body img', {autoAlpha: 1,scale: 1,transformOrigin: 'center',stagger: {
           amount: .4,
           from: 'random'
       }, duration: 1.8, clearProps: 'all', ease: 'expo.out'},'<=.3')
@@ -355,6 +360,7 @@ barba.use(barbaPrefetch);
    
      setup (){
         const title = new SplitType('.home-conquer-title', {types: 'lines, words', lineClass: 'kv-line heading-line'})
+        gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
         let tlFade = new gsap.timeline({
           scrollTrigger : {
             trigger: '.home-conquer-title-wrap',
@@ -366,7 +372,7 @@ barba.use(barbaPrefetch);
           }
         })
         tlFade
-          .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
         let allItems = $('.home-conquer-faqs-item');
         let tlFadeItem = new gsap.timeline({
           scrollTrigger : {
@@ -375,21 +381,28 @@ barba.use(barbaPrefetch);
             once: true,
           }
         })
+        gsap.set('.home-conquer-faqs-img-list', {autoAlpha: 0, y: 50})
         tlFadeItem
-          .from('.home-conquer-faqs-img-list', {autoAlpha: 0, y: 50, duration: .5, clearProps: 'all'})
+          .to('.home-conquer-faqs-img-list', {autoAlpha: 1, y: 0, duration: .5, clearProps: 'all'})
         allItems.each((idx, item) => {
           let titleItem = new SplitType($(item).find('.home-conquer-faqs-title-txt'), {types: 'lines, words', lineClass: 'kv-line'});
+          gsap.set($(item).find('.div-line-wrap'), {scaleX: 0, transformOrigin: 'left'})
+          gsap.set($(item).find('.home-conquer-faqs-title-ic'), {autoAlpha: 0, yPercent: 60})
+              gsap.set($(titleItem.words), {autoAlpha: 0, yPercent: 60})
          tlFadeItem
-            .from(titleItem.words, {autoAlpha: 0, yPercent: 100, stagger: .02, duration: .6, onComplete: () => {
+            .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6, onComplete: () => {
               // titleItem.revert();
             }},idx==0?'<=.2':`<=${idx*.1}`)
-            .from($(item).find('.div-line-wrap'), { scaleX: 0, transformOrigin: 'left', duration: .8, clearProps: 'all'}, '<=0')
-            .from($(item).find('.home-conquer-faqs-title-ic'), {autoAlpha: 0, yPercent: 80, duration: .3, clearProps: 'all'}, '<=.2')
+            .to($(item).find('.div-line-wrap'), { scaleX: 1, duration: .8, clearProps: 'all'}, '<=0')
+            .to($(item).find('.home-conquer-faqs-title-ic'), {autoAlpha: 1, yPercent: 0, duration: .3, clearProps: 'all'}, '<=.2')
             if (idx == 0 ){
               let contentItem =  new SplitType($(item).find('.home-conquer-faqs-content-txt'), {types: 'lines, words', lineClass: 'kv-line'}); 
+              gsap.set(contentItem.words, {autoAlpha: 0, yPercent: 60})
+              gsap.set('.home-conquer-faqs-content-img', {autoAlpha: 0, y: 40})
+              
               tlFadeItem
-              .from('.home-conquer-faqs-content-img', {autoAlpha: 0, y: 40, duration: 1.2, clearProps: 'all'},'<=.2')
-              .from(contentItem.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .3, onComplete: () => {
+              .to('.home-conquer-faqs-content-img', {autoAlpha: 1, y: 0, duration: 1.2, clearProps: 'all'},'<=.2')
+              .to(contentItem.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3, onComplete: () => {
                 // contentItem.revert();
               }},'<=0')
             }
@@ -443,6 +456,8 @@ barba.use(barbaPrefetch);
    
     const title = new SplitType('.home-testi-title', {types: 'lines, words', lineClass: 'kv-line heading-line'});
     const sub = new SplitType('.home-testi-sub', {types: 'lines, words', lineClass: 'kv-line '});
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
     let tlFade = new gsap.timeline({
       scrollTrigger : {
         trigger: '.home-testi-title-wrap',
@@ -454,8 +469,8 @@ barba.use(barbaPrefetch);
       }
     })
     tlFade
-          .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
-          .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+          .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3},"<=.3")
     let tlFadeItem = new gsap.timeline({
       scrollTrigger : {
         trigger: '.home-testi-main',
@@ -472,6 +487,11 @@ barba.use(barbaPrefetch);
       let content = new SplitType($(item).find('.home-testi-item-content-txt'), {types: 'lines, words', lineClass: 'kv-line '});
       let name = new SplitType($(item).find('.home-testi-item-content-name'), {types: 'lines, words', lineClass: 'kv-line '});
       let decs = new SplitType($(item).find('.home-testi-item-content-desc'), {types: 'lines, words', lineClass: 'kv-line '});
+        gsap.set(content.words, {autoAlpha: 0, yPercent: 80})
+        gsap.set(name.words, {autoAlpha: 0, yPercent: 80})
+        gsap.set(decs.words, {autoAlpha: 0, yPercent: 100})
+        gsap.set(item, {autoAlpha: 0, y: 60})
+        gsap.set($(item).find('.home-testi-item-content-ic'), {autoAlpha: 0, yPercent: 60})
      if(idx<2){
       let tlFadeItemContent = new gsap.timeline({
         scrollTrigger : {
@@ -484,21 +504,66 @@ barba.use(barbaPrefetch);
         }
       })
       tlFadeItem
-      .from(item, {autoAlpha: 0, y: 60, duration: .6,  },  `${idx*.1}`)
-      .from($(item).find('.home-testi-item-content-ic'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'}, '<=0')
+      .to(item, {autoAlpha: 1, y: 0, duration: .6,  },  `${idx*.1}`)
+      .to($(item).find('.home-testi-item-content-ic'), {autoAlpha: 1, yPercent: 0, duration: .6, clearProps: 'all'}, '<=0')
       tlFadeItemContent
-      .from(content.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .4}, '<=.2')
-      .from(name.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6}, '<=.4')
-      .from(decs.words, {autoAlpha: 0, yPercent: 100, stagger: .02, duration: .6,  onComplete: ()=>{
+      .to(content.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+      .to(name.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.4')
+      .to(decs.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6,  onComplete: ()=>{
         // content.revert();
         // name.revert();
         // decs.revert();
-      }}, '<=.4',)
+      }}, '<=.6',)
      }
     })
     }
   }
   let homeTesti = new HomeTesti();
+  class HomeMap{
+    constructor(){
+      this.tlTrigger;
+      this.tlFadeMap;
+    }
+    setTrigger(){
+      console.log('setTriggerMap')
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.home-map',
+          start: "top bottom+=50%",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup(){
+      let title = new SplitType('.home-map-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+      let sub = new SplitType('.home-map-sub', {types: 'lines words', lineClass: 'kv-line '});
+      gsap.set(title.words, {autoAlpha: true, yPercent: 60});
+      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      this.tlFadeMap = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.home-map-title-wrap',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+        }
+      })
+      this.tlFadeMap
+          .to(title.words, {autoAlpha: 1, yPercent: 0, duration: .6,stagger: .02})
+          .to(sub.words, {autoAlpha: 1, yPercent: 0, duration: .4, stagger: .015}, '<=.2')
+          let tlFadeImg = new gsap.timeline({
+             scrollTrigger: {
+               trigger: '.home-map-img',
+               start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+               once: true,
+             }
+           })
+           tlFadeImg
+                .from('.home-map-img',{autoAlpha: 0, y: 60, duration: .6})
+      }
+  }
+  let homeMap = new HomeMap();
   class HomeOpp{
     constructor(){
       this.tlTrigger;
@@ -533,6 +598,8 @@ barba.use(barbaPrefetch);
         }, intervalTime); // Thời gian mỗi lần tăng (100ms ở đây)
     }
       const title = new SplitType('.home-oppo-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+      gsap.set('.home-oppo-tags-item', {autoAlpha: 0, yPercent: 80})
       let tlFade = new gsap.timeline({
         scrollTrigger : {
           trigger: '.home-oppo-title-wrap',
@@ -541,12 +608,14 @@ barba.use(barbaPrefetch);
         }
       })
       tlFade
-        .from(title.words,{autoAlpha: 0, yPercent: 60, stagger: .02, duration: .8})
-        .from('.home-oppo-tags-item', {autoAlpha: 0, yPercent: 80, stagger: .08, duration: .4, clearProps: 'all'}, '<=.2')
+        .to(title.words,{autoAlpha: 1, yPercent: 0, stagger: .02, duration: .8})
+        .to('.home-oppo-tags-item', {autoAlpha: 1, yPercent: 0, stagger: .08, duration: .4, clearProps: 'all'}, '<=.2')
       
       let allItems = $('.home-oppo-count-item');
       allItems.each((idx, item) => {
-      const content = new SplitType('.home-oppo-count-item-sub', {types: 'lines words', lineClass: 'kv-line '});
+      const content = new SplitType($(item).find('.home-oppo-count-item-sub'), {types: 'lines words', lineClass: 'kv-line '});
+      gsap.set(content.words, {autoAlpha: 0, yPercent: 60})
+      gsap.set($(item).find('.home-oppo-count-item-title'), {autoAlpha: 0, yPercent: 60})
         let tlItem = new gsap.timeline({
           scrollTrigger : {
             trigger: '.home-oppo-count-wrap',
@@ -559,11 +628,11 @@ barba.use(barbaPrefetch);
         })
         let number = parseInt($(item).find('.span-number-count').text());
         tlItem
-          .from($(item).find('.home-oppo-count-item-title'), {autoAlpha: 0, yPercent: 60, duration: .6, onStart: () => {
+          .to($(item).find('.home-oppo-count-item-title'), {autoAlpha: 1, yPercent: 0, duration: .6, onStart: () => {
             countUpTo(number, $(item).find('.span-number-count'), 1000);
           }})
           // .from('.home-oppo-count-item-title', {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<=.0')
-          .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<=.2')
+          .to(content.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
          
       })
     }
@@ -589,6 +658,7 @@ barba.use(barbaPrefetch);
     }
   setup (){
     const title = new SplitType('.home-blog-title', {types: 'lines, words', lineClass: 'kv-line heading-line'});
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
     let tlFade = new gsap.timeline({
       scrollTrigger : {
         trigger: '.home-blog-title',
@@ -600,7 +670,7 @@ barba.use(barbaPrefetch);
       }
     })
     tlFade
-          .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
     let tlFadeItem = new gsap.timeline({
       scrollTrigger : {
         trigger: '.home-blog-post',
@@ -614,11 +684,14 @@ barba.use(barbaPrefetch);
       let allItems = $('.home-blog-item');
       allItems.each((idx, item) => {
         let content = new SplitType($(item).find('.home-blog-item-title'), {types: 'lines, words', lineClass: 'kv-line '});
+        gsap.set(content.words, {autoAlpha: 0, yPercent: 60})
+        gsap.set($(item).find('.home-blog-item-thumb'), {autoAlpha: 0, y: 60})
+        gsap.set($(item).find('.home-blog-item-date-wrap'), {autoAlpha: 0, yPercent: 60})
         if(idx<=5){
         tlFadeItem
-        .from($(item).find('.home-blog-item-thumb'), {autoAlpha: 0, y: 60, duration:1.2, clearProps: 'all' },  `${idx*.2}`)
-        .from($(item).find('.home-blog-item-date-wrap'), {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'},'<=.6')
-        .from(content.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4, onComplete: () => {
+        .to($(item).find('.home-blog-item-thumb'), {autoAlpha: 1, y: 0, duration:1.2, clearProps: 'all' },  `${idx*.2}`)
+        .to($(item).find('.home-blog-item-date-wrap'), {autoAlpha: 1, yPercent: 0, duration: .6, clearProps: 'all'},'<=.6')
+        .to(content.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4, onComplete: () => {
           // content.revert();
         }}, '<=.2')
         }
@@ -634,29 +707,42 @@ class ContactHero {
    setup(){
       const title = new SplitType('.contact-hero-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
       const sub = new SplitType('.contact-hero-sub', {types: 'lines words', lineClass: 'kv-line '});
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
+      gsap.set('.contact-form', {autoAlpha: 0, y: 100})
       this.tlFade = new gsap.timeline({
         paused: true,
         onComplete : () => {
         }
       })
       this.tlFade
-            .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
-            .from(sub.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<=.2')
-            .from('.contact-form', {autoAlpha: 0, y: 100, duration: 1, clearProps: 'all'}, '<=.3')
+            .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+            .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+            .to('.contact-form', {autoAlpha: 1, y:0, duration: 1, clearProps: 'all'}, '<=.3')
       $('input[name="Course"]').on('click', function() {
         var selectedValue = $(this).val();
         var numberOnly = selectedValue.match(/\d+/)[0]; // Lấy phần số đầu tiên trong chuỗi
         $('.money-number').text(numberOnly);
     })
+    let requetId;
     function checkSuccess(){
       if ($('.contact-form-main-inner').css('display') === 'none') {
         $('.form-contact-success').addClass('active');
+        
       } else {
           // console.log("Phần tử đang hiển thị.");
       }
-      requestAnimationFrame(checkSuccess)
+       requetId = requestAnimationFrame(checkSuccess)
     }
     requestAnimationFrame(checkSuccess);
+    $('.form-success-close').on('click', function(){
+      cancelAnimationFrame(requetId)
+      $('input').val('');
+        $('input[type="checkbox"], input[type="radio"]').prop('checked', false);
+      $('.form-contact-success').removeClass('active');
+      $('.contact-form-main-inner').fadeIn();
+      $('input[type="submit"]').val('Submit');
+    })
     let animSuccess = new gsap.timeline({
       repeat: -1,
     })
@@ -702,10 +788,13 @@ class AboutHero{
       onComplete : () => {
       }
     })
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set(label.words, {autoAlpha: 0, yPercent: 80})
     this.tlFade
-         .from(label.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4})
-          .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .025, duration: .6}, '<=.2')
-          .from(sub.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4}, '<=.1')
+         .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
+          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .025, duration: .6}, '<=.2')
+          .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.1')
   }
   play(){
     console.log('about play')
@@ -734,6 +823,8 @@ class AboutDevelop{
 setup(){
   const title = new SplitType('.about-develop-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
   const sub = new SplitType('.about-develop-sub', {types: 'lines words', lineClass: 'kv-line'})
+  gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
   let tlFade = new gsap.timeline({
     scrollTrigger: {
       trigger: '.about-develop-title-wrap',
@@ -742,12 +833,15 @@ setup(){
     }
   })
   tlFade
-    .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
-    .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+    .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3},"<=.2")
   let allItems = $('.about-develop-item');
   allItems.each((idx, item) => {
   let titleItem = new SplitType($(item).find('.about-develop-item-title'), {types: 'lines words', lineClass: 'kv-line'})
   let subItem = new SplitType($(item).find('.about-develop-item-sub'), {types: 'lines words', lineClass: 'kv-line'})
+     gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set($(item).find('.about-develop-item-ic'), {autoAlpha: 0, y: 60})
     let tlFadeItem = new gsap.timeline({
       scrollTrigger: {
         trigger: item,
@@ -756,9 +850,9 @@ setup(){
       }
     })
     tlFadeItem
-    .from($(item).find('.about-develop-item-ic'), {autoAlpha: 0, y: 60, duration: .6}, `<= ${idx*.2}`)
-    .from(titleItem.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, '<.2')
-    .from(subItem.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+    .to($(item).find('.about-develop-item-ic'), {autoAlpha: 1, y: 0, duration: .6}, `<= ${idx*.2}`)
+    .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<.2')
+    .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3},"<=.3")
   })
 }
 }
@@ -781,9 +875,21 @@ class AboutFounder{
     })
   }
   setup(){
+    let animSuccess = new gsap.timeline({
+      repeat: -1,
+    })
+    animSuccess
+    .fromTo('.eye-left', {autoAlpha: 0}, {autoAlpha: 1, duration: .8})
+    .fromTo('.eye-right', {autoAlpha: 0}, {autoAlpha: 1, duration: .8}, "<=0")
+      // .fromTo('.mouse', {'strokeDasharray': '0px 80px'}, {'strokeDasharray': '50px 80px', duration: 1, ease: 'power1.out'},'<=.2')
+    .fromTo('.eye-right', {autoAlpha: 0}, {autoAlpha: 1, duration: .8}, '<=.8')
+    .fromTo('.eye-left', {autoAlpha: 0}, {autoAlpha: 1, duration: .8}, '<=.2')
     const title = new SplitType('.about-founder-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
     const sub = new SplitType('.about-founder-sub', {types: 'lines words', lineClass: 'kv-line'})
     const label = new SplitType('.about-founder-label', {types: 'lines words', lineClass: 'kv-line'})
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set(label.words, {autoAlpha: 0, yPercent: 80})
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-founder-title-wrap',
@@ -792,9 +898,9 @@ class AboutFounder{
       }
     })
     tlFade
-      .from(label.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4})
-      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .025, duration: .6}, '<=.2')
-      .from(sub.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .4}, '<=.1')
+      .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
+      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .025, duration: .6}, '<=.2')
+      .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.1')
     let mainItems = $('.about-founder-main');
     mainItems.each((idx, item) => {
       let titleItem = new SplitType($(item).find('.about-founder-main-item-name'), {types: 'lines words', lineClass: 'kv-line'})
@@ -806,15 +912,21 @@ class AboutFounder{
           once: true,
         }
       })
+      gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set($(item).find('.about-founder-main-item-img'), {autoAlpha: 0, y: 60})
+    gsap.set($(item).find('.about-founder-main-item-social-inner'), {autoAlpha: 0, yPercent: 80})
       tlFadeItem
-        .from($(item).find('.about-founder-main-item-img'), {autoAlpha: 0, y: 60, duration: .6}, `${idx*.2}`)
-        .from(titleItem.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6}, )
-        .from(subItem.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3}, '<=.2')
-        .from($(item).find('.about-founder-main-item-social-inner'), {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3}, '<=.2')
+        .to($(item).find('.about-founder-main-item-img'), {autoAlpha: 1, y: 0, duration: .6}, `${idx*.2}`)
+        .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, )
+        .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+        .to($(item).find('.about-founder-main-item-social-inner'), {autoAlpha: 1, yPercent: 0, stagger: .05, duration: .5}, '<=.2')
     })
     let allTitleJourney = $('.about-journey-pa-title');
     allTitleJourney.each((idx, item) => {
       let titleItemJourney = new SplitType(item, {types: 'lines words', lineClass: 'kv-line'})
+      gsap.set(titleItemJourney.words, {autoAlpha: 0, yPercent: 60})
+      gsap.set($(item).closest('.about-journey-item-inner-people').find('.about-journey-logo').find('.about-journey-logo-item'), {autoAlpha: 0, x: -20})
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: item,
@@ -824,8 +936,8 @@ class AboutFounder{
       })
       // console.log($(item).closest('.about-journey-pa-title-wap'))
       tlFadeItem
-        .from($(item).closest('.about-journey-item-inner-people').find('.about-journey-logo').find('.about-journey-logo-item'),{x:-20, autoAlpha: 0,duration: .6, stagger: .2})
-        .from(titleItemJourney.words, {autoAlpha: 0, yPercent: 60, stagger: .015, duration: .6}, '<=0')
+        .to($(item).closest('.about-journey-item-inner-people').find('.about-journey-logo').find('.about-journey-logo-item'),{x:0, autoAlpha: 1,duration: .6, stagger: .2})
+        .to(titleItemJourney.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .6}, '<=0')
     })
     let tlJourneyEnd = new gsap.timeline({
       scrollTrigger: {
@@ -835,9 +947,11 @@ class AboutFounder{
       }
     })
     let journeyEndSub = new SplitType($('.about-journey-item-content-sub'), {types: 'lines words', lineClass: 'kv-line'})
+    gsap.set(journeyEndSub.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set('.about-journey-item-content-title-wrap', {autoAlpha: 0, yPercent: 60})
     tlJourneyEnd
-      .from('.about-journey-item-content-title-wrap', {autoAlpha: 0, yPercent: 60, duration: .6, clearProps: 'all'})
-      .from(journeyEndSub.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .4}, '<=.3')
+      .to('.about-journey-item-content-title-wrap', {autoAlpha: 1, yPercent: 0, duration: .6, clearProps: 'all'})
+      .to(journeyEndSub.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .4}, '<=.3')
     let allItems = $('.about-journey-item-wrap')
     allItems.each((idx, item) => {
       let tlFade  = new gsap.timeline({
@@ -953,6 +1067,8 @@ class AboutMentor {
   setup(){
     const title = new SplitType('.about-mentor-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
     const sub = new SplitType('.about-mentor-sub', {types: 'lines words', lineClass: 'kv-line'})
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-mentor-title-wrap',
@@ -961,13 +1077,18 @@ class AboutMentor {
       }
     })
     tlFade
-      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
       .from('.about-mentor-title-wrap .line-staight', {autoAlpha: 0, scaleY: 0,transformOrigin: 'top', duration: .5},"<=0")
-      .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+      .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3},"<=.3")
     let allItems = $('.about-mentor-item');
     allItems.each((idx, item) => {
     let titleItem = new SplitType($(item).find('.about-mentor-item-name'), {types: 'lines words', lineClass: 'kv-line'})
     let subItem = new SplitType($(item).find('.about-mentor-item-postion'), {types: 'lines words', lineClass: 'kv-line'})
+    gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set($(item).find('.about-mentor-item-img'), {autoAlpha: 0, scale: 0})
+    gsap.set($(item).find('.about-mentor-item-ic'), {autoAlpha: 0, y: 10})
+    gsap.set($(item).find('.about-mentor-logo'), {autoAlpha: 0, y: 10})
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: item,
@@ -976,9 +1097,11 @@ class AboutMentor {
         }
       })
       tlFadeItem
-      .from($(item).find('.about-mentor-item-img'), {autoAlpha: 0,scale: 0, duration: .8})
-      .from(titleItem.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6},'<=.2' )
-      .from(subItem.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6},"<=.3")
+      .to($(item).find('.about-mentor-item-img'), {autoAlpha: 1,scale: 1, duration: .8})
+      .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=.2' )
+      .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},"<=.3")
+      .to($(item).find('.about-mentor-item-ic'), {autoAlpha: 1, y: 0, duration: .6},'<=.2')
+      .to($(item).find('.about-mentor-logo'), {autoAlpha: 1, y: 0, duration: .6},'<=.2')
     })
   }
 }
@@ -1003,6 +1126,9 @@ class AboutMember {
   setup(){
     const title = new SplitType('.about-member-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
     const sub = new SplitType('.about-member-sub', {types: 'lines words', lineClass: 'kv-line'})
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set('.about-member-title-wrap .line-staight', {autoAlpha: 0, scaleY: 0})
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-member-title-wrap',
@@ -1011,13 +1137,16 @@ class AboutMember {
       }
     })
     tlFade
-      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
-      .from('.about-member-title-wrap .line-staight', {autoAlpha: 0, scaleY: 0,transformOrigin: 'top', duration: .5},"<=0")
-      .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+      .to('.about-member-title-wrap .line-staight', {autoAlpha: 1, scaleY: 1,transformOrigin: 'top', duration: .5},"<=0")
+      .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3},"<=.3")
     let allItems = $('.about-member-item');
     allItems.each((idx, item) => {
     let titleItem = new SplitType($(item).find('.about-member-item-name'), {types: 'lines words', lineClass: 'kv-line'})
     let subItem = new SplitType($(item).find('.about-member-item-position'), {types: 'lines words', lineClass: 'kv-line'})
+    gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set($(item).find('.about-member-item-img'), {autoAlpha: 0, scale: 0})
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: item,
@@ -1026,9 +1155,9 @@ class AboutMember {
         }
       })
       tlFadeItem
-      .from($(item).find('.about-member-item-img'), {autoAlpha: 0,scale: 0, duration: .8})
-      .from(titleItem.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6},'<=.2' )
-      .from(subItem.words, {autoAlpha: 0, yPercent: 80, stagger: .02, duration: .6},"<=.2")
+      .to($(item).find('.about-member-item-img'), {autoAlpha: 1,scale: 1, duration: .8})
+      .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=.2' )
+      .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},"<=.2")
     })
   }
 }
@@ -1052,6 +1181,9 @@ class AboutPartner{
   }
   setup(){
     const title = new SplitType('.about-partner-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
+    gsap.set(title.words, {
+      autoAlpha: 0, yPercent: 60
+    })
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-partner-title-wrap',
@@ -1060,7 +1192,7 @@ class AboutPartner{
       }
     })
     tlFade
-      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-partner-list',
@@ -1068,8 +1200,9 @@ class AboutPartner{
           once: true,
         }
       })
+      gsap.set('.about-partner-item', {autoAlpha: 0, y: 60})
       tlFadeItem
-        .from('.about-partner-item', {autoAlpha: 0, y: 60, stagger: .2, duration: .6})
+        .to('.about-partner-item', {autoAlpha: 1, y: 0, stagger: .2, duration: .6})
     
 }
 }
@@ -1094,6 +1227,8 @@ class AboutJoin{
   setup(){
     const title = new SplitType('.about-join-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
     const sub = new SplitType('.about-join-sub', {types: 'lines words', lineClass: 'kv-line'})
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
     let tlFade = new gsap.timeline({
       scrollTrigger: {
         trigger: '.about-join-content',
@@ -1102,9 +1237,9 @@ class AboutJoin{
       }
     })
     tlFade
-      .from(title.words, {autoAlpha: 0, yPercent: 60, stagger: .02, duration: .6})
+      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
       .from('.about-join-content-img', {autoAlpha: 0, y: 60, duration: .6},'<=0')
-      .from(sub.words, {autoAlpha: 0, yPercent: 80, stagger: .015, duration: .3},"<=.3")
+      .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3},"<=.3")
       .from('.about-join-btn-wrap .btn', {autoAlpha: 0, yPercent: 50, stagger: .2, duration: .3},"<=.3")
   }
 }
@@ -1136,7 +1271,7 @@ class Footer {
       }
     })
     this.tlFade
-    .from('.footer-item-txt', {autoAlpha: 0, yPercent: 100, duration: .6, stagger: .04, clearProps: 'all'})
+    .from('.footer-item-txt', {autoAlpha: 0, yPercent: 100, duration: 1, stagger: .04, clearProps: 'all'})
     .from('.footer-social', {autoAlpha: 0, yPercent: 60, duration: .6, stagger: .04, clearProps: 'all'},'<=.5')
   }
 }
@@ -1190,11 +1325,13 @@ let cta = new CTA()
               homeConquer.setTrigger();
               homeBlog.setTrigger();
               cta.setTrigger();
+              homeMap.setTrigger();
             }
             else{
               homePartner.setup();
               homeOpp.setup();
               homeTesti.setup();
+              homeMap.setup();
               homeConquer.setup();
               homeBlog.setup();
               cta.setup();
@@ -1255,7 +1392,6 @@ barba.init({
         loading.init();
         footer.setTrigger();
           lenis.stop();  
-
       },
       async leave(data) {
           // footer.destroy();
