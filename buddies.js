@@ -881,7 +881,7 @@ class AboutFounder{
     animSuccess
     .fromTo('.eye-left', {autoAlpha: 0}, {autoAlpha: 1, duration: .8})
     .fromTo('.eye-right', {autoAlpha: 0}, {autoAlpha: 1, duration: .8}, "<=0")
-      // .fromTo('.mouse', {'strokeDasharray': '0px 80px'}, {'strokeDasharray': '50px 80px', duration: 1, ease: 'power1.out'},'<=.2')
+      .fromTo('.mouse', {'strokeDasharray': '0px 80px'}, {'strokeDasharray': '50px 80px', duration: 1, ease: 'power1.out'},'<=.2')
     .fromTo('.eye-right', {autoAlpha: 0}, {autoAlpha: 1, duration: .8}, '<=.8')
     .fromTo('.eye-left', {autoAlpha: 0}, {autoAlpha: 1, duration: .8}, '<=.2')
     const title = new SplitType('.about-founder-title', {types: 'lines words', lineClass: 'kv-line heading-line'})
