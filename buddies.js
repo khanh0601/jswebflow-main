@@ -240,12 +240,12 @@ const mainScript = () => {
     $('.kv-header').toggleClass('active');
 
   })
-  //  if( viewport.w <= 991){
+   if( viewport.w <= 991){
   $('.header-menu-has-sub').on('click', function () {
     console.log('khanh')
     $(this).find('.header-menu-sub').slideToggle();
   })
-  //  }
+   }
   class HomeHero {
     constructor() {
       this.tlFade
