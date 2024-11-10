@@ -157,10 +157,10 @@ const mainScript = () => {
     }
   }
   function removeAllScrollTrigger() {
-    let triggers = ScrollTrigger.getAll();
-    triggers.forEach(trigger => {
-      trigger.kill();
-    });
+    // let triggers = ScrollTrigger.getAll();
+    // triggers.forEach(trigger => {
+    //   trigger.kill();
+    // });
   }
   class Loading {
     constructor() {
@@ -168,7 +168,6 @@ const mainScript = () => {
       this.isLoaded = sessionStorage.getItem("isLoaded") == 'true' ? true : false;
     }
     init() {
-
       let tl = new gsap.timeline({
         onStart: () => {
 
@@ -732,7 +731,8 @@ const mainScript = () => {
         .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
         .to('.contact-form', { autoAlpha: 1, y: 0, duration: 1, clearProps: 'all' }, '<=.3')
       $('.course-price').on('change', function (e) {
-        let checkedCount = $('.course-price:checked').length;
+        let checkedCount = $('.course-price:not(".course-checkbox-full"):checked').length;
+        console.log(checkedCount)
         let price = 0;
         if (checkedCount > 0) {
           $('.course-price:checked').each((idx, item) => {
@@ -1125,7 +1125,7 @@ const mainScript = () => {
         let subItem = new SplitType($(item).find('.about-mentor-item-postion'), { types: 'lines words', lineClass: 'kv-line' })
         gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 })
         gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 })
-        gsap.set($(item).find('.about-mentor-item-img'), { autoAlpha: 0, scale: 0 })
+        gsap.set($(item).find('.about-mentor-item-img'), { autoAlpha: 0, y: 30 })
         gsap.set($(item).find('.about-mentor-item-ic'), { autoAlpha: 0, y: 10 })
         gsap.set($(item).find('.about-mentor-logo'), { autoAlpha: 0, y: 10 })
         let tlFadeItem = new gsap.timeline({
@@ -1136,7 +1136,7 @@ const mainScript = () => {
           }
         })
         tlFadeItem
-          .to($(item).find('.about-mentor-item-img'), { autoAlpha: 1, scale: 1, duration: .8 })
+          .to($(item).find('.about-mentor-item-img'), { autoAlpha: 1, y: 0, duration: .8 })
           .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
           .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, "<=.3")
           .to($(item).find('.about-mentor-item-ic'), { autoAlpha: 1, y: 0, duration: .6 }, '<=.2')
@@ -1185,7 +1185,7 @@ const mainScript = () => {
         let subItem = new SplitType($(item).find('.about-member-item-position'), { types: 'lines words', lineClass: 'kv-line' })
         gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 })
         gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 })
-        gsap.set($(item).find('.about-member-item-img'), { autoAlpha: 0, scale: 0 })
+        gsap.set($(item).find('.about-member-item-img'), { autoAlpha: 0, y: 30 })
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
@@ -1194,7 +1194,7 @@ const mainScript = () => {
           }
         })
         tlFadeItem
-          .to($(item).find('.about-member-item-img'), { autoAlpha: 1, scale: 1, duration: .8 })
+          .to($(item).find('.about-member-item-img'), { autoAlpha: 1, y: 0, duration: .8 })
           .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
           .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, "<=.2")
       })
@@ -1239,7 +1239,7 @@ const mainScript = () => {
           once: true,
         }
       })
-      gsap.set('.about-partner-item', { autoAlpha: 0, y: 60 })
+      gsap.set('.about-partner-item', { autoAlpha: 0, y: 35 })
       tlFadeItem
         .to('.about-partner-item', { autoAlpha: 1, y: 0, stagger: .2, duration: .6 })
 
@@ -1268,6 +1268,8 @@ const mainScript = () => {
       const sub = new SplitType('.about-join-sub', { types: 'lines words', lineClass: 'kv-line' })
       gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
       gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 })
+      gsap.set('.about-join-btn-wrap .btn', { autoAlpha: 0, yPercent: 40 })
+      gsap.set('.about-join-content-img', { autoAlpha: 0, y: 60 })
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-join-content',
@@ -1277,9 +1279,9 @@ const mainScript = () => {
       })
       tlFade
         .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
-        .from('.about-join-content-img', { autoAlpha: 0, y: 60, duration: .6 }, '<=0')
+        .to('.about-join-content-img', { autoAlpha: 1, y: 0, duration: .6 }, '<=0')
         .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3 }, "<=.3")
-        .from('.about-join-btn-wrap .btn', { autoAlpha: 0, yPercent: 50, stagger: .2, duration: .3 }, "<=.3")
+        .to('.about-join-btn-wrap .btn', { autoAlpha: 1, yPercent: 0, stagger: .2, duration: .6 }, "<=.4")
     }
   }
   let aboutJoin = new AboutJoin();
@@ -1615,7 +1617,7 @@ const mainScript = () => {
       afterEnter() {
         console.log('contact afterEnter');
         contactHero.setup();
-        cta.setup();
+        // cta.setup();
 
       },
       beforeLeave() {
@@ -1690,35 +1692,34 @@ const mainScript = () => {
         footer.setTrigger();
       },
       beforeLeave({ current }) {
-        removeAllScrollTrigger();
-        resetScroll();
-        globalScript();
-        // location.reload();
-        loading.init();
-        footer.setTrigger();
+
         lenis.stop();
       },
       async leave(data) {
-        // footer.destroy();
-        // // console.log('leave global')
-        // await pageTrans.leaveAnim(data).then(() => {
-        //     console.log('trans enter')
-        //     pageTrans.enterAnim(data)
-        // })
       },
       afterLeave(data) {
         console.log('after leave global')
       },
       beforeEnter(data) {
         lenis.start();
+        
         console.log('before enter')
       },
       enter(data) {
-
+    
         console.log('enter global')
       },
       afterEnter(data) {
-        // Trans
+        removeAllScrollTrigger();
+        resetScroll();
+        globalScript();
+        console.log(data)
+        if(data.next.namespace == 'contact'){
+          console.log('before enter contact')
+          location.reload();
+        }
+        loading.init();
+        footer.setTrigger();
 
         console.log('after enter global')
         // footerSocialMouse()
