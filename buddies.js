@@ -992,6 +992,7 @@ const mainScript = () => {
         .to('.about-journey-item-content-title-wrap', { autoAlpha: 1, yPercent: 0, duration: .6, clearProps: 'all' })
         .to(journeyEndSub.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .4 }, '<=.3')
       let allItems = $('.about-journey-item-wrap')
+    if(viewport.w > 767){
       allItems.each((idx, item) => {
         let tlFade = new gsap.timeline({
           scrollTrigger: {
@@ -1028,6 +1029,51 @@ const mainScript = () => {
 
         tlFadeLine.fromTo(item, { 'strokeDasharray': `0 ${height}` }, { 'strokeDasharray': `${height} ${height}` })
       })
+      let tlFadeLineEnd = new gsap.timeline({
+        scrollTrigger: {
+          trigger: $(' .about-journey-item-wrap-end .about-journey-item'),
+          start: 'top center',
+          end: 'center center',
+          scrub: true,
+        }
+      })
+      tlFadeLineEnd
+        .fromTo($('.about-journey-item-wrap-end .about-journey-item-time'), { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0 },)
+        $('.line-abl-top').each((idx, item) => {
+          console.log($(item).height())
+          if ($(item).closest('.about-journey-item-wrap').length > 0) {
+            let tlFadeLine = new gsap.timeline({
+              scrollTrigger: {
+                trigger: $(item).closest('.about-journey-item-wrap'),
+                start: 'top-=50%  bottom',
+                end: 'bottom+=35% bottom',
+                scrub: true,
+              },
+
+            })
+            let height = $(item).find('svg').height();
+
+            tlFadeLine
+              .fromTo(item, { 'strokeDasharray': `0 ${height * 2}` }, { 'strokeDasharray': `${height * 2} ${height * 2}` })
+          }
+          else {
+            let tlFadeLine = new gsap.timeline({
+              scrollTrigger: {
+                trigger: $(item).closest('.about-journey-item-wrap-end'),
+                start: 'top-=100%  bottom',
+                end: 'bottom-=20% bottom',
+                scrub: true,
+
+              },
+
+            })
+            let height = $(item).find('svg').height();
+
+            tlFadeLine.fromTo(item, { 'strokeDasharray': `0 ${height * 2}` }, { 'strokeDasharray': `${height * 2} ${height * 2}` })
+          }
+      })
+    }
+      
       $('.about-journey-item-year').each((idx, item) => {
         let tlFadeLine = new gsap.timeline({
           scrollTrigger: {
@@ -1040,49 +1086,7 @@ const mainScript = () => {
         tlFadeLine
           .fromTo(item, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0 },)
       })
-      let tlFadeLineEnd = new gsap.timeline({
-        scrollTrigger: {
-          trigger: $(' .about-journey-item-wrap-end .about-journey-item'),
-          start: 'top center',
-          end: 'center center',
-          scrub: true,
-        }
-      })
-      tlFadeLineEnd
-        .fromTo($('.about-journey-item-wrap-end .about-journey-item-time'), { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0 },)
-      $('.line-abl-top').each((idx, item) => {
-        console.log($(item).height())
-        if ($(item).closest('.about-journey-item-wrap').length > 0) {
-          let tlFadeLine = new gsap.timeline({
-            scrollTrigger: {
-              trigger: $(item).closest('.about-journey-item-wrap'),
-              start: 'top-=50%  bottom',
-              end: 'bottom+=35% bottom',
-              scrub: true,
-            },
-
-          })
-          let height = $(item).find('svg').height();
-
-          tlFadeLine
-            .fromTo(item, { 'strokeDasharray': `0 ${height * 2}` }, { 'strokeDasharray': `${height * 2} ${height * 2}` })
-        }
-        else {
-          let tlFadeLine = new gsap.timeline({
-            scrollTrigger: {
-              trigger: $(item).closest('.about-journey-item-wrap-end'),
-              start: 'top-=100%  bottom',
-              end: 'bottom-=20% bottom',
-              scrub: true,
-
-            },
-
-          })
-          let height = $(item).find('svg').height();
-
-          tlFadeLine.fromTo(item, { 'strokeDasharray': `0 ${height * 2}` }, { 'strokeDasharray': `${height * 2} ${height * 2}` })
-        }
-      })
+     
     }
   }
   let aboutFounder = new AboutFounder();
@@ -1339,7 +1343,8 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.homt-cta-title',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=20%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=50%",
+          markers: true,
           once: true,
         },
         onComplete: () => {
@@ -1462,6 +1467,7 @@ const mainScript = () => {
       this.tlTrigger;
     }
     setTrigger(){
+     
       this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-blog',
@@ -1475,6 +1481,24 @@ const mainScript = () => {
       })
     }
     setup() {
+      if(viewport.w < 767){
+        console.log('khanh')
+        $('.rs-blog-cms').addClass('swiper');
+        $('.rs-blog-list').addClass('swiper-wrapper');
+        $('.rs-blog-item').addClass('swiper-slide');
+        let swiperBlog = new Swiper('.rs-blog-cms', {
+          slidesPerView: 1,
+          spaceBetween: parseRem(20),
+        });
+        $('.rs-blog-cate-cms').addClass('swiper');
+        $('.rs-blog-cate-list').addClass('swiper-wrapper');
+        $('.rs-blog-cate-item').addClass('swiper-slide');
+        let swiperBlogCate = new Swiper('.rs-blog-cate-cms', {
+          slidesPerView: auto,
+          spaceBetween: parseRem(0),
+        });
+      }
+      console.log(viewport.w)
       $('.rs-blog-item.active').eq(0).addClass('child11');
       $('.rs-blog-cate-item').eq(0).addClass('active');
       function activeItem(category){
@@ -1629,7 +1653,7 @@ const mainScript = () => {
       afterEnter() {
         console.log('resource afterEnter');
         resourceCalendar.setup();
-        cta.setup();
+        // cta.setup();
         resourceBlog.setup();
       },
       beforeLeave() {
