@@ -773,14 +773,22 @@ const mainScript = () => {
       }
       requestAnimationFrame(checkSuccess);
       $('.form-success-close').on('click', function () {
-        // reload page
         location.reload();
-        // cancelAnimationFrame(requetId)
-        // $('input').val('');
-        //   $('input[type="checkbox"], input[type="radio"]').prop('checked', false);
-        // $('.form-contact-success').removeClass('active');
-        // $('.contact-form-main-inner').fadeIn();
-        // $('input[type="submit"]').val('Submit');
+      })
+      $('.course-checkbox-full').on('change', function () {
+        if ($(this).is(':checked')) {
+          $(this).closest('.contact-form-main-inner').find('.course-checkbox').prop('checked', false);
+          $(this).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', true);
+          $(this).closest('.contact-form-main-inner').find('.contact-form-register-course-item').addClass('disable');
+          $('.form-contact-success-title-one').hide();
+          $('.form-contact-success-title-full').show()
+        }
+        else{
+          $(this).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', false);
+          $(this).closest('.contact-form-main-inner').find('.contact-form-register-course-item').removeClass('disable');
+          $('.form-contact-success-title-full').hide();
+          $('.form-contact-success-title-show').show()
+        }
       })
       let animSuccess = new gsap.timeline({
         repeat: -1,
@@ -1344,7 +1352,6 @@ const mainScript = () => {
         scrollTrigger: {
           trigger: '.homt-cta-title',
           start: $(window).width() > 767 ? "top top+=65%" : "top top+=50%",
-          markers: true,
           once: true,
         },
         onComplete: () => {
@@ -1357,6 +1364,72 @@ const mainScript = () => {
 
     }
   }
+   class ResourceForm {
+    constructor(){
+      // this.tlTrigger;
+    }
+    setup(){
+      const formSubmitEvent = (function () {
+        const init = ({ onlyWorkOnThisFormName, onSuccess, onFail, onStart }) => {
+          $(document).ajaxStart(function () {
+            onStart?.();
+          });
+          $(document).ajaxComplete(function (event, xhr, settings) {
+            if (settings.url.includes("https://webflow.com/api/v1/form/")) {
+              const isSuccessful = xhr.status === 200;
+              const isWorkOnAllForm = onlyWorkOnThisFormName == undefined;
+              const isCorrectForm =
+                !isWorkOnAllForm &&
+                settings.data.includes(
+                  getSanitizedFormName(onlyWorkOnThisFormName)
+                );
+  
+              if (isWorkOnAllForm) {
+                if (isSuccessful) {
+                  onSuccess?.();
+                } else {
+                  onFail?.();
+                }
+              } else if (isCorrectForm) {
+                if (isSuccessful) {
+                  onSuccess?.();
+                } else {
+                  onFail?.();
+                }
+              }
+            }
+          });
+        };
+        function getSanitizedFormName(name) {
+          return name.replaceAll(" ", "+");
+        }
+        return {
+          init,
+        };
+      })();
+      formSubmitEvent.init({
+        onlyWorkOnThisFormName: "Email Form",
+        // onStart: function () {
+        //   $(".contact-form-box-submit .contact-form-box-submit-title").text(
+        //     "Please wait..."
+        //   );
+        // },
+        onSuccess: () => {
+          $('.rs-form-submit-inner').addClass('done')
+          $(".rs-form-submit").val( "");
+          $('.rs-form-input').val('');
+          $('.rs-form-input').attr('placeholder', 'Cảm ơn bạn đã đăng ký! Stay tune!');
+          $('.rs-form-input').addClass('done');
+          $('.rs-form').addClass('done');
+
+        },
+        onFail: () => {
+          console.log("fail");
+        },
+      });
+    }
+   }
+   let resourceForm = new ResourceForm();
   class ResourceCalendar {
     constructor() {
 
@@ -1467,7 +1540,6 @@ const mainScript = () => {
       this.tlTrigger;
     }
     setTrigger(){
-     
       this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-blog',
@@ -1494,12 +1566,14 @@ const mainScript = () => {
         $('.rs-blog-cate-list').addClass('swiper-wrapper');
         $('.rs-blog-cate-item').addClass('swiper-slide');
         let swiperBlogCate = new Swiper('.rs-blog-cate-cms', {
-          slidesPerView: auto,
+          slidesPerView: 'auto',
           spaceBetween: parseRem(0),
         });
       }
-      console.log(viewport.w)
+      if(viewport.w>767){
       $('.rs-blog-item.active').eq(0).addClass('child11');
+
+      }
       $('.rs-blog-cate-item').eq(0).addClass('active');
       function activeItem(category){
         $('.rs-blog-item').each((idx, item) => {
@@ -1524,7 +1598,10 @@ const mainScript = () => {
         else{
           activeItem(category);
         }
-      $('.rs-blog-item.active').eq(0).addClass('child11');
+        if(viewport.w > 767){
+          $('.rs-blog-item.active').eq(0).addClass('child11');
+
+        }
 
       })
     }
@@ -1653,6 +1730,7 @@ const mainScript = () => {
       afterEnter() {
         console.log('resource afterEnter');
         resourceCalendar.setup();
+        resourceForm.setup();
         // cta.setup();
         resourceBlog.setup();
       },
@@ -1694,6 +1772,7 @@ const mainScript = () => {
       afterEnter() {
         console.log('blog afterEnter');
         blogContent.setup();
+        resourceForm.setup();
         },
       beforeLeave() {
         console.log('blog clean')
@@ -1702,6 +1781,7 @@ const mainScript = () => {
   }
   const VIEWS = Object.values(SCRIPTS);
   barba.init({
+    prevent: ({ el }) => el.matches('form') || el.getAttribute('action') === '/resource',
     preventRunning: true,
     sync: true,
     debug: true,
@@ -1722,11 +1802,12 @@ const mainScript = () => {
       async leave(data) {
       },
       afterLeave(data) {
-        console.log('after leave global')
+        console.log('after leave global');
+       
       },
       beforeEnter(data) {
         lenis.start();
-        
+       
         console.log('before enter')
       },
       enter(data) {
@@ -1738,11 +1819,12 @@ const mainScript = () => {
         resetScroll();
         globalScript();
         console.log(data)
-        if(data.next.namespace == 'contact'){
+        if(data.next.namespace == 'contact' || data.next.namespace == 'resource ' || data.next.namespace == 'blog'){
           console.log('before enter contact')
           location.reload();
         }
-        loading.init();
+          loading.init();
+        // loading.init();
         footer.setTrigger();
 
         console.log('after enter global')
