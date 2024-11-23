@@ -399,14 +399,14 @@ const mainScript = () => {
           .to($(item).find('.div-line-wrap'), { scaleX: 1, duration: .8, clearProps: 'all' }, '<=0')
           .to($(item).find('.home-conquer-faqs-title-ic'), { autoAlpha: 1, yPercent: 0, duration: .3, clearProps: 'all' }, '<=.2')
         if (idx == 0) {
-          let contentItem = new SplitType($(item).find('.home-conquer-faqs-content-txt'), { types: 'lines, words', lineClass: 'kv-line' });
-          gsap.set(contentItem.words, { autoAlpha: 0, yPercent: 60 })
+          let contentItem = new SplitType($(item).find('.home-conquer-faqs-content-txt'), { types: ' lines', lineClass: 'kv-line' });
+          gsap.set(contentItem.lines, { autoAlpha: 0, yPercent: 80 })
           gsap.set('.home-conquer-faqs-content-img', { autoAlpha: 0, y: 40 })
 
           tlFadeItem
             .to('.home-conquer-faqs-content-img', { autoAlpha: 1, y: 0, duration: 1.2, clearProps: 'all' }, '<=.2')
-            .to(contentItem.words, {
-              autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3, onComplete: () => {
+            .to(contentItem.lines, {
+              autoAlpha: 1, yPercent: 0, stagger: .2, duration: .8, onComplete: () => {
                 // contentItem.revert();
               }
             }, '<=0')
