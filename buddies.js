@@ -156,6 +156,7 @@ const mainScript = () => {
       scrollTop()
     }
   }
+  let onLoadPage = sessionStorage.getItem('loading-page');
   function removeAllScrollTrigger() {
     // let triggers = ScrollTrigger.getAll();
     // triggers.forEach(trigger => {
@@ -170,23 +171,37 @@ const mainScript = () => {
     init() {
       let tl = new gsap.timeline({
         onStart: () => {
-
-          gsap.to('.kv-header-wrap', { autoAlpha: 0, yPercent: -100 })
-          lenis.stop();
-          $(".loading-page").removeClass("loaded");
-          setTimeout(function () {
+    $('.kv-header').removeClass('active');
+          if(!onLoadPage){
+            gsap.to('.kv-header-wrap', { autoAlpha: 0, yPercent: -100 })
+            lenis.stop();
+            $(".loading-page").removeClass("loaded");
+            setTimeout(function () {
+              $('.main-wrap').removeClass('hide-def-div')
+            }, 1000)
+          }
+          else{
             $('.main-wrap').removeClass('hide-def-div')
-          }, 1000)
+          }
         },
         onComplete: () => {
-          lenis.start();
+          if(!onLoadPage){
+            lenis.start();
           $(".loading-page").addClass("loaded");
+          }
           this.animHero();
         }
       });
+     if(!onLoadPage){
       tl
-        .fromTo('.loading-page .loading-page-inner', { autoAlpha: 0 }, { duration: 1, autoAlpha: 1, ease: "power1.out", })
-        .to('.loading-page .loading-page-inner', { duration: 1, autoAlpha: 0, ease: "power1.out" })
+      .fromTo('.loading-page .loading-page-inner', { autoAlpha: 0 }, { duration: 1, autoAlpha: 1, ease: "power1.out", })
+      .to('.loading-page .loading-page-inner', { duration: 1, autoAlpha: 0, ease: "power1.out" }) 
+    }
+    else{
+      tl
+      .to('.loading-page .loading-page-inner', { duration: 1, autoAlpha: 0, ease: "power1.out" }) 
+    }
+      sessionStorage.setItem('loading-page', 'true');
     }
     animHero() {
       console.log('hero loaded')
@@ -241,9 +256,9 @@ const mainScript = () => {
   })
    if( viewport.w <= 991){
   $('.header-menu-has-sub').on('click', function () {
-    console.log('khanh')
     $(this).find('.header-menu-sub').slideToggle();
   })
+
    }
   class HomeHero {
     constructor() {
@@ -952,6 +967,7 @@ const mainScript = () => {
       mainItems.each((idx, item) => {
         let titleItem = new SplitType($(item).find('.about-founder-main-item-name'), { types: 'lines words', lineClass: 'kv-line' })
         let subItem = new SplitType($(item).find('.about-founder-main-item-sub'), { types: 'lines words', lineClass: 'kv-line' })
+        let decItem = new SplitType($(item).find('.about-founder-main-item-ul li'), { types: 'lines words', lineClass: 'kv-line' })
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
@@ -963,11 +979,13 @@ const mainScript = () => {
         gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 })
         gsap.set($(item).find('.about-founder-main-item-img'), { autoAlpha: 0, y: 60 })
         gsap.set($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 0, yPercent: 80 })
+        gsap.set(decItem.words, { autoAlpha: 0, yPercent: 80 })
         tlFadeItem
           .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, y: 0, duration: .6 }, `${idx * .2}`)
           .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 },)
           .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
           .to($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 1, yPercent: 0, stagger: .05, duration: .5 }, '<=.2')
+          .to(decItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3 }, '<=.3')
       })
       let allTitleJourney = $('.about-journey-pa-title');
       allTitleJourney.each((idx, item) => {
@@ -1553,7 +1571,6 @@ const mainScript = () => {
       })
     }
     setup() {
-      let swiperBlog;
       if(viewport.w < 767){
         // console.log('khanh')
         // $('.rs-blog-cms').addClass('swiper');
@@ -1816,17 +1833,11 @@ const mainScript = () => {
       async leave(data) {
       },
       afterLeave(data) {
-        console.log('after leave global');
-       
       },
       beforeEnter(data) {
         lenis.start();
-       
-        console.log('before enter')
       },
       enter(data) {
-    
-        console.log('enter global')
       },
       afterEnter(data) {
         removeAllScrollTrigger();
@@ -1837,12 +1848,10 @@ const mainScript = () => {
           console.log('before enter contact')
           location.reload();
         }
+        // if(!onLoadPage){
           loading.init();
-        // loading.init();
+        // }
         footer.setTrigger();
-
-        console.log('after enter global')
-        // footerSocialMouse()
       },
     }],
     views: VIEWS
