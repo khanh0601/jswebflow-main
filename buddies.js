@@ -3,6 +3,11 @@ const mainScript = () => {
   const parseRem = (input) => {
     return (input / 10) * parseFloat($("html").css("font-size"));
   };
+  function reinitializeWebflow() {
+    console.log('reinitialize webflow');
+    window.Webflow && window.Webflow.destroy();
+    window.Webflow && window.Webflow.ready();
+}
   function globalScript() {
     // loadingPage();
 
@@ -127,6 +132,8 @@ const mainScript = () => {
     window.scrollTo(0, 0);
   }
   function resetScroll() {
+    reinitializeWebflow();
+    console.log(window.location)
     if (window.location.hash !== '') {
       console.log('has hash')
       if ($(window.location.hash).length >= 1) {
@@ -158,10 +165,10 @@ const mainScript = () => {
   }
   let onLoadPage = sessionStorage.getItem('loading-page');
   function removeAllScrollTrigger() {
-    // let triggers = ScrollTrigger.getAll();
-    // triggers.forEach(trigger => {
-    //   trigger.kill();
-    // });
+    let triggers = ScrollTrigger.getAll();
+    triggers.forEach(trigger => {
+      trigger.kill();
+    });
   }
   class Loading {
     constructor() {
@@ -213,6 +220,12 @@ const mainScript = () => {
       }
       else if ($('[data-barba-namespace="about"]').length) {
         aboutHero.play()
+      }
+      else if ($('[data-barba-namespace="resource"]').length) {
+        resourceHero.play()
+      }
+      else if ($('[data-barba-namespace="blog"]').length) {
+        blogHero.play()
       }
     }
   }
@@ -1382,6 +1395,43 @@ const mainScript = () => {
 
     }
   }
+  class ResourceHero{
+    constructor(){
+      this.tlFade;
+    }
+    setup(){
+      const titleHero = new SplitType('.rs-hero-title', { types: 'lines, words', lineClass: 'kv-line heading-line' });
+      const titleForm = new SplitType('.rs-form-title', { types: 'lines, words', lineClass: 'kv-line heading-line' });
+      const subForm = new SplitType('.rs-form-sub', { types: 'lines, words', lineClass: 'kv-line heading-line' });
+      const label = new SplitType('.rs-hero-label', { types: 'lines, words', lineClass: 'kv-line ' });
+      const sub = new SplitType('.rs-hero-sub', { types: 'lines, words', lineClass: 'kv-line ' });
+      gsap.set(titleHero.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(titleForm.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(label.words, { autoAlpha: 0, yPercent: 80 });
+      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 });
+      gsap.set(subForm.words, { autoAlpha: 0, yPercent: 80 });
+      gsap.set('.rs-form-register', { autoAlpha: 0, yPercent: 60 });
+      this.tlFade = new gsap.timeline({
+        scrollTrigger: {
+          paused: true,
+          trigger: '.rs-hero-title-wrap',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+          },
+        });
+        this.tlFade
+              .to(label.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .6 })
+              .to(titleHero.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .4 }, '<=.2')
+              .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+              .to(titleForm.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+              .to(subForm.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+              .to('.rs-form-register', { autoAlpha: 1, yPercent: 0, duration: .4, clearProps: 'all' }, '<=.2')
+    }
+    play(){
+      this.tlFade.play();
+    }
+  }
+  let resourceHero = new ResourceHero();
    class ResourceForm {
     constructor(){
       // this.tlTrigger;
@@ -1427,11 +1477,6 @@ const mainScript = () => {
       })();
       formSubmitEvent.init({
         onlyWorkOnThisFormName: "Email Form",
-        // onStart: function () {
-        //   $(".contact-form-box-submit .contact-form-box-submit-title").text(
-        //     "Please wait..."
-        //   );
-        // },
         onSuccess: () => {
           $('.rs-form-submit-inner').addClass('done')
           $(".rs-form-submit").val( "");
@@ -1450,9 +1495,24 @@ const mainScript = () => {
    let resourceForm = new ResourceForm();
   class ResourceCalendar {
     constructor() {
-
     }
     setup() {
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.rs-event',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          end: "bottom top",
+          once: true,
+        }
+      })
+      const title = new SplitType('.rs-event-title', { types: 'lines words', lineClass: 'kv-line heading-line' })
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
+      gsap.set ('.rs-event-calendar-iframe', { autoAlpha: 0, y: 100 })
+      gsap.set('.rs-event-calendar',  { autoAlpha: 0, y: 100 })
+      tlFade
+          .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+          .to('.rs-event-calendar', { autoAlpha: 1, y: 0, stagger: .02, duration: 1 }, '<=.2')
+          .to('.rs-event-calendar-iframe', { autoAlpha: 1, y: 0, stagger: .02, duration: 1 }, '<=.0')
       let link_calendar = $('.rs-event-calendar-date').eq(0).attr('link');
       $('.iframe-luna').attr('src', link_calendar);
       $('<iframe>', {
@@ -1571,15 +1631,32 @@ const mainScript = () => {
       })
     }
     setup() {
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.rs-blog-title',
+          start : viewport.w>767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+        }
+      })
+      const title = new SplitType('.rs-blog-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set('.rs-blog-cate-item', { autoAlpha: 0, x: 10 });
+      tlFade
+            .to(title.words, { autoAlpha: 1, yPercent: 0, duration: .6})
+            .to('.rs-blog-cate-item', { autoAlpha: 1, x: 0,stagger: .1, duration: .4}, '<=.2')
+      gsap.set('.rs-blog-item', { autoAlpha: 0, y: 50 });
+      $('.rs-blog-item').each((idx, item) => {
+        let tlFadeItem = new gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            once: true,
+          }
+        })
+        tlFadeItem
+                .to(item, { autoAlpha: 1, y: 0, duration: 1 })
+      })
       if(viewport.w < 767){
-        // console.log('khanh')
-        // $('.rs-blog-cms').addClass('swiper');
-        // $('.rs-blog-list').addClass('swiper-wrapper');
-        // $('.rs-blog-item').addClass('swiper-slide');
-        // let swiperBlog = new Swiper('.rs-blog-cms', {
-        //   slidesPerView: 1,
-        //   spaceBetween: parseRem(20),
-        // });
         $('.rs-blog-cate-cms').addClass('swiper');
         $('.rs-blog-cate-list').addClass('swiper-wrapper');
         $('.rs-blog-cate-item').addClass('swiper-slide');
@@ -1638,6 +1715,150 @@ const mainScript = () => {
     }
   }
   let resourceBlog = new ResourceBlog();
+  class ResourceLetter {
+    constructor(){
+      this.tlTrigger;
+      this.tlFade;
+    }
+    setTrigger (){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger : {
+          trigger : '.rs-newletter',
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+  setup(){
+      let title = new SplitType('.rs-newletter-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+     if(viewport.w > 767){
+      gsap.set('.rs-newletter-item', { autoAlpha: 0, x: -30 });
+     }
+     else {
+      gsap.set('.rs-newletter-item', { autoAlpha: 0, y: -30 });
+
+     }
+      gsap.set('.rs-newletter-btn', { autoAlpha: 0, y: 30 });
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger : '.rs-newletter-title-wrap',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+        }
+      })
+      tlFade
+      .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+      .to('.rs-newletter-btn', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' },'<=0')
+      if(viewport.w > 767){
+        tlFade
+        .to('.rs-newletter-item', { autoAlpha: 1, x: 0, duration: .8, clearProps: 'all', stagger: .1 },'<=.4');
+      }
+      else {
+        tlFade
+        .to('.rs-newletter-item', { autoAlpha: 1, y: 0, duration: .8, clearProps: 'all', stagger: .1 },'<=.4');
+      }
+   }
+  }
+  let resourceLetter = new ResourceLetter()
+  class ResourceJob{
+    constructor(){
+      this.tlTrigger;
+      this.tlFade;
+    }
+    setTrigger (){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger : {
+          trigger : '.rs-job',
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup(){
+      let title = new SplitType('.rs-job-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set('.rs-job-item', {autoAlpha: 0, y: 30});
+       let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.rs-job-title',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+          }
+       })
+       tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to('.rs-job-item', { autoAlpha: 1, y: 0, stagger: .2, duration: .6 }, '<=.2')
+    }
+  }
+  let resourceJob = new ResourceJob();
+  class ResourceCta {
+    constructor() {
+      this.tlTrigger;
+      this.tlFade;
+      }
+      setTrigger (){
+        this.tlTrigger = new gsap.timeline({
+          scrollTrigger : {
+            trigger : '.rs-cta',
+            onEnter: () => {
+              this.setup();
+            }
+          }
+        })
+      }
+      setup(){
+        let title = new SplitType('.rs-cta-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+        gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+        gsap.set('.rs-cta-btn', {autoAlpha: 0, y: 40});
+        let tlFade = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.rs-cta-title',
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            once: true,
+            }
+            })
+            tlFade
+            .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+            .to('.rs-cta-btn', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' },'<=0.3')
+      }
+
+  }
+  let resourceCta = new ResourceCta();
+  class BlogHero {
+    constructor(){
+      this.tlFade;
+    }
+    setup(){
+      let title = new SplitType('.blog-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set('.blog-hero-cate', {autoAlpha: 0, yPercent: 100});
+      gsap.set('.blog-hero-direct .txt', {autoAlpha: 0, x: 20});
+      gsap.set('.blog-hero-info', {autoAlpha: 0, x: 20});
+      gsap.set('.blog-hero-img', {autoAlpha: 0, y: 40});
+      this.tlFade = new gsap.timeline({
+        scrollTrigger: {
+          paused: true,
+          trigger: '.blog-hero-title',
+          start:  "top bottom+=50%",
+          once: true,
+        }
+      })  
+      this.tlFade
+      .to('.blog-hero-direct .txt', { autoAlpha: 1, x: 0, duration: .6, stagger: .1})
+      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+      .to('.blog-hero-img', {autoAlpha: 1, y: 0, duration: .6}, '<=0')
+      .to('.blog-hero-cate', {autoAlpha: 1, yPercent: 0, duration: .6}, '<=.2')
+      .to('.blog-hero-info', {autoAlpha: 1, x: 0, duration: .6}, '<=.2')
+    }
+    play(){
+      this.tlFade.play();
+    }
+  }
+  let blogHero = new BlogHero();
+  
   class BlogContent{
     constructor(){
       this.tlTrigger;
@@ -1760,10 +1981,24 @@ const mainScript = () => {
       namespace: 'resource',
       afterEnter() {
         console.log('resource afterEnter');
+        if(viewport.w > 991){
+          resourceHero.setup();
         resourceCalendar.setup();
         resourceForm.setup();
-        // cta.setup();
+        resourceLetter.setTrigger();
         resourceBlog.setup();
+        resourceJob.setTrigger();
+        resourceCta.setTrigger();
+        }
+        else{
+          resourceHero.setup();
+        resourceCalendar.setup();
+        resourceForm.setup();
+        resourceLetter.setup();
+        resourceBlog.setup();
+        resourceJob.setup();
+        resourceCta.setup();
+        }
       },
       beforeLeave() {
         console.log('contact clean')
@@ -1804,6 +2039,7 @@ const mainScript = () => {
         console.log('blog afterEnter');
         blogContent.setup();
         resourceForm.setup();
+        blogHero.setup();
         },
       beforeLeave() {
         console.log('blog clean')
@@ -1812,9 +2048,10 @@ const mainScript = () => {
   }
   const VIEWS = Object.values(SCRIPTS);
   barba.init({
-    prevent: ({ el }) => el.matches('form') || el.getAttribute('action') === '/resource',
+    // prevent: ({ el }) => el.matches('form') || el.getAttribute('action') === '/resource',
     preventRunning: true,
-    sync: true,
+    timeout: 5000,
+    // sync: true,
     debug: true,
     transitions: [{
       name: 'default-transition',
@@ -1827,7 +2064,6 @@ const mainScript = () => {
         footer.setTrigger();
       },
       beforeLeave({ current }) {
-
         lenis.stop();
       },
       async leave(data) {
@@ -1835,22 +2071,20 @@ const mainScript = () => {
       afterLeave(data) {
       },
       beforeEnter(data) {
+        removeAllScrollTrigger();
         lenis.start();
       },
       enter(data) {
       },
       afterEnter(data) {
-        removeAllScrollTrigger();
         resetScroll();
         globalScript();
-        console.log(data)
-        if(data.next.namespace == 'contact' || data.next.namespace == 'resource ' || data.next.namespace == 'blog'){
-          console.log('before enter contact')
-          location.reload();
-        }
-        // if(!onLoadPage){
-          loading.init();
+        console.log(data.next.namespace)
+        // if(data.next.namespace == 'contact' || data.next.namespace == 'resource' || data.next.namespace == 'blog'){
+        //   console.log('before enter contact')
+        //   location.reload();
         // }
+          loading.init();
         footer.setTrigger();
       },
     }],
