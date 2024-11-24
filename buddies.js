@@ -1553,15 +1553,16 @@ const mainScript = () => {
       })
     }
     setup() {
+      let swiperBlog;
       if(viewport.w < 767){
-        console.log('khanh')
-        $('.rs-blog-cms').addClass('swiper');
-        $('.rs-blog-list').addClass('swiper-wrapper');
-        $('.rs-blog-item').addClass('swiper-slide');
-        let swiperBlog = new Swiper('.rs-blog-cms', {
-          slidesPerView: 1,
-          spaceBetween: parseRem(20),
-        });
+        // console.log('khanh')
+        // $('.rs-blog-cms').addClass('swiper');
+        // $('.rs-blog-list').addClass('swiper-wrapper');
+        // $('.rs-blog-item').addClass('swiper-slide');
+        // let swiperBlog = new Swiper('.rs-blog-cms', {
+        //   slidesPerView: 1,
+        //   spaceBetween: parseRem(20),
+        // });
         $('.rs-blog-cate-cms').addClass('swiper');
         $('.rs-blog-cate-list').addClass('swiper-wrapper');
         $('.rs-blog-cate-item').addClass('swiper-slide');
@@ -1577,7 +1578,7 @@ const mainScript = () => {
       $('.rs-blog-cate-item').eq(0).addClass('active');
       function activeItem(category){
         $('.rs-blog-item').each((idx, item) => {
-          console.log(category);
+          console.log($(item).attr('category'));
           if($(item).attr('category') == category){
             $(item).addClass('active');
           }
@@ -1598,10 +1599,23 @@ const mainScript = () => {
         else{
           activeItem(category);
         }
+        // $('.rs-blog-item').removeClass('swiper-slide');
+        // $('.rs-blog-item.active').addClass('swiper-slide');
         if(viewport.w > 767){
           $('.rs-blog-item.active').eq(0).addClass('child11');
 
         }
+// if (swiperBlog) {
+//   swiperBlog.destroy(true, true);
+//     }
+//   $('.swiper-blog-wrapper').removeAttr('style')
+//     console.log(swiperBlog)
+//     // Khởi tạo lại Swiper
+//     swiperBlog = new Swiper('.rs-blog-cms', {
+//         slidesPerView: 1,
+//         spaceBetween: parseRem(20),
+//     });
+//     console.log(swiperBlog)
 
       })
     }
