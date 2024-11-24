@@ -163,7 +163,6 @@ const mainScript = () => {
       scrollTop()
     }
   }
-  let onLoadPage = sessionStorage.getItem('loading-page');
   function removeAllScrollTrigger() {
     let triggers = ScrollTrigger.getAll();
     triggers.forEach(trigger => {
@@ -176,6 +175,7 @@ const mainScript = () => {
       this.isLoaded = sessionStorage.getItem("isLoaded") == 'true' ? true : false;
     }
     init() {
+  let onLoadPage = sessionStorage.getItem('loading-page');
       let tl = new gsap.timeline({
         onStart: () => {
     $('.kv-header').removeClass('active');
