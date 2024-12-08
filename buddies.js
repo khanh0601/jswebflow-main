@@ -11,9 +11,9 @@ const mainScript = () => {
   function globalScript() {
     // loadingPage();
 
-    // if ($(".hide-def-div").length > 0) {
-    //   $(".hide-def-div").removeClass("hide-def-div");
-    // }
+    if ($(".hide-def-div").length > 0) {
+      $(".hide-def-div").removeClass("hide-def-div");
+    }
     const paginationDiv = document.createElement('div');
     paginationDiv.classList.add('swiper-pagination');
     const swiper = document.querySelector('.swiper.home-testi-cms');
@@ -226,6 +226,9 @@ const mainScript = () => {
       }
       else if ($('[data-barba-namespace="blog"]').length) {
         blogHero.play()
+      }
+      else if($('[data-barba-namespace="course"]').length){
+        courseHero.play()
       }
     }
   }
@@ -1337,8 +1340,8 @@ const mainScript = () => {
       this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
           trigger: '.kv-footer',
-          start: 'top bottom',
-          end: 'bottom top',
+          start: "top bottom+=50%",
+          end: "bottom top",
           once: true,
           onEnter: () => {
             this.setup();
@@ -1724,6 +1727,8 @@ const mainScript = () => {
       this.tlTrigger = new gsap.timeline({
         scrollTrigger : {
           trigger : '.rs-newletter',
+          start: "top bottom+=50%",
+          end: "bottom top",
           onEnter: () => {
             this.setup();
           }
@@ -1771,6 +1776,8 @@ const mainScript = () => {
       this.tlTrigger = new gsap.timeline({
         scrollTrigger : {
           trigger : '.rs-job',
+          start: "top bottom+=50%",
+          end: "bottom top",
           onEnter: () => {
             this.setup();
           }
@@ -1803,6 +1810,8 @@ const mainScript = () => {
         this.tlTrigger = new gsap.timeline({
           scrollTrigger : {
             trigger : '.rs-cta',
+            start: "top bottom+=50%",
+          end: "bottom top",
             onEnter: () => {
               this.setup();
             }
@@ -1824,7 +1833,6 @@ const mainScript = () => {
             .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
             .to('.rs-cta-btn', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' },'<=0.3')
       }
-
   }
   let resourceCta = new ResourceCta();
   class BlogHero {
@@ -1934,6 +1942,377 @@ const mainScript = () => {
   }
   }
   let blogContent = new BlogContent();
+  class CourseHero{
+    constructor() {
+      this.tlTrigger;
+      this.tlFade;
+    }
+    setup(){
+      this.tlFade = new gsap.timeline({
+        scrollTrigger: {
+          paused: true,
+        }
+      })
+      let title = new SplitType('.cs-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let label = new SplitType('.cs-hero-label', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set(label.words, {autoAlpha: 0, yPercent: 100});
+      gsap.set('.cs-hero-btn', {autoAlpha: 0, y: 30});
+      this.tlFade 
+            .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+            .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+            .to('.cs-hero-btn', {autoAlpha: 1, y: 0, stagger: .1, duration: .4}, '<=.4')
+    }
+    play(){
+      this.tlFade.play();
+    }
+  }
+  let courseHero = new CourseHero();
+  class CourseResume{
+    constructor(){
+      this.tlTrigger;
+    }
+    setTrigger (){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger : {
+          trigger : '.cs-resume',
+          start: "top bottom+=50%",
+          end: "bottom top",
+          once: true,
+
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup(){
+      let title = new SplitType('.cs-resume-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 80});
+      gsap.set('.cs-resume-title-ic', {autoAlpha: 0});
+      gsap.set('.cs-resume-title-ic-bot', {autoAlpha: 0});
+      let tlFade = new gsap.timeline({ 
+        scrollTrigger: {
+          trigger: '.cs-resume',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+        }
+        })
+        tlFade
+          .to('.cs-resume-title-ic', {autoAlpha: 1})
+          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+          .to('.cs-resume-title-ic-bot', {autoAlpha: 1}, '<=.4')
+
+    }
+  }
+  let courseResume = new CourseResume();
+  class CourseLevel{
+    constructor(){
+      this.tlTrigger;
+    }
+    setTrigger (){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger : {
+          trigger : '.cs-level',
+          start: "top bottom+=50%",
+          end: "bottom top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup(){
+      let title = new SplitType('.cs-level-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let sub = new SplitType('.cs-level-sub', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.cs-level-title-wrap',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+          }
+      })
+      tlFade
+      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+      .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.4')
+      let items = $('.cs-level-item');
+      items.each(function(idx, item){
+        let titleItem = new SplitType($(item).find('.cs-level-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+        let subItem = new SplitType($(item).find('.cs-level-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
+        gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
+        gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
+        gsap.set($(item).find('.cs-level-item-ic'), {autoAlpha: 0, y: 30});
+
+        let tlFadeItem = new gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+            once: true,
+          }
+        })
+        tlFadeItem
+        .to($(item).find('.cs-level-item-ic'), {autoAlpha: 1, y: 0, duration: .6})
+        .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+        .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+      })
+    }
+  }
+  let courseLevel = new CourseLevel();
+  class CourseFouder{
+    constructor(){
+      this.tlTrigger;
+      this.tlFade;
+    }
+    setTrigger (){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger : {
+          trigger : '.cs-founder',
+          start: "top bottom+=50%",
+          end: "bottom top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup(){
+      let title = new SplitType('.cs-founder-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let sub = new SplitType('.cs-founder-sub', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set (title.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set (sub.words, {autoAlpha: 0, yPercent: 80});
+      gsap.set('.cs-founder-title-btn-wrap', {autoAlpha: 0, y: 30});
+      this.tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.cs-founder-title-wrap',
+          start: "top top+=65%",
+          once: true,
+          }
+          })
+          this.tlFade
+              .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+              .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+              .to('.cs-founder-title-btn-wrap', {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
+          let items = $('.cs-founder-item');
+          console.log(items)
+          items.each((idx, item) =>  {
+            console.log(idx)
+            let titleItem = new SplitType($(item).find('.cs-founder-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+            let subItem = new SplitType($(item).find('.cs-founder-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
+            $(item).find('.cs-founder-item-ul .about-founder-main-item-li').each((idx, li) => {
+              console.log(li)
+              let liTitle = new SplitType($(li), { types: 'lines words', lineClass: 'kv-line' });
+              gsap.set(liTitle.words, {autoAlpha: 0, yPercent: 80});
+            })
+            gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
+            gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
+            // gsap.set($(item).find('.cs-founder-item-ul .about-founder-main-item-li .word'), {autoAlpha: 0, yPercent: 80});
+            gsap.set ($(item).find('.cs-founder-item-ic'), {autoAlpha: 0, y: 30});
+            gsap.set ($(item).find('.cs-founder-item-img'), {autoAlpha: 0});
+           let tlFadeItem = new gsap.timeline({
+              scrollTrigger: {
+                trigger: item,
+                start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+                once: true,
+              }
+            });
+            tlFadeItem
+            .to($(item).find('.cs-founder-item-img'), {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+            .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.4')
+            .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+            .to($(item).find('.cs-founder-item-ic'), {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
+            .to($(item).find('.cs-founder-item-ul .about-founder-main-item-li .word'), {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+          });
+    }
+  }
+  let courseFouder = new CourseFouder();
+  class CourseProcess{
+    constructor(){
+      this.tlTrigger;
+      this.tlFade;
+    }
+    setTrigger (){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger : {
+          trigger : '.cs-process',
+          start: "top bottom+=50%",
+          end: "bottom top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup(){
+      let title  = new SplitType('.cs-process-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      this.tlFade = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.cs-process-title',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+          }
+      })
+      this.tlFade.to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+      $('.cs-process-content-item').each((idx, item) => {
+        let itemTitle = new SplitType($(item).find('.cs-process-content-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
+        gsap.set(itemTitle.words, {autoAlpha: 0, yPercent: 100});
+        gsap.set($(item).find('.cs-process-content-item-step-wrap'), {autoAlpha: 0});
+        $(item).find('.txt-decoration').append('<div class="line"></div>')
+        gsap.set($('.txt-decoration .line'), {width: 0});
+      })
+     let tlFadeProcess = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.cs-process-main',
+          start: $(window).width() > 767 ? "top top+=65%" :'top top+=35%',
+          }
+          })
+        tlFadeProcess.to('.cs-process-deco2', {xPercent: 100, duration: 4,  onUpdate: () => {
+          let progress = tlFadeProcess.progress();
+          if(progress > 0.07){
+            fadeItem('.cs-process-content-item.item1')
+          }
+          if(progress > 0.16){
+            fadeItem('.cs-process-content-item.item2')
+          }
+          if(progress > 0.35){
+            fadeItem('.cs-process-content-item.item3')
+          }
+        }})
+      function fadeItem(item) {
+        let tlItem = new gsap.timeline({
+          scrollTrigger: {
+            once: true
+            }
+            })
+        tlItem.to($(item).find('.cs-process-content-item-step-wrap'), {duration: .3, autoAlpha: 1})
+                .to($(item).find('.cs-process-content-item-sub .word'), {duration: .4, autoAlpha: 1, stagger: .015, yPercent: 0}, '<=.2')
+        if($(item).find('.txt-decoration .line').length > 0){
+          tlItem
+            .to($(item).find('.txt-decoration .line'), {width: '100%', duration: .5}, '>=.0');  
+
+        }
+
+      }
+    }
+  }
+  let courseProcess = new CourseProcess();
+  class CourseChoose  {
+    constructor(){
+      this.tlTrigger;
+    }
+    setTrigger (){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger : {
+          trigger : '.cs-choose',
+          start: "top bottom+=50%",
+          end: "bottom top",
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup () {
+      $('.cs-choose-content').eq(0).fadeIn();
+      $('.cs-choose-tab').on('click', function() {
+        let index = $(this).index();
+        $('.cs-choose-tab').removeClass('active');
+        $(this).addClass('active');
+        $('.cs-choose-content').fadeOut();
+        $('.cs-choose-content').eq(index).fadeIn(500);
+      })
+      let title = new SplitType('.cs-choose-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+      let sub = new SplitType('.cs-choose-sub', {types: 'lines words', lineClass: 'kv-line'});
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      gsap.set ('.cs-choose-tab', {autoAlpha: 0, x: -30});
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.cs-choose-title-wrap',
+          start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+        }
+        })
+      tlFade 
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+        .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+        .to('.cs-choose-tab', {autoAlpha: 1, x: 0, stagger: .1, duration: .4}, '<=.2')
+      let titlePice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+      let labelPice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-label', {types: 'lines words', lineClass: 'kv-line '});
+      let labelPicelab = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-txt-label', {types: 'lines words', lineClass: 'kv-line '});
+      gsap.set(titlePice.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set(labelPice.words, {autoAlpha: 0, yPercent: 80});
+      gsap.set(labelPicelab.words, {autoAlpha: 0, yPercent: 80});
+      gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', {autoAlpha: 0});
+      gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', {autoAlpha: 0});
+      let tlPrice = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-price',
+          start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+          }
+          })
+          tlPrice
+          .to(labelPice.words, {autoAlpha: 1 , yPercent: 0, stagger: .02, duration: .6})
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', {autoAlpha: 1, duration: .6},'<=.2')
+          .to(titlePice.words, {autoAlpha: 1 , yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', {autoAlpha: 1, duration: 1}, '<=.2')
+          .to(labelPicelab.words, {autoAlpha: 1, yPercent: 1, stagger: .015, duration: .4}, '<=.2')
+        let titleConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+        let subConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-sub', {types: 'lines words', lineClass: 'kv-line'});
+        gsap.set(titleConfi.words, {autoAlpha: 0, yPercent: 60});
+        gsap.set(subConfi.words, {autoAlpha: 0, yPercent: 80});
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', {autoAlpha: 0, y: 30});
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', {autoAlpha: 0, y: 30});
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', {autoAlpha: 0, y: 30});
+          let tlConfi = new gsap.timeline({
+            scrollTrigger: {
+              trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-confi',
+              start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+              once: true,
+              }
+          })
+        tlConfi
+              .to(titleConfi.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+              .to(subConfi.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+              .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', {autoAlpha: 1, y: 0, stagger: .1, duration: .6}, '<=.2')
+              .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
+              .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', {autoAlpha: 1, y: 0, duration: .6}, '<=.0')
+        let titleStudent  = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-student-title', {type: 'lines words', lineClass: 'kv-line heading-line'})
+        $('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title').each((idx, item) => {
+          let studentTitle = new SplitType(item, {types: 'lines words', lineClass: 'kv-line'});
+          gsap.set(studentTitle.words, {autoAlpha: 0, yPercent: 100});
+        })
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', { autoAlpha: 0, yPercent: 60})
+        let tlStudent = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-student',
+            start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+            once: true,
+            }
+        })
+        tlStudent
+        .to(titleStudent.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+        .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', {autoAlpha: 1, yPercent: 0, duration: .6, stagger: .2, clearProps: 'all'},'<=.2')
+        .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title .word', {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.0')
+        let titleStudy = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-study-title', {type: 'lines words', lineClass: 'kv-line heading-line'});
+        let tlStudy = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-study-title-wrap',
+            start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+            once: true,
+          }
+        })
+        gsap.set(titleStudy, {autoAlpha: 0, yPercent: 60});
+        tlStudy.to(titleStudy.words, {autoAlpha: 1, yPercent:0, stagger: 0, duration: .6});
+      }
+  }
+  let courseChoose = new CourseChoose();
   let cta = new CTA()
   const SCRIPTS = {
     home: {
@@ -2043,6 +2422,28 @@ const mainScript = () => {
         },
       beforeLeave() {
         console.log('blog clean')
+      }
+    },
+    course: {
+      namespace: 'course',
+      afterEnter() {
+        if(viewport.w > 767){
+          courseFouder.setTrigger();
+          courseProcess.setTrigger();
+          courseChoose.setTrigger();
+          courseResume.setTrigger();
+          courseLevel.setTrigger();
+        }
+        else {
+          courseFouder.setup();
+          courseLevel.setup();
+          courseResume.setup();
+          courseProcess.setup();
+          courseChoose.setup();
+        }
+        courseHero.setup();
+        },
+      beforeLeave() {
       }
     }
   }
