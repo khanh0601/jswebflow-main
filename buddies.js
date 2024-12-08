@@ -2024,6 +2024,14 @@ const mainScript = () => {
       })
     }
     setup(){
+      $('.cs-level-item').hover(
+        function(){
+          $(this).addClass('active');
+        },
+        function(){
+          $(this).removeClass('active');
+          }
+      )
       let title = new SplitType('.cs-level-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       let sub = new SplitType('.cs-level-sub', { types: 'lines words', lineClass: 'kv-line' });
       gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
