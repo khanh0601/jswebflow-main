@@ -216,7 +216,8 @@ const mainScript = () => {
       if ($('[data-barba-namespace="home"]').length) {
         homeHero.play();
       } else if ($('[data-barba-namespace="contact"]').length) {
-        contactHero.play()
+        contactHero.play();
+        contactPromo.play();
       }
       else if ($('[data-barba-namespace="about"]').length) {
         aboutHero.play()
@@ -745,8 +746,36 @@ const mainScript = () => {
   class ContactHero {
     constructor() {
       this.tlFade;
+      this.Promotion=[];
+      this.persentPrice= 0;
+      this.persentName= 'No Promotion';
     }
     setup() {
+      $('.contact-promo-item-title-ic').on('click', function () {
+
+        var textToCopy = $(this).parent().find('.contact-promo-item-title').text();
+        console.log('textToCopy', $(this).parent().find('.dowload_hash'))
+        let item = $(this).parent();
+        var tempInput = $('<input>');
+        $('body').append(tempInput);
+        tempInput.val(textToCopy).select();
+        document.execCommand('copy');
+        tempInput.remove();
+        item.find('.tooltip').text('Copied!')
+        
+        setTimeout(function () {
+            item.find('.tooltip').text('Copy')
+        }, 2000)
+    });
+      $('.contact-promo-item-promotion').each((idx, item) => {
+        let promo = $(item).attr('data-promotion-price');
+        let name = $(item).closest('.contact-promo-item').find('.contact-promo-item-title').attr('data-promotion-code').toUpperCase();
+        this.Promotion.push({
+          promo: promo,
+          name: name
+      });
+      })
+      console.log(this.Promotion);
       const title = new SplitType('.contact-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       const sub = new SplitType('.contact-hero-sub', { types: 'lines words', lineClass: 'kv-line ' });
       gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
@@ -761,16 +790,41 @@ const mainScript = () => {
         .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
         .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
         .to('.contact-form', { autoAlpha: 1, y: 0, duration: 1, clearProps: 'all' }, '<=.3')
-      $('.course-price').on('change', function (e) {
+        $('.form-contact-input-promo-submit').on('click',  () => {
+          let code = $('.input-code').val().toUpperCase();
+          console.log(this.Promotion)
+          let foundItem = this.Promotion.find(item => item.name === code)
+          if (foundItem) {
+            this.persentPrice = parseInt( foundItem.promo);
+            this.persentName = parseInt( foundItem.name);
+            $('.contact-form-tranfer-promo-title').text(`${foundItem.name}  ${foundItem.promo}%`);
+            $('.ma-giam-gia').val(`${foundItem.name}  ${foundItem.promo}%`);
+            $('.promotion-number').text(parseInt($('.origin-number').text())*foundItem.promo/100);
+          $('.final-number').text(parseInt($('.origin-number').text()) - parseInt($('.origin-number').text())*this.persentPrice/100);
+            $('.final-price').val(parseInt($('.origin-number').text()) - parseInt($('.origin-number').text())*this.persentPrice/100)
+          }
+          console.log(code)
+        })
+      $('.course-price').on('change', () => {
         let checkedCount = $('.course-price:not(".course-checkbox-full"):checked').length;
         console.log(checkedCount)
         let price = 0;
+        let name = 'No Course'
         if (checkedCount > 0) {
           $('.course-price:checked').each((idx, item) => {
             price = price + parseInt($(item).attr('price'));
+            name = name + $(item).attr('data-name') + (idx === $('.course-price:checked').length - 1 ? '' : ', ')
           })
         }
+        
         $('.money-number').text(price);
+        $('.origin-number').text(price);
+        console.log(this.persentPrice);
+        $('.final-number').text(price - price*this.persentPrice/100);
+        $('.final-price').val(price - price*this.persentPrice/100)
+
+        $('.promotion-number').text(price*this.persentPrice/100);
+        $('.contact-form-tranfer-origin-title').text(name);
         if (checkedCount === 3) {
           $('.course-notification-wrap').addClass('active');
         }
@@ -787,11 +841,6 @@ const mainScript = () => {
       $('.course-notification-ic-close').on('click', function () {
         $('.course-notification-wrap').removeClass('active');
       })
-      //   $('input[name="Course"]').on('click', function() {
-      //     var selectedValue = $(this).val();
-      //     var numberOnly = selectedValue.match(/\d+/)[0]; // Lấy phần số đầu tiên trong chuỗi
-      //     $('.money-number').text(numberOnly);
-      // })
       let requetId;
       function checkSuccess() {
         if ($('.contact-form-main-inner').css('display') === 'none') {
@@ -806,17 +855,27 @@ const mainScript = () => {
       $('.form-success-close').on('click', function () {
         location.reload();
       })
-      $('.course-checkbox-full').on('change', function () {
-        if ($(this).is(':checked')) {
-          $(this).closest('.contact-form-main-inner').find('.course-checkbox').prop('checked', false);
-          $(this).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', true);
-          $(this).closest('.contact-form-main-inner').find('.contact-form-register-course-item').addClass('disable');
+      $('.course-checkbox-full').on('change',  (e) => {
+        if ($(e.currentTarget).is(':checked')) {
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('checked', false);
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', true);
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.contact-form-register-course-item').addClass('disable');
           $('.form-contact-success-title-one').hide();
-          $('.form-contact-success-title-full').show()
+          $('.form-contact-success-title-full').show();
+          $('.contact-form-tranfer-origin-title').text($(e.currentTarget).attr('data-name'));
+          $('.money-number').text($(e.currentTarget).attr('price'));
+          $('.origin-number').text($(e.currentTarget).attr('price'));
+          let price = parseInt($(e.currentTarget).attr('price'));
+          console.log(price);
+          $('.final-number').text(price - price*this.persentPrice/100);
+          $('.final-price').val(price - price*this.persentPrice/100)
+
+        $('.promotion-number').text(price*this.persentPrice/100);
         }
         else{
-          $(this).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', false);
-          $(this).closest('.contact-form-main-inner').find('.contact-form-register-course-item').removeClass('disable');
+          $('.contact-form-tranfer-origin-title').text('No Course');
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', false);
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.contact-form-register-course-item').removeClass('disable');
           $('.form-contact-success-title-full').hide();
           $('.form-contact-success-title-show').show()
         }
@@ -853,6 +912,51 @@ const mainScript = () => {
     }
   }
   let contactHero = new ContactHero();
+  class ContactPromo{
+    constructor() {
+      this.tlTrigger,
+      this.titleFade
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.contact-promo',
+          start: "top bottom+=50%",
+          // end: "bottom top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        },
+      })
+    }
+    setup() {
+      const title = new SplitType('.contact-promo-title', { types: 'lines words', lineClass: 'kv-line heading-line' })
+      gsap.set(title.words, {autoAlpha: 0 , yPercent: 60})
+      gsap.set('.contact-promo-item', {autoAlpha: 0, y: 30});
+      this.titleFade = new gsap.timeline({
+        scrollTrigger: {
+          paused: true,
+          trigger: '.contact-promo-title',
+          start: $(window).width() > 767 ? "top top+=45%" : "top top+=35%",
+          once: true,
+        }
+      })
+      this.titleFade
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .8})
+        .to('.contact-promo-item', {autoAlpha: 1, y: 0, stagger: .02, duration: .8}, '<=.2')
+      $('.contact-promo-item-promotion').each((idx, item) => {
+        let promo = $(item).attr('data-promotion-price');
+        let name = $(item).closest('.contact-promo-item').find('.contact-promo-item-title').attr('data-promotion-code');
+     
+        $(item).text(`${promo}%`)
+      })
+    }
+    play(){
+      this.titleFade.play()
+    }
+  }
+  let contactPromo = new ContactPromo();
   class AboutHero {
     constructor() {
       this.tlFade;
@@ -1692,6 +1796,9 @@ const mainScript = () => {
         let index = $(this).index();
         if(index == 0){
           $('.rs-blog-item').removeClass('active').addClass('active');
+          $('.rs-blog-item.active').removeClass('child11');
+          $('.rs-blog-item.active').eq(0).addClass('child11');
+
         }
         else{
           activeItem(category);
@@ -1702,18 +1809,6 @@ const mainScript = () => {
           $('.rs-blog-item.active').eq(0).addClass('child11');
 
         }
-// if (swiperBlog) {
-//   swiperBlog.destroy(true, true);
-//     }
-//   $('.swiper-blog-wrapper').removeAttr('style')
-//     console.log(swiperBlog)
-//     // Khởi tạo lại Swiper
-//     swiperBlog = new Swiper('.rs-blog-cms', {
-//         slidesPerView: 1,
-//         spaceBetween: parseRem(20),
-//     });
-//     console.log(swiperBlog)
-
       })
     }
   }
@@ -1728,7 +1823,8 @@ const mainScript = () => {
         scrollTrigger : {
           trigger : '.rs-newletter',
           start: "top bottom+=50%",
-          end: "bottom top",
+          end: "bottom+=50% top",
+          once: true,
           onEnter: () => {
             this.setup();
           }
@@ -1777,7 +1873,8 @@ const mainScript = () => {
         scrollTrigger : {
           trigger : '.rs-job',
           start: "top bottom+=50%",
-          end: "bottom top",
+          end: "bottom+=50% top",
+          once: true,
           onEnter: () => {
             this.setup();
           }
@@ -1811,7 +1908,8 @@ const mainScript = () => {
           scrollTrigger : {
             trigger : '.rs-cta',
             start: "top bottom+=50%",
-          end: "bottom top",
+          end: "bottom+=50% top",
+          once: true,
             onEnter: () => {
               this.setup();
             }
@@ -2545,6 +2643,12 @@ const mainScript = () => {
       afterEnter() {
         console.log('contact afterEnter');
         contactHero.setup();
+        if(viewport.w > 767){
+          contactPromo.setTrigger();
+        }
+        else{
+          contactPromo.setup();
+        }
         // cta.setup();
 
       },
