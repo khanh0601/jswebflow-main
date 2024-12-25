@@ -3,6 +3,34 @@ const mainScript = () => {
   const parseRem = (input) => {
     return (input / 10) * parseFloat($("html").css("font-size"));
   };
+  function countUpTo(maxNumber, item, duration) {
+    var currentNumber = 0;
+    let width = $(item).width();
+    console.log(item);
+    $(item).css('width', width);
+    // Tạo hàm chạy liên tục với khoảng thời gian 100ms
+    var intervalTime = duration / maxNumber;
+    var interval = setInterval(function () {
+      if (currentNumber <= maxNumber) {
+        $(item).text(currentNumber);
+        currentNumber++;
+      } else {
+        clearInterval(interval); // Dừng khi đạt tới số maxNumber
+      }
+    }, intervalTime); // Thời gian mỗi lần tăng (100ms ở đây)
+  }
+  function createMarqueeAnimation(innerClass, wrapClass) {
+    const width = $(innerClass).width();
+    const length = Math.floor($(window).width() / width) + 1;
+  
+    for (let i = 0; i < length; i++) {
+      let $originalElement = $(innerClass).eq(0);
+      let $clonedElement = $originalElement.clone();
+      $(wrapClass).append($clonedElement);
+    }
+  
+    // $(innerClass).addClass('anim');
+  }
   function reinitializeWebflow() {
     console.log('reinitialize webflow');
     window.Webflow && window.Webflow.destroy();
@@ -230,6 +258,9 @@ const mainScript = () => {
       }
       else if($('[data-barba-namespace="course"]').length){
         courseHero.play()
+      }
+      else if($('[data-barba-namespace="job-couching"]').length){
+        jobHero.play()
       }
     }
   }
@@ -620,22 +651,7 @@ const mainScript = () => {
       })
     }
     setup() {
-      function countUpTo(maxNumber, item, duration) {
-        var currentNumber = 0;
-        let width = $(item).width();
-        console.log(item);
-        $(item).css('width', width);
-        // Tạo hàm chạy liên tục với khoảng thời gian 100ms
-        var intervalTime = duration / maxNumber;
-        var interval = setInterval(function () {
-          if (currentNumber <= maxNumber) {
-            $(item).text(currentNumber);
-            currentNumber++;
-          } else {
-            clearInterval(interval); // Dừng khi đạt tới số maxNumber
-          }
-        }, intervalTime); // Thời gian mỗi lần tăng (100ms ở đây)
-      }
+      
       const title = new SplitType('.home-oppo-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
       gsap.set('.home-oppo-tags-item', { autoAlpha: 0, yPercent: 80 })
@@ -2600,13 +2616,286 @@ const mainScript = () => {
                   .to($(item).find('.cs-faq-item-line'), {scaleX: 1, duration: .6}, '<=.2')
 
       })
+      $('.cs-faq-item').removeClass('active');
+      console.log('2384798')
       $('.cs-faq-item-title-wrap').on('click', function() {
+        $(this).closest('.cs-faq-item').toggleClass('active');
         $(this).closest('.cs-faq-item').find('.cs-faq-item-content').slideToggle(300);
         })
     }
   }
   let courseFaq = new CourseFaq();
   let courseTime = new CourseTime();
+  class JobHero {
+    constructor() {
+      this.tlFade;
+    }
+    setup() {
+      const width = $(".job-marquee-inner").width();
+      const length = Math.floor($(window).width() / width) + 1;
+        for (var i = 0; i < length; i++) {
+          let $originalListBrand = $(".job-marquee-inner").eq(0);
+          let $clonedListBrand = $originalListBrand.clone();
+          $(".job-marquee-wrap").append($clonedListBrand);
+        }
+        createMarqueeAnimation(".job-marquee-inner", ".job-marquee-wrap")
+        $(".job-marquee-inner").addClass('anim');
+        $(".job-marquee-inner").addClass('anim');
+        let label = new SplitType('.job-hero-label', { types: 'lines words', lineClass: 'kv-line' });
+        let title = new SplitType('.job-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+        let sub = new SplitType('.job-hero-sub', { types: 'lines words', lineClass: 'kv-line' });
+        gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+        gsap.set(label.words, {autoAlpha: 0, yPercent: 80});
+        gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+        gsap.set('.job-hero-btn', {autoAlpha: 0, y: 20})
+        this.tlFade = new gsap.timeline({
+          scrollTrigger: {
+            once: true,
+          },
+         paused: true,
+        })
+        this.tlFade
+          .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+          .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+          .to('.job-hero-btn', {autoAlpha: 1, y: 0, duration: .4, clearProps: 'all'}, '<=.7')
+    }
+    play(){
+      this.tlFade.play();
+    }
+  }
+  let jobHero = new JobHero();
+  class JobReason {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger (){
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger : {
+          trigger : '.job-reason',
+          start: "top bottom+=50%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+  setup(){
+      $('.job-reason-main').addClass('swiper');
+      $('.job-reason-list').addClass('swiper-wrapper');
+      $('.job-reason-item').addClass('swiper-slide');
+      let swiper = new Swiper('.job-reason-main', {
+        slidesPerView:3,
+        spaceBetween: parseRem(24),
+        initialSlide: 1, 
+        navigation: {
+          nextEl: '.job-reason-control-ic-next',
+          prevEl: '.job-reason-control-ic-prev',
+        },
+      });
+  }
+}
+let jobReason = new JobReason();
+class JobWhy {
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-why',
+        start: "top bottom+=50%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+setup(){
+  createMarqueeAnimation(".job-why-logo-list", ".job-why-logo-inner")
+  $(".job-why-logo-list").addClass('anim');
+  $('.job-why-offer-main').each((idx, item) =>{
+    console.log(idx)
+    createMarqueeAnimation($(item).find('.job-why-offer-list'), $(item))
+    $(item).find('.job-why-offer-list').addClass('anim');
+  })
+
+}
+}
+let jobWhy = new JobWhy()
+class JobProud{
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-proud',
+        start: "top bottom+=50%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+      });
+    }
+    setup(){
+      $('.job-why-company').each(function () {
+        const $scrollContainer = $(this); // Lấy từng hộp job-why-company
+        const $scrollContent = $scrollContainer.find('.job-why-company-list');
+        const $clone = $scrollContent.clone();
+        for (let i = 0; i < 8; i++) {
+          const $clone = $scrollContent.clone(); // Tạo bản clone mới trong mỗi lần lặp
+          $scrollContainer.append($clone);
+        }
+      });
+      $('.job-why-btn').on('click', function () {
+        $('.job-why-company').each(function () {
+          const $scrollContainer = $(this); // Lấy từng hộp job-why-company
+          const $scrollContent = $scrollContainer.find('.job-why-company-list');
+          const contentHeight = $scrollContainer.height() - $scrollContent.height(); // Calculate the height difference
+          // Start scrolling animation
+          const scrollAnimation = gsap.to($scrollContent, {
+            y: `-${contentHeight}px`, // Scroll up to the end of the content
+            duration: 3, // Adjust duration as needed
+            ease: "none",
+            repeat: -1,
+          });
+      
+          // Stop the animation and align to a random position
+          setTimeout(() => {
+            scrollAnimation.kill(); // Stop the animation
+            const $items = $scrollContent.find('.job-why-company-item'); // All items in the list
+            const randomIndex = Math.floor(Math.random() * $items.length); // Random index
+            const $randomItem = $items.eq(randomIndex); // Random item
+            const randomPosition = $randomItem.position().top - $scrollContainer.height()/2;
+      
+            gsap.to($scrollContent, {
+              y: `-${randomPosition}px`, // Align to the random item's position
+              duration: 1,
+              ease: "power2.out",
+            });
+          }, 3000); // Adjust timing to stop
+        });
+      });
+      
+      let titleMain = new SplitType(".job-proud-main-title", { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let subMain = new SplitType(".job-proud-main-sub", { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(titleMain.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set(subMain.words, {autoAlpha: 0, yPercent: 80});
+      gsap.set('.job-proud-main-content-item-ab', {autoAlpha: 0})
+      gsap.set('.job-proud-main-process', {x: -parseRem(200)})
+      gsap.set('.job-proud-main-content', {autoAlpha: 0, y: 10})
+      let tlFadeMain = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-proud-main',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          once: true,
+        }
+      })
+      tlFadeMain 
+        .to('.job-proud-main-content', {autoAlpha: 1, y: 0, duration: .6})
+        .to('.job-proud-main-process', {x: 0, duration: 1.2, onComplete: () => {
+          $('.job-proud-main-content-item.will-active').addClass('active');
+          gsap.to('.job-proud-main-content-item-ab', {autoAlpha: 1, duration: .6})
+        }}, '<=.3')
+        .to(titleMain.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=0')
+        .to(subMain.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+        $('.job-proud-item').each((idx, item) => {
+        let titleItem = new SplitType($(item).find('.job-proud-item-txt'), { types: 'lines words', lineClass: 'kv-line' });
+        gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80})
+        gsap.set($(item).find('.job-svg-process-bg'), {strokeDasharray: '0, 1', autoAlpha: 0})
+        let number =parseInt($(item).find('.process-number').text());
+        let numberPercent = number / 100;
+        $(item).find('.process-number').text('0')
+
+        let tlItem = gsap.timeline({
+          scrollTrigger: {
+            trigger: $(item),
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+            once: true,
+          }
+        })
+        tlItem
+          .to($(item).find('.job-svg-process-bg'), {strokeDasharray: `${numberPercent}, 1`, duration: 1.5, ease: 'power1.inOut', onEnter: ()=>{
+            gsap.to($(item).find('.job-svg-process-bg'),{autoAlpha: 1})
+            countUpTo(number, $(item).find('.process-number'), 1500);
+          }})
+          .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.4')
+      })
+    }
+}
+let jobProud = new JobProud();
+class JobProcess {
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-process',
+        start: "top bottom+=50%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+setup(){
+$('.job-process-content').hide();
+$('.job-process-content').eq(0).fadeIn();
+$('.job-process-tab').on('click', function() {
+  let index = $(this).index()
+  $('.job-process-content').hide();
+  $('.job-process-content').eq(index).fadeIn(1000);
+  $('.job-process-tab').removeClass('active');
+  $(this).addClass('active');
+  console.log('khanh');
+  })
+
+}
+}
+let jobProcess = new JobProcess();
+class JobTesti {
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-process',
+        start: "top bottom+=50%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+setup(){
+  
+  $('.job-testi-more-link').on('click', function(e) {
+    e.preventDefault();
+    $('.job-testi-more').addClass('hidden');
+    $('.job-testi-item.hidden').removeClass('hidden');
+    setTimeout(function(){
+      ScrollTrigger.refresh();
+  }, 1000)
+  });
+  setTimeout(function(){
+    ScrollTrigger.refresh();
+}, 1000)
+}
+}
+let jobTesti = new JobTesti();
   let cta = new CTA()
   const SCRIPTS = {
     home: {
@@ -2748,6 +3037,29 @@ const mainScript = () => {
         courseHero.setup();
         },
       beforeLeave() {
+      }
+    },
+    job: {
+      namespace: 'job-couching',
+      afterEnter() {
+        console.log('jouCourse afterEnter');
+        jobHero.setup();
+        if( viewport.w > 991){
+          courseFaq.setTrigger();
+          jobReason.setTrigger();
+          jobWhy.setTrigger();
+          jobProcess.setTrigger();
+          jobProud.setTrigger();
+          jobTesti.setTrigger();
+        }
+        else{
+          courseFaq.setup();
+          jobReason.setup();
+          jobWhy.setup();
+          jobProcess.setup();
+          jobProud.setup();
+          jobTesti.setup();
+        }
       }
     }
   }
