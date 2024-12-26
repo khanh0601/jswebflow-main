@@ -2537,12 +2537,13 @@ const mainScript = () => {
           let tlTitle = new gsap.timeline({
             scrollTrigger: {
               trigger: '.cs-time-item3',
-              start: 'top center',
-              end: 'bottom center',
+              start: 'top+=20% center',
+              end: 'bottom+=20% center',
               scrub: true,
+              marker: true
             }
           })
-        tlTitle.to(item, {rotate: 0})
+        tlTitle.to(item, {rotate: 0, y: 0, x: 0})
         })
         gsap.to(".cs-time-item-img-ic", {
           rotation: "+=360",
