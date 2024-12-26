@@ -2673,7 +2673,7 @@ const mainScript = () => {
       this.tlTrigger = new gsap.timeline({
         scrollTrigger : {
           trigger : '.job-reason',
-          start: "top bottom+=50%",
+          start: "top bottom+=70%",
           end: "bottom+=50% top",
           once: true,
           onEnter: () => {
@@ -2695,6 +2695,40 @@ const mainScript = () => {
           prevEl: '.job-reason-control-ic-prev',
         },
       });
+      let title = new SplitType('.job-reason-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let sub = new SplitType('.job-reason-sub', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-reason-title-wrap',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      tlFade
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+        .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+        let tlFadeItem = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.job-reason-main',
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+            once: true,
+          },
+        })
+        setTimeout(function () {
+          $('.job-reason-item').each((idx, item) => {
+            gsap.set($(item).find('.job-reason-item-img'), {autoAlpha: 0, clipPath: 'inset(0 0 100% 100%)'});
+            let titleItem = new SplitType($(item).find('.job-reason-item-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+            let subItem = new SplitType($(item).find('.job-reason-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
+            gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
+            gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
+            tlFadeItem
+              .to($(item).find('.job-reason-item-img'), {autoAlpha: 1,clipPath: 'inset(0 0 0% 0%)', duration: 1, clearProps: 'all'}, '<=0')
+              .to(titleItem.words, {autoAlpha: 1,yPercent: 0, duration: .6, stagger: .02}, '<=.3')
+              .to(subItem.words, {autoAlpha: 1,yPercent: 0, duration: .4, stagger: .015}, '<=.3')
+          })
+        },1000)
   }
 }
 let jobReason = new JobReason();
@@ -2716,6 +2750,46 @@ class JobWhy {
     })
   }
 setup(){
+  $('.job-why-company').each(function () {
+    const $scrollContainer = $(this); // Lấy từng hộp job-why-company
+    const $scrollContent = $scrollContainer.find('.job-why-company-list');
+    const $clone = $scrollContent.clone();
+    for (let i = 0; i < 8; i++) {
+      const $clone = $scrollContent.clone(); // Tạo bản clone mới trong mỗi lần lặp
+      $scrollContainer.append($clone);
+    }
+  });
+  $('.job-why-btn').on('click', function () {
+    $(this).addClass('disable')
+    $('.job-why-company').each(function () {
+      const $scrollContainer = $(this); // Lấy từng hộp job-why-company
+      const $scrollContent = $scrollContainer.find('.job-why-company-list');
+      const contentHeight = $scrollContainer.height() - $scrollContent.height(); // Calculate the height difference
+      // Start scrolling animation
+      const scrollAnimation = gsap.to($scrollContent, {
+        y: `-${contentHeight}px`, // Scroll up to the end of the content
+        duration: 3, // Adjust duration as needed
+        ease: "none",
+        repeat: -1,
+      });
+  
+      // Stop the animation and align to a random position
+      setTimeout(() => {
+        scrollAnimation.kill(); // Stop the animation
+        const $items = $scrollContent.find('.job-why-company-item'); // All items in the list
+        const randomIndex = Math.floor(Math.random() * $items.length); // Random index
+        console.log(randomIndex)
+        const $randomItem = $items.eq(randomIndex); // Random item
+        const randomPosition = $randomItem.position().top ;
+  
+        gsap.to($scrollContent, {
+          y: `-${randomPosition}px`, // Align to the random item's position
+          duration: 1,
+          ease: "power2.out",
+        });
+      }, 3000); // Adjust timing to stop
+    });
+  });
   createMarqueeAnimation(".job-why-logo-list", ".job-why-logo-inner")
   $(".job-why-logo-list").addClass('anim');
   $('.job-why-offer-main').each((idx, item) =>{
@@ -2723,7 +2797,55 @@ setup(){
     createMarqueeAnimation($(item).find('.job-why-offer-list'), $(item))
     $(item).find('.job-why-offer-list').addClass('anim');
   })
-
+  let title = new SplitType('.job-why-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+  gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+  gsap.set('.job-why-inner', {autoAlpha: 0, y: 40});
+  gsap.set('.job-why-btn', {autoAlpha: 0, y: 30});
+  let tlFade = new gsap.timeline({
+    scrollTrigger: {
+      trigger: '.job-why-title-wrap',
+      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      once: true,
+    },
+  })
+  let tlFadeItem = new gsap.timeline({
+    scrollTrigger: {
+      trigger: '.job-why-title-wrap',
+      start: viewport.w > 767 ? "top top+=70%" : "top top+=45%",
+      once: true,
+    },
+  })
+  tlFade
+    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+  tlFadeItem
+  .to('.job-why-inner', {autoAlpha: 1, y: 0, duration: 2, clearProps: 'all'})
+  .to('.job-why-btn', {autoAlpha: 1, y: 0, duration: .6, clearProps: 'all'},'<=.6')
+ let  tlFadeLogo = new gsap.timeline({
+    scrollTrigger: {
+      trigger: '.job-why-logo',
+      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      once: true,
+    },
+  })
+  let titleLogo = new SplitType('.job-why-logo-title', { types: 'lines words', lineClass: 'kv-line' });
+  gsap.set(titleLogo.words, {autoAlpha: 0, yPercent: 60});
+  gsap.set('.job-why-logo-inner', {autoAlpha: 0, y: 30});
+  tlFadeLogo
+  .to(titleLogo.words, {autoAlpha: 1, yPercent: 0, stagger: .03, duration: .6})
+  .to('.job-why-logo-inner', {autoAlpha: 1, y: 0, duration: 1.2, clearProps: 'all'}, '<=.2')
+  let  tlFadeOffer = new gsap.timeline({
+    scrollTrigger: {
+      trigger: '.job-why-offer',
+      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      once: true,
+    },
+  })
+  let titleOffer = new SplitType('.job-why-offer-title', { types: 'lines words', lineClass: 'kv-line' });
+  gsap.set(titleOffer.words, {autoAlpha: 0, yPercent: 60});
+  gsap.set('.job-why-offer-main', {autoAlpha: 0, y: 30});
+  tlFadeOffer
+  .to(titleOffer.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+  .to('.job-why-offer-main', {autoAlpha: 1, y: 0, duration: .6,stagger: .2, clearProps: 'all'}, '<=.2')
 }
 }
 let jobWhy = new JobWhy()
@@ -2745,44 +2867,21 @@ class JobProud{
       });
     }
     setup(){
-      $('.job-why-company').each(function () {
-        const $scrollContainer = $(this); // Lấy từng hộp job-why-company
-        const $scrollContent = $scrollContainer.find('.job-why-company-list');
-        const $clone = $scrollContent.clone();
-        for (let i = 0; i < 8; i++) {
-          const $clone = $scrollContent.clone(); // Tạo bản clone mới trong mỗi lần lặp
-          $scrollContainer.append($clone);
-        }
-      });
-      $('.job-why-btn').on('click', function () {
-        $('.job-why-company').each(function () {
-          const $scrollContainer = $(this); // Lấy từng hộp job-why-company
-          const $scrollContent = $scrollContainer.find('.job-why-company-list');
-          const contentHeight = $scrollContainer.height() - $scrollContent.height(); // Calculate the height difference
-          // Start scrolling animation
-          const scrollAnimation = gsap.to($scrollContent, {
-            y: `-${contentHeight}px`, // Scroll up to the end of the content
-            duration: 3, // Adjust duration as needed
-            ease: "none",
-            repeat: -1,
-          });
-      
-          // Stop the animation and align to a random position
-          setTimeout(() => {
-            scrollAnimation.kill(); // Stop the animation
-            const $items = $scrollContent.find('.job-why-company-item'); // All items in the list
-            const randomIndex = Math.floor(Math.random() * $items.length); // Random index
-            const $randomItem = $items.eq(randomIndex); // Random item
-            const randomPosition = $randomItem.position().top - $scrollContainer.height()/2;
-      
-            gsap.to($scrollContent, {
-              y: `-${randomPosition}px`, // Align to the random item's position
-              duration: 1,
-              ease: "power2.out",
-            });
-          }, 3000); // Adjust timing to stop
-        });
-      });
+      let title = new SplitType('.job-proud-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let sub = new SplitType('.job-proud-label', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-proud-title-wrap',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      tlFade
+      .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+     
       
       let titleMain = new SplitType(".job-proud-main-title", { types: 'lines words', lineClass: 'kv-line heading-line' });
       let subMain = new SplitType(".job-proud-main-sub", { types: 'lines words', lineClass: 'kv-line heading-line' });
@@ -2808,6 +2907,7 @@ class JobProud{
         .to(subMain.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
         $('.job-proud-item').each((idx, item) => {
         let titleItem = new SplitType($(item).find('.job-proud-item-txt'), { types: 'lines words', lineClass: 'kv-line' });
+        gsap.set($(item), {autoAlpha: 0, y: 20})
         gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80})
         gsap.set($(item).find('.job-svg-process-bg'), {strokeDasharray: '0, 1', autoAlpha: 0})
         let number =parseInt($(item).find('.process-number').text());
@@ -2822,10 +2922,11 @@ class JobProud{
           }
         })
         tlItem
+        .to($(item), {autoAlpha: 1, y: 0, duration: .4})
           .to($(item).find('.job-svg-process-bg'), {strokeDasharray: `${numberPercent}, 1`, duration: 1.5, ease: 'power1.inOut', onEnter: ()=>{
             gsap.to($(item).find('.job-svg-process-bg'),{autoAlpha: 1})
             countUpTo(number, $(item).find('.process-number'), 1500);
-          }})
+          }}, '<=.2')
           .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.4')
       })
     }
@@ -2859,11 +2960,37 @@ $('.job-process-tab').on('click', function() {
   $(this).addClass('active');
   console.log('khanh');
   })
+  let title = new SplitType('.job-process-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+  let sub = new SplitType('.job-process-sub', { types: 'lines words', lineClass: 'kv-line' });
+  gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+  gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+  let tlFade = new gsap.timeline({
+    scrollTrigger: {
+      trigger: '.job-process-title-wrap',
+      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      once: true,
+    },
+  })
+  tlFade
+  .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, )
+  .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4},'<=.2')
 
+  let tlFadeTab = new gsap.timeline({
+    scrollTrigger: {
+      trigger: '.job-process-tab-wrap',
+      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      once: true,
+    },
+  })
+  gsap.set('.job-process-tab', {autoAlpha: 0, x: -15})
+  gsap.set('.job-process-content:nth-child(1) .job-process-content-item', {autoAlpha: 0, y: 20})
+  tlFadeTab
+    .to('.job-process-tab', {autoAlpha: 1, x: 0, stagger: .02, duration: .8})
+    .to('.job-process-content:nth-child(1) .job-process-content-item', {autoAlpha: 1, y: 0, stagger: .1, duration: 1}, '<=.4')
 }
 }
 let jobProcess = new JobProcess();
-class JobTesti {
+class JobResource {
   constructor() {
     this.tlTrigger;
   }
@@ -2872,6 +2999,54 @@ class JobTesti {
       scrollTrigger : {
         trigger : '.job-process',
         start: "top bottom+=50%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+  setup(){
+    let title = new SplitType('.job-resource-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.job-resource-title-wrap',
+        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+        once: true,
+        },
+        })
+    tlFade
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+    $('.job-resource-item').each((idx, item) => {
+      let itemTitle =new SplitType($(item).find('.job-resource-item-txt'), { types: 'lines words', lineClass: 'kv-line' });
+      let borderRadius = $(item).find('.job-resource-item-img').css('border-radius');
+      gsap.set($(item).find('.job-resource-item-img'), {autoAlpha: 0, clipPath: `inset(0 0 100% 100% round ${borderRadius})`});
+      gsap.set(itemTitle.words, {autoAlpha: 0, yPercent: 80});
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+          },
+          })
+          tlFadeItem
+          .to($(item).find('.job-resource-item-img'), {autoAlpha: 1, clipPath: `inset(0 0 0% 0% round ${borderRadius})`, duration: 1, clearProps: 'all'})
+          .to(itemTitle.words, {autoAlpha: 1, yPercent: 0, duration : .5, stagger: .02},'<=.2')
+        })
+  }
+}
+let jobResource = new JobResource();
+class JobTesti {
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-detail',
+        start: "top bottom+=100%",
         end: "bottom+=50% top",
         once: true,
         onEnter: () => {
@@ -2893,9 +3068,235 @@ setup(){
   setTimeout(function(){
     ScrollTrigger.refresh();
 }, 1000)
+let title = new SplitType('.job-testi-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+gsap.set('.job-testi-title-ic', {autoAlpha: 0})
+let tlFade = new gsap.timeline({
+  scrollTrigger: {
+    trigger: '.job-testi-title-wrap',
+    start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+    once: true,
+    },
+    })
+tlFade
+    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+    .to('.job-testi-title-ic', {autoAlpha: 1, duration: .6},'<=.5')
+$('.job-testi-item:not(.hidden)').each((idx, item) => {
+  let title = new SplitType($(item).find('.job-testi-item-content'), { types: 'lines words', lineClass: 'kv-line ' });
+  gsap.set(title.words, {autoAlpha: 0, yPercent: 80})
+  gsap.set($(item).find('.job-testi-item-avt'), {autoAlpha: 0, clipPath: 'circle(20% at 50% 50%)'});
+  gsap.set($(item).find('.job-testi-item-info-inner'), {autoAlpha: 0, y: 20});
+  let tlFadeItem = gsap.timeline({
+    scrollTrigger: {
+      trigger: item,
+      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      once: true,
+      },
+  })
+  tlFadeItem
+    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+    .to($(item).find('.job-testi-item-avt'), {autoAlpha: 1, clipPath: 'circle(50% at 50% 50%)', duration: .6}, '>=-.2')
+    .to($(item).find('.job-testi-item-info-inner'), {autoAlpha: 1, y: 0, duration: .6}, '<=0')
+})
 }
 }
 let jobTesti = new JobTesti();
+class JobStep{
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-testi',
+        start: "top bottom+=100%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+  setup(){
+    let title = new SplitType($('.job-step-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.job-step-title-wrap',
+        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+        once: true,
+        },
+        })
+    tlFade
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+    $('.job-step-item').each((idx, item) => {
+      gsap.set($(item).find('.job-step-item-ic'), {autoAlpha: 0, y: 20})
+      let titleItem = new SplitType($(item).find('.job-step-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80})
+      gsap.set($('.job-step-item-ar').eq(idx), {autoAlpha: 0, yPercent:30})
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+          },
+          })
+          tlFadeItem
+          .to($(item).find('.job-step-item-ic'), {autoAlpha: 1, y: 0, duration: .6})
+          .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+          .to($('.job-step-item-ar').eq(idx), {autoAlpha: 1, yPercent: 0, duration: .6}, '<=.2')
+      })
+  }
+}
+let jobStep = new JobStep();
+class JobCta {
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-step',
+        start: "top bottom+=100%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+  setup() {
+    let title = new SplitType($('.job-sign-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+    let sub = new SplitType($('.job-sign-sub'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set('.job-sign-link', {autoAlpha: 0, y: 30})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.job-sign-inner',
+        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+        once: true,
+        },
+        })
+    tlFade
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+        .to('.job-sign-link', {autoAlpha: 1, y: 0, duration: .6, clearProps: 'all'}, '<=.2')
+        .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+  }
+}
+let jobCta = new JobCta();
+class JobPrice{
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-resource',
+        start: "top bottom+=100%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+  setup () {
+    let title = new SplitType('.job-price-title', { types: 'lines words', lineClass: 'kv-line' });
+    let desc = new SplitType('.job-price-desc', { types: 'lines words', lineClass: 'kv-line' });
+    let sub = $('.job-price-sub')
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set(sub, {autoAlpha: 0, yPercent: 80})
+    gsap.set(desc.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set('.job-price-img-note', {autoAlpha: 0, y: 20})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.job-price-content',
+        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+        once: true,
+        },
+        })
+    tlFade
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+        .to(sub, {autoAlpha: 1, yPercent: 0, duration: .8},'<=.2')
+        .to(desc.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .5},'<=.3')
+    let borderRadius = $('.job-price-img-item').css('border-radius');
+    gsap.set('.job-price-img-inner .img-basic',{autoAlpha: 0})
+    gsap.set('.job-price-img-item', {autoAlpha: 0 , clipPath: `inset(100% 0% 0% 0% round ${borderRadius})`})
+    let tlFadeImg = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.job-price-img-inner',
+        start: viewport.w > 767 ? 'top top+=60%' : 'top top+=35%',
+        once: true
+      }
+    })
+    tlFadeImg.to('.job-price-img-inner .img-basic', {autoAlpha: 1, duration: 1.6})
+                    .to('.job-price-img-item', {autoAlpha: 1, clipPath : `inset(0% 0% 0% 0% round ${borderRadius})`, duration: 1.2, stagger: .2}, '<=.6')
+                    .to('.job-price-img-note', {autoAlpha: 1, y: 0, duration: .6},'<=.6')
+  }
+}
+class JobDetail {
+  constructor() {
+    this.tlTrigger;
+  }
+  setTrigger (){
+    this.tlTrigger = new gsap.timeline({
+      scrollTrigger : {
+        trigger : '.job-price',
+        start: "top bottom+=100%",
+        end: "bottom+=50% top",
+        once: true,
+        onEnter: () => {
+          this.setup();
+        }
+      }
+    })
+  }
+  setup () {
+    let title = new SplitType('.job-detail-main-txt', { types: 'lines words', lineClass: 'kv-line' });
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    gsap.set('.job-detail-btn', {autoAlpha: 0, y: 20})
+    gsap.set('.job-detail-main-inner-ic', {autoAlpha: 0})
+    let tlFade = new gsap.timeline({
+      scrollTrigger: {
+        trigger: '.job-detail-main',
+        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+        once: true,
+        },
+        })
+    tlFade
+        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+        .to('.job-detail-main-inner-ic', {autoAlpha: 1, duration: .6, yPercent: 0, stagger: .02})
+        .to('.job-detail-btn', {autoAlpha: 1, y:0,  duration: .6},'<=0')
+    $('.job-detail-list').each((idx, item) => {
+      let tlFadeList = new gsap.timeline({
+        scrollTrigger: {
+          trigger: item,
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+          },
+          })
+          
+          $(item).find('.job-detail-item').each((idx, itemInner) => {
+            let titleItem = new SplitType($(itemInner).find('.job-detail-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+            let subItem = new SplitType($(itemInner).find('.job-detail-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
+            gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
+            gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
+            gsap.set($(itemInner).find('.job-detail-item-ic'), {autoAlpha: 0, y: 20})
+            tlFadeList
+               .to($(itemInner).find('.job-detail-item-ic'), {autoAlpha: 1, y: 0, duration: .6},'<=.2')
+              .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=0')
+              .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.3')
+      
+          })
+    })
+  }
+}
+let jobDetail = new JobDetail();
+let jobPrice = new JobPrice();
   let cta = new CTA()
   const SCRIPTS = {
     home: {
@@ -3051,6 +3452,11 @@ let jobTesti = new JobTesti();
           jobProcess.setTrigger();
           jobProud.setTrigger();
           jobTesti.setTrigger();
+          jobPrice.setTrigger();
+          jobResource.setTrigger();
+          jobDetail.setTrigger();
+          jobStep.setTrigger();
+          jobCta.setTrigger();
         }
         else{
           courseFaq.setup();
@@ -3059,6 +3465,11 @@ let jobTesti = new JobTesti();
           jobProcess.setup();
           jobProud.setup();
           jobTesti.setup();
+          jobPrice.setup();
+          jobResource.setup();
+          jobDetail.setup();
+          jobStep.setup();
+          jobCta.setup();
         }
       }
     }
