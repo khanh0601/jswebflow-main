@@ -3169,8 +3169,11 @@ class JobCta {
     })
   }
   setup() {
+
     let title = new SplitType($('.job-sign-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
     let sub = new SplitType($('.job-sign-sub'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+    $(' .job-sign-sub-link.txt-decoration').append('<div class="line"></div>')
+    gsap.set('.job-sign-sub-link.txt-decoration .line', {scaleX: 0, transformOrigin: 'left'})
     gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
     gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
     gsap.set('.job-sign-link', {autoAlpha: 0, y: 30})
@@ -3185,6 +3188,7 @@ class JobCta {
         .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
         .to('.job-sign-link', {autoAlpha: 1, y: 0, duration: .6, clearProps: 'all'}, '<=.2')
         .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+        .to('.job-sign-sub-link.txt-decoration .line', {scaleX: 1, duration: .6}, '<=.4')
   }
 }
 let jobCta = new JobCta();
