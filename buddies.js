@@ -2688,9 +2688,9 @@ const mainScript = () => {
       $('.job-reason-list').addClass('swiper-wrapper');
       $('.job-reason-item').addClass('swiper-slide');
       let swiper = new Swiper('.job-reason-main', {
-        slidesPerView:3,
+        slidesPerView:viewport.w > 767 ? 3 : 1,
         spaceBetween: parseRem(24),
-        initialSlide: 1, 
+        initialSlide: viewport.w > 767 ? 1: 0, 
         navigation: {
           nextEl: '.job-reason-control-ic-next',
           prevEl: '.job-reason-control-ic-prev',
@@ -2729,7 +2729,9 @@ const mainScript = () => {
               .to(titleItem.words, {autoAlpha: 1,yPercent: 0, duration: .6, stagger: .02}, '<=.3')
               .to(subItem.words, {autoAlpha: 1,yPercent: 0, duration: .4, stagger: .015}, '<=.3')
           })
-        },1000)
+      ScrollTrigger.refresh();
+
+        },2000)
   }
 }
 let jobReason = new JobReason();
@@ -2877,6 +2879,7 @@ class JobProud{
           trigger: '.job-proud-title-wrap',
           start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
+          markers: true
         },
       })
       tlFade
@@ -2889,7 +2892,7 @@ class JobProud{
       gsap.set(titleMain.words, {autoAlpha: 0, yPercent: 60});
       gsap.set(subMain.words, {autoAlpha: 0, yPercent: 80});
       gsap.set('.job-proud-main-content-item-ab', {autoAlpha: 0})
-      gsap.set('.job-proud-main-process', {x: -parseRem(200)})
+      gsap.set('.job-proud-main-process', {x:viewport.w> 767?  -parseRem(200): -parseRem(144)})
       gsap.set('.job-proud-main-content', {autoAlpha: 0, y: 10})
       let tlFadeMain = new gsap.timeline({
         scrollTrigger: {
@@ -2918,7 +2921,7 @@ class JobProud{
         let tlItem = gsap.timeline({
           scrollTrigger: {
             trigger: $(item),
-            start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -3057,7 +3060,31 @@ class JobTesti {
     })
   }
 setup(){
-  
+  if(viewport.w < 767){
+    $('.job-testi-list-wrap').each((idx, item) => {
+      const $item = $(item);
+    
+      // Add Swiper classes if not already added
+      if (!$item.hasClass('swiper-initialized')) {
+        $item.addClass('swiper swiper-initialized');
+        $item.find('.job-testi-list').addClass('swiper-wrapper');
+        $item.find('.job-testi-item').addClass('swiper-slide');
+    
+        // Initialize Swiper
+        new Swiper($item[0], {
+          slidesPerView: 'auto',
+          spaceBetween: parseRem(20),
+          loop: true,
+          speed: 4000, 
+          autoplay: {
+            delay: 0,
+            reverseDirection: idx % 2 === 1,
+          },
+        });
+      }
+    });
+    
+  }
   $('.job-testi-more-link').on('click', function(e) {
     e.preventDefault();
     $('.job-testi-more').addClass('hidden');
