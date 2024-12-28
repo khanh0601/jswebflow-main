@@ -2879,7 +2879,6 @@ class JobProud{
           trigger: '.job-proud-title-wrap',
           start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
-          markers: true
         },
       })
       tlFade
