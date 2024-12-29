@@ -3432,7 +3432,7 @@ class LandingpageForm {
       gsap.set($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 0, yPercent: 80 })
       gsap.set(decItem.words, { autoAlpha: 0, yPercent: 80 })
       tlFadeItem
-        .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, clipPath: 'inset(0 0 0% 0%)', duration: .6 , clearProps: 'all'}, `${idx * .2}`)
+        .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, clipPath: 'inset(0 0 0% 0%)', duration: 1.2 , clearProps: 'all'}, `${idx * .2}`)
         .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 },)
         .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .5 }, '<=.2')
         .to($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 1, yPercent: 0, stagger: .05, duration: .5 }, '<=.2')
