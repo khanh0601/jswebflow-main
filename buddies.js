@@ -3406,7 +3406,7 @@ class LandingpageForm {
     let tlFadeFouder = new gsap.timeline({
       scrollTrigger: {
         trigger: '.ld-form-fouder',
-        start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
+        start: viewport.w > 767 ? 'top top+=65%' : 'top top+=55%',
         once: true
       }
     })
@@ -3428,11 +3428,11 @@ class LandingpageForm {
       })
       gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 })
       gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 })
-      gsap.set($(item).find('.about-founder-main-item-img'), { autoAlpha: 0, y: 60 })
+      gsap.set($(item).find('.about-founder-main-item-img'), { autoAlpha: 0, clipPath: ' inset(0 0 100% 100%)' })
       gsap.set($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 0, yPercent: 80 })
       gsap.set(decItem.words, { autoAlpha: 0, yPercent: 80 })
       tlFadeItem
-        .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, y: 0, duration: .6 }, `${idx * .2}`)
+        .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, clipPath: 'inset(0 0 0% 0%)', duration: .6 , clearProps: 'all'}, `${idx * .2}`)
         .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 },)
         .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .5 }, '<=.2')
         .to($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 1, yPercent: 0, stagger: .05, duration: .5 }, '<=.2')
