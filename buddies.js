@@ -19,6 +19,61 @@ const mainScript = () => {
       }
     }, intervalTime); // Thời gian mỗi lần tăng (100ms ở đây)
   }
+  const Confettiful = function(el) {
+    this.el = el;
+    this.containerEl = null;
+    
+    this.confettiFrequency = 3;
+    this.confettiColors = ['#EF2964', '#00C09D', '#2D87B0', '#48485E','#EFFF1D'];
+    this.confettiAnimations = ['slow', 'medium', 'fast'];
+    
+    this._setupElements();
+    this._renderConfetti();
+  };
+
+  Confettiful.prototype._setupElements = function() {
+    const containerEl = document.createElement('div');
+    const elPosition = this.el.style.position;
+    
+    if (elPosition !== 'relative' || elPosition !== 'absolute') {
+      this.el.style.position = 'relative';
+    }
+    
+    containerEl.classList.add('confetti-container');
+    this.el.appendChild(containerEl);
+    this.containerEl = containerEl;
+  };
+
+  Confettiful.prototype._renderConfetti = function() {
+    this.confettiInterval = setInterval(() => {
+      const confettiEl = document.createElement('div');
+      const confettiSize = (Math.floor(Math.random() * 3) + 7) + 'px';
+      const confettiBackground = this.confettiColors[Math.floor(Math.random() * this.confettiColors.length)];
+      const confettiLeft = (Math.floor(Math.random() * this.el.offsetWidth)) + 'px';
+      const confettiAnimation = this.confettiAnimations[Math.floor(Math.random() * this.confettiAnimations.length)];
+      
+      confettiEl.classList.add('confetti', 'confetti--animation-' + confettiAnimation);
+      confettiEl.style.left = confettiLeft;
+      confettiEl.style.width = confettiSize;
+      confettiEl.style.height = confettiSize;
+      confettiEl.style.backgroundColor = confettiBackground;
+  
+      this.containerEl.appendChild(confettiEl);
+      
+      // Set timeout to remove the confetti after 3 seconds
+      confettiEl.removeTimeout = setTimeout(function() {
+        confettiEl.parentNode.removeChild(confettiEl);
+      }, 3000);
+  
+    }, 25);
+  
+    // Set a timeout to stop the interval after 5 seconds
+    setTimeout(() => {
+      clearInterval(this.confettiInterval);
+    }, 5000);
+  };
+  
+  
   function createMarqueeAnimation(innerClass, wrapClass) {
     const width = $(innerClass).width();
     const length = Math.floor($(window).width() / width) + 1;
@@ -2851,18 +2906,21 @@ setup(){
   });
   $('.job-why-btn').on('click', function () {
     $(this).addClass('disable')
-    $('.job-why-company').each(function () {
-      const $scrollContainer = $(this); // Lấy từng hộp job-why-company
+    $('.job-why-company').each( (idx, item)=> {
+      const $scrollContainer = $(item); // Lấy từng hộp job-why-company
       const $scrollContent = $scrollContainer.find('.job-why-company-list');
       const contentHeight = $scrollContainer.height() - $scrollContent.height(); // Calculate the height difference
-      // Start scrolling animation
       const scrollAnimation = gsap.to($scrollContent, {
         y: `-${contentHeight}px`, // Scroll up to the end of the content
-        duration: 3, // Adjust duration as needed
+        duration: 1, // Adjust duration as needed
         ease: "none",
         repeat: -1,
+        onStart: function () {
+          console.log("Animation started!");
+          $('.job-why-info-input').addClass('active'); // Thêm class 'active' vào phần tử
+        }
       });
-  
+      console.log(idx)
       // Stop the animation and align to a random position
       setTimeout(() => {
         scrollAnimation.kill(); // Stop the animation
@@ -2871,13 +2929,24 @@ setup(){
         console.log(randomIndex)
         const $randomItem = $items.eq(randomIndex); // Random item
         const randomPosition = $randomItem.position().top ;
-  
+        
         gsap.to($scrollContent, {
           y: `-${randomPosition}px`, // Align to the random item's position
-          duration: 1,
-          ease: "power2.out",
+          duration: 1 + idx * 0.3,
+          ease: "power4.out",onComplete: () => {
+            $('.job-why-btn').removeClass('disable');
+            $('.job-why-btn').find('.txt').text('Quay lại lần nữa');
+            const $confettiContainer = $('.js-container'); // Sử dụng jQuery để chọn container
+            $('.js-container-wrap.unactive').removeClass('unactive');
+            if ($confettiContainer.length > 0) {
+              new Confettiful($confettiContainer[0]); // Truyền DOM element vào Confettiful
+            }
+            setTimeout(() =>{
+              $('.js-container-wrap').addClass('unactive');
+            },5000)
+          }
         });
-      }, 3000); // Adjust timing to stop
+      }, 1000); // Adjust timing to stop
     });
   });
   createMarqueeAnimation(".job-why-logo-list", ".job-why-logo-inner")
