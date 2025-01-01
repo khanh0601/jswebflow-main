@@ -286,13 +286,16 @@ const mainScript = () => {
       // console.log(inst.direction)
       if (inst.direction >= 1) {
         $(".kv-header").addClass("on-hide");
+        $(".kv-header-wrap").addClass("on-hide");
       } else if (inst.direction <= -1) {
         $(".kv-header").removeClass("on-hide");
+        $(".kv-header-wrap").removeClass("on-hide");
       }
       $(".kv-header").addClass("on-scroll");
     } else {
       $(".kv-header").removeClass("on-scroll");
       $(".kv-header").removeClass("on-hide");
+      $(".kv-header-wrap").removeClass("on-hide");
     }
   });
   $('.home-header-toggle').on('click', function () {
@@ -770,6 +773,27 @@ const mainScript = () => {
       this.persentName= 'No Promotion';
     }
     setup() {
+      $('.contact-form-submit').on('click', function (e) {
+        e.preventDefault();
+        if($('.course-price:checked').length ===0){
+          $('.form-validation-txt').fadeIn();
+        }
+        else{
+          $('.form-validation-txt').fadeOut();
+          let form = $('.contact-form-inner form')[0];
+
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            form.reportValidity();
+        }
+        }
+      })
+      var urlParams = new URLSearchParams(window.location.search);
+    var courseValue = urlParams.get('sc');
+    if (courseValue) {
+        $('input[course="' + courseValue + '"]').prop('checked', true);
+    }
       $('.contact-promo-item-title-ic').on('click', function () {
 
         var textToCopy = $(this).parent().find('.contact-promo-item-title').text();
@@ -812,15 +836,24 @@ const mainScript = () => {
         $('.form-contact-input-promo-submit').on('click',  () => {
           let code = $('.input-code').val().toUpperCase();
           console.log(this.Promotion)
+          
           let foundItem = this.Promotion.find(item => item.name === code)
           if (foundItem) {
+            $('.contact-form-tranfer-origin-pro-wrap').fadeIn(1000)
+            setTimeout(() => {
+              $('.input-code').val('')}, 1000);
             this.persentPrice = parseInt( foundItem.promo);
             this.persentName = parseInt( foundItem.name);
             $('.contact-form-tranfer-promo-title').text(`${foundItem.name}  ${foundItem.promo}%`);
             $('.ma-giam-gia').val(`${foundItem.name}  ${foundItem.promo}%`);
-            $('.promotion-number').text(parseInt($('.origin-number').text())*foundItem.promo/100);
-          $('.final-number').text(parseInt($('.origin-number').text()) - parseInt($('.origin-number').text())*this.persentPrice/100);
-            $('.final-price').val(parseInt($('.origin-number').text()) - parseInt($('.origin-number').text())*this.persentPrice/100)
+          console.log($('.final-number').text())
+
+            $('.promotion-number').text(parseInt($('.final-number').eq(0).text())*foundItem.promo/100);
+          $('.final-number').text(parseInt($('.final-number').eq(0).text()) - parseInt($('.final-number').eq(0).text())*this.persentPrice/100);
+            $('.final-price').val(parseInt($('.final-number').eq(0).text()) - parseInt($('.final-number').eq(0).text())*this.persentPrice/100)
+          }
+          else{
+            alert('Invalid promo code')
           }
           console.log(code)
         })
@@ -828,22 +861,44 @@ const mainScript = () => {
         let checkedCount = $('.course-price:not(".course-checkbox-full"):checked').length;
         console.log(checkedCount)
         let price = 0;
-        let name = 'No Course'
+        let name = ''
+        // let itemCourse = $('.contact-form-tranfer-origin').clone();
+        let initCourse = $('.contact-form-tranfer-origin').eq(0).clone();
         if (checkedCount > 0) {
+          $('.form-validation-txt').fadeOut();
+          if(this.persentPrice >0){
+            $('.contact-form-tranfer-origin-pro-wrap').fadeIn(500)
+          }
+          $('.contact-form-tranfer-origin-inner').html('');
           $('.course-price:checked').each((idx, item) => {
-            price = price + parseInt($(item).attr('price'));
-            name = name + $(item).attr('data-name') + (idx === $('.course-price:checked').length - 1 ? '' : ', ')
+            let priceItem = $(item).attr('price');
+            price = price + parseInt(priceItem);
+            let name = $(item).attr('data-name');
+            let itemCourse =  $(initCourse).clone();
+            console.log($(itemCourse))
+            $(itemCourse).find('.contact-form-tranfer-origin-title').text(name);
+            $(itemCourse).find('.origin-number').text(priceItem);
+            $('.contact-form-tranfer-origin-inner').append(itemCourse);
           })
         }
-        
-        $('.money-number').text(price);
-        $('.origin-number').text(price);
-        console.log(this.persentPrice);
+        else{
+          $('.contact-form-tranfer-origin-pro-wrap').fadeOut(200)
+          $('.contact-form-tranfer-origin-inner').html('');
+          price = 0;
+          let itemCourse =  $(initCourse).clone();
+            console.log($(itemCourse))
+            $(itemCourse).find('.contact-form-tranfer-origin-title').text('No Course');
+            $(itemCourse).find('.origin-number').text(0);
+            $('.contact-form-tranfer-origin-inner').append(itemCourse);
+        }
+        $('.money-number').text(price - price*this.persentPrice/100);
+        // $('.origin-number').text(price);
         $('.final-number').text(price - price*this.persentPrice/100);
+        console.log(price - price*this.persentPrice/100);
+        console.log(this.persentPrice);
         $('.final-price').val(price - price*this.persentPrice/100)
 
         $('.promotion-number').text(price*this.persentPrice/100);
-        $('.contact-form-tranfer-origin-title').text(name);
         if (checkedCount === 3) {
           $('.course-notification-wrap').addClass('active');
         }
@@ -876,16 +931,18 @@ const mainScript = () => {
       })
       $('.course-checkbox-full').on('change',  (e) => {
         if ($(e.currentTarget).is(':checked')) {
+          $('.form-validation-txt').fadeOut();
+          $('.course-notification-wrap').removeClass('active');
           $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('checked', false);
           $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', true);
           $(e.currentTarget).closest('.contact-form-main-inner').find('.contact-form-register-course-item').addClass('disable');
           $('.form-contact-success-title-one').hide();
           $('.form-contact-success-title-full').show();
           $('.contact-form-tranfer-origin-title').text($(e.currentTarget).attr('data-name'));
-          $('.money-number').text($(e.currentTarget).attr('price'));
           $('.origin-number').text($(e.currentTarget).attr('price'));
           let price = parseInt($(e.currentTarget).attr('price'));
           console.log(price);
+          $('.money-number').text($(price - price*this.persentPrice/100));
           $('.final-number').text(price - price*this.persentPrice/100);
           $('.final-price').val(price - price*this.persentPrice/100)
 
@@ -908,21 +965,21 @@ const mainScript = () => {
         .fromTo('.ic-mouse', { 'strokeDasharray': '0px 60px' }, { 'strokeDasharray': '60px 60px', duration: 1, ease: 'power1.out' }, '<=.2')
         .fromTo('.ic-eye2', { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, '<=.8')
         .fromTo('.ic-eye', { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, '<=.2')
-      $('.form-contact-success-ic').each((idx, item) => {
-        let tlIc = gsap.timeline({
-          repeat: -1,
-        });
-        tlIc.fromTo(
-          item,
-          { rotation: 0 },
-          { rotation: 720, duration: 2, ease: 'power2.out' }
-        );
-        tlIc.fromTo(
-          item,
-          { rotation: 720 },
-          { rotation: 0, duration: 2, ease: 'power2.out' }
-        );
-      });
+      // $('.form-contact-success-ic').each((idx, item) => {
+      //   let tlIc = gsap.timeline({
+      //     repeat: -1,
+      //   });
+      //   tlIc.fromTo(
+      //     item,
+      //     { rotation: 0 },
+      //     { rotation: 720, duration: 2, ease: 'power2.out' }
+      //   );
+      //   tlIc.fromTo(
+      //     item,
+      //     { rotation: 720 },
+      //     { rotation: 0, duration: 2, ease: 'power2.out' }
+      //   );
+      // });
 
     }
     play() {
@@ -2113,7 +2170,8 @@ const mainScript = () => {
           trigger: '.cs-resume',
           start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
           once: true,
-        }
+        },
+
         })
         tlFade
           .to('.cs-resume-title-ic', {autoAlpha: 1})
@@ -2141,6 +2199,16 @@ const mainScript = () => {
       })
     }
     setup(){
+      if(viewport.w < 768){
+        $('.cs-level-main').addClass('swiper');
+      $('.cs-level-list').addClass('swiper-wrapper');
+      $('.cs-level-item').addClass('swiper-slide');
+      let swiper = new Swiper('.cs-level-main', {
+        slidesPerView:"auto",
+        spaceBetween: parseRem(20),
+      });
+      ScrollTrigger.refresh();
+      }
       $('.cs-level-item').hover(
         function(){
           $(this).addClass('active');
@@ -2205,6 +2273,16 @@ const mainScript = () => {
       })
     }
     setup(){
+      if(viewport.w < 768){
+        $('.cs-founder-main').addClass('swiper');
+      $('.cs-founder-list').addClass('swiper-wrapper');
+      $('.cs-founder-item').addClass('swiper-slide');
+      let swiper = new Swiper('.cs-founder-main', {
+        slidesPerView:"auto",
+        spaceBetween: parseRem(20),
+      });
+      ScrollTrigger.refresh();
+      }
       let title = new SplitType('.cs-founder-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       let sub = new SplitType('.cs-founder-sub', { types: 'lines words', lineClass: 'kv-line' });
       gsap.set (title.words, {autoAlpha: 0, yPercent: 60});
@@ -2366,8 +2444,13 @@ const mainScript = () => {
       })
     }
     setup () {
+      $('.cs-choose-content').fadeOut();
       $('.cs-choose-content').eq(0).fadeIn();
+      setTimeout(() =>{
+        ScrollTrigger.refresh();
+      },1000)
       $('.cs-choose-tab').on('click', function() {
+        ScrollTrigger.refresh();
         let index = $(this).index();
         $('.cs-choose-tab').removeClass('active');
         $(this).addClass('active');
@@ -2459,7 +2542,7 @@ const mainScript = () => {
         })
         gsap.set(titleStudy.words, {autoAlpha: 0, yPercent: 60});
         tlStudy.to(titleStudy.words, {autoAlpha: 1, yPercent:0, stagger: 0.02, duration: .6});
-        let studyItems = $('.cs-choose-content-study-item');
+        let studyItems = $('.cs-choose-content:nth-child(1) .cs-choose-content-study-item');
         studyItems.each((idx, item) => {
           let titleItem = new SplitType($(item).find('.cs-choose-content-study-item-title'), {types: 'lines words', lineClass: 'kv-line'});
           let labelItem = '';
@@ -2469,8 +2552,8 @@ const mainScript = () => {
           }
           gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80});
           $(item).find('.cs-choose-content-study-item-txt').each((idx, itemContent) => {
-            let contentItem = new SplitType(itemContent, {types: 'lines words', lineClass: 'kv-line'});
-            gsap.set(contentItem.words, {autoAlpha: 0, yPercent: 80});
+              let contentItem = new SplitType(itemContent, {types: 'lines words', lineClass: 'kv-line'});
+              gsap.set(contentItem.words, {autoAlpha: 0, yPercent: 80});
           });
           let tlStudyItem = new gsap.timeline({
             scrollTrigger: {
@@ -2540,10 +2623,9 @@ const mainScript = () => {
           let tlTitle = new gsap.timeline({
             scrollTrigger: {
               trigger: '.cs-time-item3',
-              start: 'top+=20% center',
-              end: 'bottom+=20% center',
+              start: 'top center',
+              end: 'bottom-=20% center',
               scrub: true,
-              marker: true
             }
           })
         tlTitle.to(item, {rotate: 0, y: 0, x: 0})
@@ -2635,34 +2717,34 @@ const mainScript = () => {
       this.tlFade;
     }
     setup() {
-      const width = $(".job-marquee-inner").width();
-      const length = Math.floor($(window).width() / width) + 1;
-        for (var i = 0; i < length; i++) {
-          let $originalListBrand = $(".job-marquee-inner").eq(0);
-          let $clonedListBrand = $originalListBrand.clone();
-          $(".job-marquee-wrap").append($clonedListBrand);
-        }
-        createMarqueeAnimation(".job-marquee-inner", ".job-marquee-wrap")
-        $(".job-marquee-inner").addClass('anim');
-        $(".job-marquee-inner").addClass('anim');
-        let label = new SplitType('.job-hero-label', { types: 'lines words', lineClass: 'kv-line' });
-        let title = new SplitType('.job-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-        let sub = new SplitType('.job-hero-sub', { types: 'lines words', lineClass: 'kv-line' });
-        gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-        gsap.set(label.words, {autoAlpha: 0, yPercent: 80});
-        gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-        gsap.set('.job-hero-btn', {autoAlpha: 0, y: 20})
+      // const width = $(".job-marquee-inner").width();
+      // const length = Math.floor($(window).width() / width) + 1;
+      //   for (var i = 0; i < length; i++) {
+      //     let $originalListBrand = $(".job-marquee-inner").eq(0);
+      //     let $clonedListBrand = $originalListBrand.clone();
+      //     $(".job-marquee-wrap").append($clonedListBrand);
+      //   }
+      //   createMarqueeAnimation(".job-marquee-inner", ".job-marquee-wrap")
+      //   $(".job-marquee-inner").addClass('anim');
+      //   $(".job-marquee-inner").addClass('anim');
+        // let label = new SplitType('.job-hero-label', { types: 'lines words', lineClass: 'kv-line' });
+        // let title = new SplitType('.job-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+        // let sub = new SplitType('.job-hero-sub', { types: 'lines words', lineClass: 'kv-line' });
+        // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+        // gsap.set(label.words, {autoAlpha: 0, yPercent: 80});
+        // gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+        // gsap.set('.job-hero-btn', {autoAlpha: 0, y: 20})
         this.tlFade = new gsap.timeline({
           scrollTrigger: {
             once: true,
           },
          paused: true,
         })
-        this.tlFade
-          .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-          .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-          .to('.job-hero-btn', {autoAlpha: 1, y: 0, duration: .4, clearProps: 'all'}, '<=.7')
+        // this.tlFade
+        //   .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+        //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+        //   .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+        //   .to('.job-hero-btn', {autoAlpha: 1, y: 0, duration: .4, clearProps: 'all'}, '<=.7')
     }
     play(){
       this.tlFade.play();
@@ -2676,7 +2758,7 @@ const mainScript = () => {
     setTrigger (){
       this.tlTrigger = new gsap.timeline({
         scrollTrigger : {
-          trigger : '.job-reason',
+          trigger : '.job-hero',
           start: "top bottom+=70%",
           end: "bottom+=50% top",
           once: true,
@@ -2694,25 +2776,27 @@ const mainScript = () => {
         slidesPerView:viewport.w > 767 ? 3 : 1,
         spaceBetween: parseRem(24),
         initialSlide: viewport.w > 767 ? 1: 0, 
+        loop: true,
+        loopAdditionalSlides: 1,
         navigation: {
           nextEl: '.job-reason-control-ic-next',
           prevEl: '.job-reason-control-ic-prev',
         },
       });
-      let title = new SplitType('.job-reason-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      let sub = new SplitType('.job-reason-sub', { types: 'lines words', lineClass: 'kv-line' });
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-      let tlFade = new gsap.timeline({
-        scrollTrigger: {
-          trigger: '.job-reason-title-wrap',
-          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-          once: true,
-        },
-      })
-      tlFade
-        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-        .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+      // let title = new SplitType('.job-reason-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      // let sub = new SplitType('.job-reason-sub', { types: 'lines words', lineClass: 'kv-line' });
+      // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      // gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      // let tlFade = new gsap.timeline({
+      //   scrollTrigger: {
+      //     trigger: '.job-reason-title-wrap',
+      //     start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      //     once: true,
+      //   },
+      // })
+      // tlFade
+      //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+      //   .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: '.job-reason-main',
@@ -2728,13 +2812,13 @@ const mainScript = () => {
             gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
             gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
             tlFadeItem
-              .to($(item).find('.job-reason-item-img'), {autoAlpha: 1,clipPath: 'inset(0 0 0% 0%)', duration: 1, clearProps: 'all'}, '<=0')
+              .to($(item).find('.job-reason-item-img'), {autoAlpha: 1,clipPath: 'inset(0 0 0% 0%)', duration: .6, clearProps: 'all'}, '<=0')
               .to(titleItem.words, {autoAlpha: 1,yPercent: 0, duration: .6, stagger: .02}, '<=.3')
               .to(subItem.words, {autoAlpha: 1,yPercent: 0, duration: .4, stagger: .015}, '<=.3')
           })
       ScrollTrigger.refresh();
 
-        },2000)
+        },500)
   }
 }
 let jobReason = new JobReason();
@@ -2873,20 +2957,20 @@ class JobProud{
       });
     }
     setup(){
-      let title = new SplitType('.job-proud-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      let sub = new SplitType('.job-proud-label', { types: 'lines words', lineClass: 'kv-line' });
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-      let tlFade = new gsap.timeline({
-        scrollTrigger: {
-          trigger: '.job-proud-title-wrap',
-          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-          once: true,
-        },
-      })
-      tlFade
-      .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
-        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+      // let title = new SplitType('.job-proud-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      // let sub = new SplitType('.job-proud-label', { types: 'lines words', lineClass: 'kv-line' });
+      // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      // gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      // let tlFade = new gsap.timeline({
+      //   scrollTrigger: {
+      //     trigger: '.job-proud-title-wrap',
+      //     start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      //     once: true,
+      //   },
+      // })
+      // tlFade
+      // .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
+      //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
      
       
       let titleMain = new SplitType(".job-proud-main-title", { types: 'lines words', lineClass: 'kv-line heading-line' });
@@ -2908,7 +2992,7 @@ class JobProud{
         .to('.job-proud-main-process', {x: 0, duration: 1.2, onComplete: () => {
           $('.job-proud-main-content-item.will-active').addClass('active');
           gsap.to('.job-proud-main-content-item-ab', {autoAlpha: 1, duration: .6})
-        }}, '<=.3')
+        }}, '<=0')
         .to(titleMain.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=0')
         .to(subMain.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
         $('.job-proud-item').each((idx, item) => {
@@ -3562,7 +3646,7 @@ let landingpageForm = new LandingpageForm();
       namespace: 'course',
       afterEnter() {
         if(viewport.w > 767){
-          courseFaq.setTrigger();
+          // courseFaq.setTrigger();
           courseFouder.setTrigger();
           courseProcess.setTrigger();
           courseChoose.setTrigger();
@@ -3571,7 +3655,7 @@ let landingpageForm = new LandingpageForm();
           courseTime.setTrigger();
         }
         else {
-          courseFaq.setup();
+          // courseFaq.setup();
           courseFouder.setup();
           courseLevel.setup();
           courseResume.setup();
@@ -3645,7 +3729,7 @@ let landingpageForm = new LandingpageForm();
         resetScroll();
         globalScript();
         loading.init();
-        footer.setTrigger();
+        // footer.setTrigger();
       },
       beforeLeave({ current }) {
         lenis.stop();
@@ -3669,7 +3753,7 @@ let landingpageForm = new LandingpageForm();
         //   location.reload();
         // }
           loading.init();
-        footer.setTrigger();
+        // footer.setTrigger();
       },
     }],
     views: VIEWS
