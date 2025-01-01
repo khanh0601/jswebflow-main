@@ -2867,13 +2867,13 @@ const mainScript = () => {
             gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
             gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
             tlFadeItem
-              .to($(item).find('.job-reason-item-img'), {autoAlpha: 1,clipPath: 'inset(0 0 0% 0%)', duration: .6, clearProps: 'all'}, '<=0')
-              .to(titleItem.words, {autoAlpha: 1,yPercent: 0, duration: .6, stagger: .02}, '<=.3')
+              .to($(item).find('.job-reason-item-img'), {autoAlpha: 1,clipPath: 'inset(0 0 0% 0%)', duration: .4, clearProps: 'all'}, '<=0')
+              .to(titleItem.words, {autoAlpha: 1,yPercent: 0, duration: .6, stagger: .02}, '<=.1')
               .to(subItem.words, {autoAlpha: 1,yPercent: 0, duration: .4, stagger: .015}, '<=.3')
           })
       ScrollTrigger.refresh();
 
-        },2000)
+        },1000)
   }
 }
 let jobReason = new JobReason();
@@ -3109,12 +3109,12 @@ class JobProcess {
     })
   }
 setup(){
-$('.job-process-content').hide();
-$('.job-process-content').eq(0).fadeIn();
+$('.job-process-content').addClass('unactive');
+$('.job-process-content').eq(0).removeClass('unactive');
 $('.job-process-tab').on('click', function() {
   let index = $(this).index()
-  $('.job-process-content').hide();
-  $('.job-process-content').eq(index).fadeIn(1000);
+  $('.job-process-content').addClass('unactive');
+$('.job-process-content').eq(index).removeClass('unactive');
   $('.job-process-tab').removeClass('active');
   $(this).addClass('active');
   console.log('khanh');
