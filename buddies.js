@@ -97,12 +97,12 @@ const mainScript = () => {
     if ($(".hide-def-div").length > 0) {
       $(".hide-def-div").removeClass("hide-def-div");
     }
-    const paginationDiv = document.createElement('div');
-    paginationDiv.classList.add('swiper-pagination');
-    const swiper = document.querySelector('.swiper.home-testi-cms');
-    if (swiper) {
-      swiper.appendChild(paginationDiv);
-    }
+    const $swiper = $('.swiper.home-testi-cms');
+if ($swiper.length > 0) {
+  const $paginationDiv = $('<div></div>').addClass('swiper-pagination');
+  $swiper.append($paginationDiv);
+}
+
     var swiperTesti = new Swiper(".home-testi-cms ", {
       slidesPerView: 1,
       spaceBetween: parseRem(28),
@@ -489,7 +489,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-conquer-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         },
         onComplete: () => {
@@ -502,7 +502,7 @@ const mainScript = () => {
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-conquer-faqs-main',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -590,7 +590,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-testi-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         },
         onComplete: () => {
@@ -629,7 +629,8 @@ const mainScript = () => {
               once: true,
             },
             onComplete: () => {
-              // sub.revert();
+              sub.revert();
+              content.revert();
             }
           })
           tlFadeItem
@@ -676,7 +677,7 @@ const mainScript = () => {
       this.tlFadeMap = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-map-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -686,7 +687,7 @@ const mainScript = () => {
       let tlFadeImg = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-map-img',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -719,7 +720,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-oppo-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -780,7 +781,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-blog-title',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         },
         onComplete: () => {
@@ -792,7 +793,7 @@ const mainScript = () => {
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: '.home-blog-post',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         },
         onComplete: () => {
@@ -1069,7 +1070,7 @@ const mainScript = () => {
         scrollTrigger: {
           paused: true,
           trigger: '.contact-promo-title',
-          start: $(window).width() > 767 ? "top top+=45%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=45%" : "top top+=45%",
           once: true,
         }
       })
@@ -1141,7 +1142,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-develop-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1158,7 +1159,7 @@ const mainScript = () => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -1206,7 +1207,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-founder-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1222,7 +1223,7 @@ const mainScript = () => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -1246,7 +1247,7 @@ const mainScript = () => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -1258,7 +1259,7 @@ const mainScript = () => {
       let tlJourneyEnd = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-journey-item-content',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1392,7 +1393,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-mentor-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1412,7 +1413,7 @@ const mainScript = () => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -1452,7 +1453,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-member-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1470,7 +1471,7 @@ const mainScript = () => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -1507,7 +1508,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-partner-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1516,7 +1517,7 @@ const mainScript = () => {
       let tlFadeItem = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-partner-list',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1554,7 +1555,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.about-join-content',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1653,7 +1654,7 @@ const mainScript = () => {
         scrollTrigger: {
           paused: true,
           trigger: '.rs-hero-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
           },
         });
@@ -1738,7 +1739,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-event',
-          start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           end: "bottom top",
           once: true,
         }
@@ -1872,7 +1873,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-blog-title',
-          start : viewport.w>767 ? "top top+=65%" : "top top+=35%",
+          start : viewport.w>767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1887,7 +1888,7 @@ const mainScript = () => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -1976,7 +1977,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger : '.rs-newletter-title-wrap',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -2019,7 +2020,7 @@ const mainScript = () => {
        let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-job-title',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
           }
        })
@@ -2054,7 +2055,7 @@ const mainScript = () => {
         let tlFade = new gsap.timeline({
           scrollTrigger: {
             trigger: '.rs-cta-title',
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
             }
             })
@@ -2223,7 +2224,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({ 
         scrollTrigger: {
           trigger: '.cs-resume',
-          start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         },
 
@@ -2279,7 +2280,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-level-title-wrap',
-          start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
           }
       })
@@ -2297,7 +2298,7 @@ const mainScript = () => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
             trigger: item,
-            start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -2373,7 +2374,7 @@ const mainScript = () => {
            let tlFadeItem = new gsap.timeline({
               scrollTrigger: {
                 trigger: item,
-                start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+                start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
                 once: true,
               }
             });
@@ -2411,7 +2412,7 @@ const mainScript = () => {
       this.tlFade = gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-process-title',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=35%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
           }
       })
@@ -2426,7 +2427,7 @@ const mainScript = () => {
      let tlFadeProcess = gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-process-main',
-          start: $(window).width() > 767 ? "top top+=65%" :'top top+=35%',
+          start: $(window).width() > 767 ? "top top+=65%" :'top top+=45%',
           }
           })
         if(viewport.w > 767){
@@ -2450,7 +2451,7 @@ const mainScript = () => {
           let tlItem = new gsap.timeline({
             scrollTrigger: {
               trigger: item,
-              start: "top top+=35%",
+              start: "top top+=45%",
               once: true
               }
               })
@@ -2520,7 +2521,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-choose-title-wrap',
-          start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
         })
@@ -2539,7 +2540,7 @@ const mainScript = () => {
       let tlPrice = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-price',
-          start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
           }
           })
@@ -2559,7 +2560,7 @@ const mainScript = () => {
           let tlConfi = new gsap.timeline({
             scrollTrigger: {
               trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-confi',
-              start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+              start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
               once: true,
               }
           })
@@ -2579,7 +2580,7 @@ const mainScript = () => {
         let tlStudent = new gsap.timeline({
           scrollTrigger: {
             trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-student',
-            start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+            start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
             }
         })
@@ -2591,7 +2592,7 @@ const mainScript = () => {
         let tlStudy = new gsap.timeline({
           scrollTrigger: {
             trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-study',
-            start : viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+            start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
         })
@@ -2613,7 +2614,7 @@ const mainScript = () => {
           let tlStudyItem = new gsap.timeline({
             scrollTrigger: {
               trigger: item,
-              start : viewport.w > 767 ? "top top+=75%" : "top top+=35%",
+              start : viewport.w > 767 ? "top top+=75%" : "top top+=45%",
               once: true,
             }
           })
@@ -2652,7 +2653,7 @@ const mainScript = () => {
       let tlTitle = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-time-title-wrap',
-          start: viewport.w > 767 ? 'top top+=65%' : 'top top+=35%',
+          start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
           once: true,
         }
       })
@@ -2665,7 +2666,7 @@ const mainScript = () => {
         let tlTitle = new gsap.timeline({ 
           scrollTrigger: { 
             trigger: item,
-            start: viewport.w > 767 ? 'top top+=65%' : 'top top+=35%',
+            start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
             once: true,
           }
         })
@@ -2730,7 +2731,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-faq-title-wrap',
-          start: viewport.w > 767 ? 'top top+=65%' : 'top top+=35%',
+          start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
           once: true,
         }
       })
@@ -2739,21 +2740,21 @@ const mainScript = () => {
         .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
         .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
         .to('.cs-faq-sub .line', {width: '100%', duration: .6}, '<=.2')
-      $('.cs-faq-item').each((idx, item) => {
-        let titleItem = new SplitType($(item).find('.cs-faq-item-title'), { types: 'lines words', lineClass: 'kv-line' });
-        gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
-        gsap.set($(item).find('.cs-faq-item-title-ic'), {autoAlpha: 0, y: 30});
-        gsap.set($(item).find('.cs-faq-item-line'), { scaleX: 0, transformOrigin: 'left'});
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
-            trigger: item,
-            start: viewport.w > 767 ? 'top top+=65%' : 'top top+=35%',
+            trigger: '.cs-faq-list',
+            start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
             once: true,
           }
           })
+      $('.cs-faq-item').each((idx, item) => {
+        let titleItem = new SplitType($(item).find('.cs-faq-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+        gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
+        gsap.set($(item).find('.cs-faq-item-title-ic .ic-embed'), {autoAlpha: 0, y: 30});
+        gsap.set($(item).find('.cs-faq-item-line'), { scaleX: 0, transformOrigin: 'left'});
           tlFadeItem
-                  .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-                  .to($(item).find('.cs-faq-item-title-ic'), {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
+                  .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=0')
+                  .to($(item).find('.cs-faq-item-title-ic .ic-embed'), {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
                   .to($(item).find('.cs-faq-item-line'), {scaleX: 1, duration: .6}, '<=.2')
 
       })
@@ -3041,7 +3042,25 @@ class JobProud{
       // .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
       //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
      
-      
+      if(viewport.w < 767){
+        $('.job-proud-list-wrap').addClass('swiper');
+      $('.job-proud-list').addClass('swiper-wrapper');
+      $('.job-proud-item').addClass('swiper-slide');
+     const $paginationDiv = $('<div></div>').addClass('swiper-pagination');
+      $('.job-proud-list-wrap').append($paginationDiv);
+      let swiper = new Swiper('.job-proud-list-wrap', {
+        slidesPerView:'auto',
+        spaceBetween: parseRem(24),
+        pagination: {
+          el: ".swiper-pagination",
+          // able click
+          clickable: true
+        },
+      });
+      setTimeout(function(){
+        ScrollTrigger.refresh();
+      })
+      }
       let titleMain = new SplitType(".job-proud-main-title", { types: 'lines words', lineClass: 'kv-line heading-line' });
       let subMain = new SplitType(".job-proud-main-sub", { types: 'lines words', lineClass: 'kv-line heading-line' });
       gsap.set(titleMain.words, {autoAlpha: 0, yPercent: 60});
@@ -3052,7 +3071,7 @@ class JobProud{
       let tlFadeMain = new gsap.timeline({
         scrollTrigger: {
           trigger: '.job-proud-main',
-          start: viewport.w > 767 ? "top top+=65%" : "top top+=35%",
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -3244,10 +3263,20 @@ setup(){
     e.preventDefault();
     $('.job-testi-more').addClass('hidden');
     $('.job-testi-item.hidden').removeClass('hidden');
+    $('.job-testi-small-link-wrap').removeClass('hidden');
     setTimeout(function(){
       ScrollTrigger.refresh();
   }, 1000)
   });
+  $('.job-testi-small-link').on('click', function(e) {
+    e.preventDefault();
+    $('.job-testi-more').removeClass('hidden');
+    $('.job-testi-item[aria-hidden="true"]').addClass('hidden');
+    $('.job-testi-small-link-wrap').addClass('hidden');
+    setTimeout(function(){
+      ScrollTrigger.refresh();
+  }, 1000)
+  })
   setTimeout(function(){
     ScrollTrigger.refresh();
 }, 1000)
@@ -3264,6 +3293,7 @@ setup(){
 // tlFade
 //     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
 //     .to('.job-testi-title-ic', {autoAlpha: 1, duration: .6},'<=.5')
+$('.job-testi-item:not(.hidden)').attr('aria-hidden', 'true');
 $('.job-testi-item:not(.hidden)').each((idx, item) => {
   let title = new SplitType($(item).find('.job-testi-item-content'), { types: 'lines words', lineClass: 'kv-line ' });
   gsap.set(title.words, {autoAlpha: 0, yPercent: 80})
@@ -3302,17 +3332,17 @@ class JobStep{
     })
   }
   setup(){
-    let title = new SplitType($('.job-step-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
-    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
-    let tlFade = new gsap.timeline({
-      scrollTrigger: {
-        trigger: '.job-step-title-wrap',
-        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-        once: true,
-        },
-        })
-    tlFade
-        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+    // let title = new SplitType($('.job-step-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+    // gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+    // let tlFade = new gsap.timeline({
+    //   scrollTrigger: {
+    //     trigger: '.job-step-title-wrap',
+    //     start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+    //     once: true,
+    //     },
+    //     })
+    // tlFade
+    //     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
     $('.job-step-item').each((idx, item) => {
       gsap.set($(item).find('.job-step-item-ic'), {autoAlpha: 0, y: 20})
       let titleItem = new SplitType($(item).find('.job-step-item-title'), { types: 'lines words', lineClass: 'kv-line' });
@@ -3416,7 +3446,7 @@ class JobPrice{
     let tlFadeImg = new gsap.timeline({
       scrollTrigger: {
         trigger: '.job-price-img-inner',
-        start: viewport.w > 767 ? 'top top+=60%' : 'top top+=35%',
+        start: viewport.w > 767 ? 'top top+=60%' : 'top top+=45%',
         once: true
       }
     })
