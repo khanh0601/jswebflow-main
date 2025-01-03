@@ -19,6 +19,10 @@ const mainScript = () => {
       }
     }, intervalTime); // Thời gian mỗi lần tăng (100ms ở đây)
   }
+  function isValidEmail(email) {
+    var emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    return emailRegex.test(email);
+}
   const Confettiful = function(el) {
     this.el = el;
     this.containerEl = null;
@@ -1094,6 +1098,18 @@ if ($swiper.length > 0) {
       this.tlFade;
     }
     setup() {
+      if(viewport.w <767){
+        $('.about-develop-main').addClass('swiper swiper-initialized');
+        $('.about-develop-list').addClass('swiper-wrapper');
+        $('.about-develop-item').addClass('swiper-slide');
+    
+        // Initialize Swiper
+        new Swiper('.about-develop-main', {
+          slidesPerView: 'auto',
+          spaceBetween: parseRem(20),
+          speed: 4000, 
+        });
+      }
       const title = new SplitType('.about-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       const sub = new SplitType('.about-hero-sub', { types: 'lines words', lineClass: 'kv-line ' });
       const label = new SplitType('.about-hero-label', { types: 'lines words', lineClass: 'kv-line ' });
@@ -1676,6 +1692,22 @@ if ($swiper.length > 0) {
       // this.tlTrigger;
     }
     setup(){
+      $('.rs-form-submit').on('click', function(e){
+        e.preventDefault();
+        let email = $('.rs-form-input').val();
+        if(email == ''){
+          $('.email-validation').text("Vui lòng nhập Email.")
+          $('.email-validation').addClass('active')
+        }
+        else if( !isValidEmail(email)){
+          $('.email-validation').addClass('active')
+          $('.email-validation').text("Email không hợp lệ.")
+        }
+        else{
+          $('.email-validation').removeClass('active')
+          $('.rs-form-inner-main form').submit();
+        }
+      })
       const formSubmitEvent = (function () {
         const init = ({ onlyWorkOnThisFormName, onSuccess, onFail, onStart }) => {
           $(document).ajaxStart(function () {
@@ -1720,7 +1752,7 @@ if ($swiper.length > 0) {
           $('.rs-form-submit-inner').addClass('done')
           $(".rs-form-submit").val( "");
           $('.rs-form-input').val('');
-          $('.rs-form-input').attr('placeholder', 'Cảm ơn bạn đã đăng ký! Stay tune!');
+          $('.rs-form-input').attr('placeholder', 'Cảm ơn bạn đã đăng ký! Stay tuned.');
           $('.rs-form-input').addClass('done');
           $('.rs-form').addClass('done');
 
