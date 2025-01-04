@@ -1921,7 +1921,8 @@ if ($swiper.length > 0) {
       tlFade
             // .to(title.words, { autoAlpha: 1, yPercent: 0, duration: .6})
             .to('.rs-blog-cate-item', { autoAlpha: 1, x: 0,stagger: .1, duration: .4})
-      gsap.set('.rs-blog-item', { autoAlpha: 0, y: 50 });
+      if(viewport.w > 767){
+        gsap.set('.rs-blog-item', { autoAlpha: 0, y: 50 });
       $('.rs-blog-item').each((idx, item) => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
@@ -1933,6 +1934,7 @@ if ($swiper.length > 0) {
         tlFadeItem
                 .to(item, { autoAlpha: 1, y: 0, duration: 1 })
       })
+      }
       let swiperNew;
       if(viewport.w < 767){
         $('.rs-blog-cms').append('<div class="rs-blog-scrollbar swiper-scrollbar"></div>');
@@ -2002,6 +2004,9 @@ $('.rs-blog-item').each(function () {
           $('.rs-blog-item.active').eq(0).addClass('child11');
         }
         else{
+          setTimeout(function(){
+           ScrollTrigger.refresh();
+          }, 2000)
           const filteredBlogs = category == 'Tất cả Blog'
         ? allBlogs 
         : allBlogs.filter(blog => $(blog).attr('category') === category);
@@ -2021,7 +2026,6 @@ $('.rs-blog-item').each(function () {
           activeItem(category);
         }
 
-        setTimeout(function() {
           swiperNew = new Swiper('.rs-blog-cms', {
             spaceBetween: parseRem(20),
             slidesPerView: 1,
@@ -2037,7 +2041,6 @@ $('.rs-blog-item').each(function () {
                 crossFade: true,
             },
         });
-        }, 1000)
         }
       })
     }
