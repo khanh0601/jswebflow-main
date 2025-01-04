@@ -1925,7 +1925,7 @@ if ($swiper.length > 0) {
       $('.rs-blog-item').each((idx, item) => {
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
-            trigger: item,
+            trigger: viewport.w > 767 ? item : '.rs-blog-cms',
             start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
             once: true,
           }
@@ -1933,7 +1933,27 @@ if ($swiper.length > 0) {
         tlFadeItem
                 .to(item, { autoAlpha: 1, y: 0, duration: 1 })
       })
+      let swiperNew;
       if(viewport.w < 767){
+        $('.rs-blog-cms').append('<div class="rs-blog-scrollbar swiper-scrollbar"></div>');
+        $('.rs-blog-cms').addClass('swiper');
+        $('.rs-blog-list').addClass('swiper-wrapper');
+       $('.rs-blog-item').addClass('swiper-slide');
+       swiperNew = new Swiper('.rs-blog-cms', {
+        spaceBetween: parseRem(20),
+        slidesPerView: 1,
+        grid: {
+            rows: 3,
+          },
+        scrollbar: {
+          el: $('.rs-blog-scrollbar')
+        },
+        speed: 600,
+        effect: "fade",
+        fadeEffect: {
+            crossFade: true,
+          },
+      })
         $('.rs-blog-cate-cms').addClass('swiper');
         $('.rs-blog-cate-list').addClass('swiper-wrapper');
         $('.rs-blog-cate-item').addClass('swiper-slide');
@@ -1958,26 +1978,66 @@ if ($swiper.length > 0) {
           }
         })
       }
+      const allBlogs = [];
+
+// Đưa tất cả các bài blog hiện tại vào mảng `allBlogs` khi trang được load
+$('.rs-blog-item').each(function () {
+    allBlogs.push($(this).clone()); // Clone để tránh thao tác trực tiếp trên DOM
+});
       $('.rs-blog-cate-item').on('click', function () {
         $('.rs-blog-cate-item').removeClass('active');
-        $(this).addClass('active');
-        let category = $(this).find('.txt').text();
-        console.log(category)
-        let index = $(this).index();
+          $(this).addClass('active');
+          let category = $(this).find('.txt').text();
+          console.log(category)
+          let index = $(this).index();
+        if(viewport.w > 767){
+          if(index == 0){
+            $('.rs-blog-item').removeClass('active').addClass('active');
+            $('.rs-blog-item.active').removeClass('child11');
+            $('.rs-blog-item.active').eq(0).addClass('child11');
+          }
+          else{
+            activeItem(category);
+          }
+          $('.rs-blog-item.active').eq(0).addClass('child11');
+        }
+        else{
+          const filteredBlogs = category == 'Tất cả Blog'
+        ? allBlogs 
+        : allBlogs.filter(blog => $(blog).attr('category') === category);
+          if (swiperNew) {
+            swiperNew.destroy(true, true); // Hủy Swiper và xóa toàn bộ cấu hình liên quan
+        }
+        console.log(filteredBlogs);
+        const swiperWrapper = $('.rs-blog-list.swiper-wrapper');
+    swiperWrapper.empty(); // Xóa toàn bộ nội dung hiện tại
+    filteredBlogs.forEach(blog => {
+        swiperWrapper.append(blog); // Thêm các blog đã lọc vào DOM
+    });
         if(index == 0){
           $('.rs-blog-item').removeClass('active').addClass('active');
-          $('.rs-blog-item.active').removeClass('child11');
-          $('.rs-blog-item.active').eq(0).addClass('child11');
-
         }
         else{
           activeItem(category);
         }
-        // $('.rs-blog-item').removeClass('swiper-slide');
-        // $('.rs-blog-item.active').addClass('swiper-slide');
-        if(viewport.w > 767){
-          $('.rs-blog-item.active').eq(0).addClass('child11');
 
+        setTimeout(function() {
+          swiperNew = new Swiper('.rs-blog-cms', {
+            spaceBetween: parseRem(20),
+            slidesPerView: 1,
+            grid: {
+                rows: 3,
+            },
+            scrollbar: {
+                el: $('.rs-blog-scrollbar'),
+            },
+            speed: 600,
+            effect: "fade",
+            fadeEffect: {
+                crossFade: true,
+            },
+        });
+        }, 1000)
         }
       })
     }
