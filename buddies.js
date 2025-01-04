@@ -1852,7 +1852,7 @@ if ($swiper.length > 0) {
         
         allEvents.each((idx, item) => {
           let eventDate = $(item).attr('time');
-          
+          console.log(eventDate)
           // Convert eventDate from "dd.mm.yy" to Date object
           let [day, month, year] = eventDate.split('.');
           let formattedDate = `${parseInt(day)}.${parseInt(month)}.${parseInt(year)}`;
@@ -1877,10 +1877,16 @@ if ($swiper.length > 0) {
           manipulate();
         });
       });
-      $('.event-date').on('click', function() {
-        $('#lu-ma-iframe').attr('src', $(this).attr('link'))
-        console.log('khanh')
-      })
+      $(document).on('click', '.event-date', function() {
+        $('#lu-ma-iframe').attr('src', $(this).attr('link'));
+        console.log('khanh');
+    });
+    $(document).on('click', '.rs-event-calendar-item-inner', function(e) {
+      if(viewport.w > 767){
+        e.preventDefault();
+        $('#lu-ma-iframe').attr('src', $(this).attr('href'));
+      }
+  });
     }
   }
   let resourceCalendar = new ResourceCalendar();
@@ -1909,12 +1915,12 @@ if ($swiper.length > 0) {
           once: true,
         }
       })
-      const title = new SplitType('.rs-blog-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      // const title = new SplitType('.rs-blog-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      // gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
       gsap.set('.rs-blog-cate-item', { autoAlpha: 0, x: 10 });
       tlFade
-            .to(title.words, { autoAlpha: 1, yPercent: 0, duration: .6})
-            .to('.rs-blog-cate-item', { autoAlpha: 1, x: 0,stagger: .1, duration: .4}, '<=.2')
+            // .to(title.words, { autoAlpha: 1, yPercent: 0, duration: .6})
+            .to('.rs-blog-cate-item', { autoAlpha: 1, x: 0,stagger: .1, duration: .4})
       gsap.set('.rs-blog-item', { autoAlpha: 0, y: 50 });
       $('.rs-blog-item').each((idx, item) => {
         let tlFadeItem = new gsap.timeline({
