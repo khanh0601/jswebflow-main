@@ -3626,105 +3626,108 @@ class LandingpageHero{
         once: true,
       },
     })
-    let title = new SplitType('.ld-hero-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+    let title = new SplitType('.ld-from-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+    let sub = new SplitType('.ld-form-sub', {types: 'lines words', lineClass: 'kv-line heading-line'});
     gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-    gsap.set('.ld-hero-btn', {autoAlpha: 0, y: 30});
+    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+    gsap.set('.ld-form-main', {autoAlpha: 0, y: 30});
     this.tlFade
          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-         .to('.ld-hero-btn', {autoAlpha: 1, y:0, duration: .6}, '<=.3')
+         .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+         .to('.ld-form-main', {autoAlpha: 1, y:0, duration: .6}, '<=.3')
   }
   play(){
     this.tlFade.play();
   }
 }
 let landingpageHero = new LandingpageHero();
-class LandingpageForm {
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.ld-form',
-        start: "top bottom+=100%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
-      }
-    })
-  }
-  setup () {
-    let title = new SplitType('.ld-from-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-    let sub = new SplitType('.ld-from-sub', { types: 'lines words', lineClass: 'kv-line' });
-    gsap.set(title.words, {autoAlpha: 0, yPercent: 60, })
-    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
-    gsap.set('.ld-from-sub-inner', {autoAlpha: 0});
-    gsap.set('.ld-from-sub-ic', {autoAlpha: 0, y: 20});
-    let tlFade = new gsap.timeline({
-      scrollTrigger: {
-        trigger: '.ld-form-title-wrap',
-        start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
-        once: true
-      }
-    })
-    tlFade
-    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-    .to('.ld-from-sub-inner', {autoAlpha: 1, duration: .6, clearProps: 'all'}, '<=.2')
-    .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.3')
-    .to('.ld-from-sub-ic', {autoAlpha: 1, y: 0, duration: .6}, '>=-.2')
-    let tlFadeForm = new gsap.timeline({
-      scrollTrigger: {
-        trigger: '.ld-form-main',
-        start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
-        once: true
-      }
-    })
-    gsap.set('.ld-form-inner', {autoAlpha: 0, y: 30})
-    let borderRadius = $('.ld-form-img').css('border-radius');
-    gsap.set('.ld-form-img', {autoAlpha: 0, clipPath: `inset(0% 0% 100% 100% round ${borderRadius})`})
-    tlFadeForm
-    .to('.ld-form-inner', {autoAlpha: 1, y: 0, duration: .6})
-    .to('.ld-form-img', {autoAlpha: 1, clipPath: `inset(0% 0% 0% 0% round ${borderRadius})`, duration: 1.2, clearProps: 'all'}, '<=.2')
-    let tlFadeFouder = new gsap.timeline({
-      scrollTrigger: {
-        trigger: '.ld-form-fouder',
-        start: viewport.w > 767 ? 'top top+=65%' : 'top top+=55%',
-        once: true
-      }
-    })
-    let titleFouder = new SplitType('.ld-form-fouder-sub', { types: 'lines words', lineClass: 'kv-line heading-line' });
-    gsap.set(titleFouder.words, {autoAlpha: 0, yPercent: 80})
-    tlFadeFouder
-            .to(titleFouder.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-    let mainItems = $('.about-founder-main-item');
-    mainItems.each((idx, item) => {
-      let titleItem = new SplitType($(item).find('.about-founder-main-item-name'), { types: 'lines words', lineClass: 'kv-line' })
-      let subItem = new SplitType($(item).find('.about-founder-main-item-sub'), { types: 'lines words', lineClass: 'kv-line' })
-      let decItem = new SplitType($(item).find('.about-founder-main-item-ul li'), { types: 'lines words', lineClass: 'kv-line' })
-      let tlFadeItem = new gsap.timeline({
-        scrollTrigger: {
-          trigger: item,
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
-          once: true,
-        }
-      })
-      gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 })
-      gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 })
-      gsap.set($(item).find('.about-founder-main-item-img'), { autoAlpha: 0, clipPath: ' inset(0 0 100% 100%)' })
-      gsap.set($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 0, yPercent: 80 })
-      gsap.set(decItem.words, { autoAlpha: 0, yPercent: 80 })
-      tlFadeItem
-        .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, clipPath: 'inset(0 0 0% 0%)', duration: 1.2 , clearProps: 'all'}, `${idx * .2}`)
-        .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 },)
-        .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .5 }, '<=.2')
-        .to($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 1, yPercent: 0, stagger: .05, duration: .5 }, '<=.2')
-        .to(decItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3 }, '<=.3')
-    })
-  }
-}
-let landingpageForm = new LandingpageForm();
+// class LandingpageForm {
+//   constructor() {
+//     this.tlTrigger;
+//   }
+//   setTrigger (){
+//     this.tlTrigger = new gsap.timeline({
+//       scrollTrigger : {
+//         trigger : '.ld-form',
+//         start: "top bottom+=100%",
+//         end: "bottom+=50% top",
+//         once: true,
+//         onEnter: () => {
+//           this.setup();
+//         }
+//       }
+//     })
+//   }
+//   setup () {
+//     let title = new SplitType('.ld-from-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+//     let sub = new SplitType('.ld-from-sub', { types: 'lines words', lineClass: 'kv-line' });
+//     gsap.set(title.words, {autoAlpha: 0, yPercent: 60, })
+//     gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
+//     gsap.set('.ld-from-sub-inner', {autoAlpha: 0});
+//     gsap.set('.ld-from-sub-ic', {autoAlpha: 0, y: 20});
+//     let tlFade = new gsap.timeline({
+//       scrollTrigger: {
+//         trigger: '.ld-form-title-wrap',
+//         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
+//         once: true
+//       }
+//     })
+//     tlFade
+//     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+//     .to('.ld-from-sub-inner', {autoAlpha: 1, duration: .6, clearProps: 'all'}, '<=.2')
+//     .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.3')
+//     .to('.ld-from-sub-ic', {autoAlpha: 1, y: 0, duration: .6}, '>=-.2')
+//     let tlFadeForm = new gsap.timeline({
+//       scrollTrigger: {
+//         trigger: '.ld-form-main',
+//         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
+//         once: true
+//       }
+//     })
+//     gsap.set('.ld-form-inner', {autoAlpha: 0, y: 30})
+//     let borderRadius = $('.ld-form-img').css('border-radius');
+//     gsap.set('.ld-form-img', {autoAlpha: 0, clipPath: `inset(0% 0% 100% 100% round ${borderRadius})`})
+//     tlFadeForm
+//     .to('.ld-form-inner', {autoAlpha: 1, y: 0, duration: .6})
+//     .to('.ld-form-img', {autoAlpha: 1, clipPath: `inset(0% 0% 0% 0% round ${borderRadius})`, duration: 1.2, clearProps: 'all'}, '<=.2')
+//     let tlFadeFouder = new gsap.timeline({
+//       scrollTrigger: {
+//         trigger: '.ld-form-fouder',
+//         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=55%',
+//         once: true
+//       }
+//     })
+//     let titleFouder = new SplitType('.ld-form-fouder-sub', { types: 'lines words', lineClass: 'kv-line heading-line' });
+//     gsap.set(titleFouder.words, {autoAlpha: 0, yPercent: 80})
+//     tlFadeFouder
+//             .to(titleFouder.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+//     let mainItems = $('.about-founder-main-item');
+//     mainItems.each((idx, item) => {
+//       let titleItem = new SplitType($(item).find('.about-founder-main-item-name'), { types: 'lines words', lineClass: 'kv-line' })
+//       let subItem = new SplitType($(item).find('.about-founder-main-item-sub'), { types: 'lines words', lineClass: 'kv-line' })
+//       let decItem = new SplitType($(item).find('.about-founder-main-item-ul li'), { types: 'lines words', lineClass: 'kv-line' })
+//       let tlFadeItem = new gsap.timeline({
+//         scrollTrigger: {
+//           trigger: item,
+//           start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
+//           once: true,
+//         }
+//       })
+//       gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 })
+//       gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 })
+//       gsap.set($(item).find('.about-founder-main-item-img'), { autoAlpha: 0, clipPath: ' inset(0 0 100% 100%)' })
+//       gsap.set($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 0, yPercent: 80 })
+//       gsap.set(decItem.words, { autoAlpha: 0, yPercent: 80 })
+//       tlFadeItem
+//         .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, clipPath: 'inset(0 0 0% 0%)', duration: 1.2 , clearProps: 'all'}, `${idx * .2}`)
+//         .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 },)
+//         .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .5 }, '<=.2')
+//         .to($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 1, yPercent: 0, stagger: .05, duration: .5 }, '<=.2')
+//         .to(decItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3 }, '<=.3')
+//     })
+//   }
+// }
+// let landingpageForm = new LandingpageForm();
   let cta = new CTA()
   const SCRIPTS = {
     home: {
@@ -3906,10 +3909,10 @@ let landingpageForm = new LandingpageForm();
       afterEnter() {
         landingpageHero.setup();
         if(viewport.w > 767){
-          landingpageForm.setTrigger();
+          // landingpageForm.setTrigger();
         }
         else{
-          landingpageForm.setup();
+          // landingpageForm.setup();
         }
       }
     }
