@@ -150,7 +150,8 @@ if ($swiper.length > 0) {
       swiper2.appendChild(paginationDiv2);
     }
     var swiperBlog = new Swiper(".home-blog-cms ", {
-      slidesPerView: 1,
+      slidesPerView: "auto",
+
       spaceBetween: parseRem(16),
       pagination: {
         el: ".swiper-pagination",
@@ -159,12 +160,13 @@ if ($swiper.length > 0) {
       },
       breakpoints: {
         768: {
-          spaceBetween: parseRem(20),
-          slidesPerView: 2,
+          spaceBetween: parseRem(16),
+          slidesPerView: "auto",
+
         },
         991: {
-          spaceBetween: parseRem(28),
-          slidesPerView: 4,
+          spaceBetween: parseRem(16),
+          slidesPerView: "auto",
         },
       },
       on: {
@@ -808,10 +810,11 @@ if ($swiper.length > 0) {
       let allItems = $('.home-blog-item');
       allItems.each((idx, item) => {
         let content = new SplitType($(item).find('.home-blog-item-title'), { types: 'lines, words', lineClass: 'kv-line ' });
-        gsap.set(content.words, { autoAlpha: 0, yPercent: 60 })
+        
+        if (idx <= 5) {
+          gsap.set(content.words, { autoAlpha: 0, yPercent: 60 })
         gsap.set($(item).find('.home-blog-item-thumb'), { autoAlpha: 0, y: 60 })
         gsap.set($(item).find('.home-blog-item-date-wrap'), { autoAlpha: 0, yPercent: 60 })
-        if (idx <= 5) {
           tlFadeItem
             .to($(item).find('.home-blog-item-thumb'), { autoAlpha: 1, y: 0, duration: 1.2, clearProps: 'all' }, `${idx * .2}`)
             .to($(item).find('.home-blog-item-date-wrap'), { autoAlpha: 1, yPercent: 0, duration: .6, clearProps: 'all' }, '<=.6')
@@ -834,26 +837,35 @@ if ($swiper.length > 0) {
       this.persentName= 'No Promotion';
     }
     setup() {
+      let initCourse = $('.contact-form-tranfer-origin').eq(0).clone();
       $('.contact-form-submit').on('click', function (e) {
-        e.preventDefault();
+        
         if($('.course-price:checked').length ===0){
-          $('.form-validation-txt').fadeIn();
+          alert('Vui lòng chọn khóa học')
         }
         else{
-          $('.form-validation-txt').fadeOut();
+          // $('.form-validation-txt').fadeOut();
           let form = $('.contact-form-inner form')[0];
 
-        if (form.checkValidity()) {
-            form.submit();
-        } else {
+        if (!form.checkValidity()) {
+            e.preventDefault();
             form.reportValidity();
-        }
+        } 
         }
       })
       var urlParams = new URLSearchParams(window.location.search);
     var courseValue = urlParams.get('sc');
     if (courseValue) {
         $('input[course="' + courseValue + '"]').prop('checked', true);
+        let price = $('input[course="' + courseValue + '"]').attr('price');
+        let name = $('input[course="' + courseValue + '"]').attr('data-name');
+        let itemCourse =  $(initCourse).clone();
+        $(itemCourse).find('.contact-form-tranfer-origin-title').text(name);
+        $(itemCourse).find('.origin-number').text(price);
+        $('.contact-form-tranfer-origin-inner').html('')
+        $('.contact-form-tranfer-origin-inner').append(itemCourse);
+        $('.final-number').text(price);
+        $('.money-number').text(price);
     }
       $('.contact-promo-item-title-ic').on('click', function () {
 
@@ -900,6 +912,8 @@ if ($swiper.length > 0) {
           
           let foundItem = this.Promotion.find(item => item.name === code)
           if (foundItem) {
+            $('.form-contact-input-promo-submit-txt').text('Đã dùng');
+            setTimeout(() =>{$('.form-contact-input-promo-submit-txt').text('Dùng code')}, 3000)
             $('.contact-form-tranfer-origin-pro-wrap').fadeIn(1000)
             setTimeout(() => {
               $('.input-code').val('')}, 1000);
@@ -911,7 +925,8 @@ if ($swiper.length > 0) {
 
             $('.promotion-number').text(parseInt($('.final-number').eq(0).text())*foundItem.promo/100);
           $('.final-number').text(parseInt($('.final-number').eq(0).text()) - parseInt($('.final-number').eq(0).text())*this.persentPrice/100);
-            $('.final-price').val(parseInt($('.final-number').eq(0).text()) - parseInt($('.final-number').eq(0).text())*this.persentPrice/100)
+            $('.final-price').val(parseInt($('.final-number').eq(0).text()))
+            $('.money-number').text($('.final-number').eq(0).text())
           }
           else{
             alert('Invalid promo code')
@@ -919,12 +934,14 @@ if ($swiper.length > 0) {
           console.log(code)
         })
       $('.course-price').on('change', () => {
-        let checkedCount = $('.course-price:not(".course-checkbox-full"):checked').length;
+        let checkedCount = $('.course-price:not(.course-checkbox-full):checked').length;
+        if($('.course-checkbox-full:checked').length>0){
+          $('.course-price:not(.course-checkbox-full)').prop('checked', false)
+        }
         console.log(checkedCount)
         let price = 0;
         let name = ''
         // let itemCourse = $('.contact-form-tranfer-origin').clone();
-        let initCourse = $('.contact-form-tranfer-origin').eq(0).clone();
         if (checkedCount > 0) {
           $('.form-validation-txt').fadeOut();
           if(this.persentPrice >0){
@@ -948,7 +965,7 @@ if ($swiper.length > 0) {
           price = 0;
           let itemCourse =  $(initCourse).clone();
             console.log($(itemCourse))
-            $(itemCourse).find('.contact-form-tranfer-origin-title').text('No Course');
+            $(itemCourse).find('.contact-form-tranfer-origin-title').text('Chưa chọn khóa học');
             $(itemCourse).find('.origin-number').text(0);
             $('.contact-form-tranfer-origin-inner').append(itemCourse);
         }
@@ -1003,14 +1020,14 @@ if ($swiper.length > 0) {
           $('.origin-number').text($(e.currentTarget).attr('price'));
           let price = parseInt($(e.currentTarget).attr('price'));
           console.log(price);
-          $('.money-number').text($(price - price*this.persentPrice/100));
+          $('.money-number').text(price - price*this.persentPrice/100);
           $('.final-number').text(price - price*this.persentPrice/100);
           $('.final-price').val(price - price*this.persentPrice/100)
 
         $('.promotion-number').text(price*this.persentPrice/100);
         }
         else{
-          $('.contact-form-tranfer-origin-title').text('No Course');
+          $('.contact-form-tranfer-origin-title').text('Chưa chọn khóa học');
           $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', false);
           $(e.currentTarget).closest('.contact-form-main-inner').find('.contact-form-register-course-item').removeClass('disable');
           $('.form-contact-success-title-full').hide();
@@ -2602,8 +2619,8 @@ $('.rs-blog-item').each(function () {
       })
     }
     setup () {
-      $('.cs-choose-content').fadeOut();
-      $('.cs-choose-content').eq(0).fadeIn();
+      // $('.cs-choose-content').fadeOut();
+      $('.cs-choose-content').eq(0).addClass('active');
       setTimeout(() =>{
         ScrollTrigger.refresh();
       },1000)
@@ -2612,8 +2629,8 @@ $('.rs-blog-item').each(function () {
         let index = $(this).index();
         $('.cs-choose-tab').removeClass('active');
         $(this).addClass('active');
-        $('.cs-choose-content').fadeOut();
-        $('.cs-choose-content').eq(index).fadeIn(500);
+        $('.cs-choose-content').removeClass('active');
+        $('.cs-choose-content').eq(index).addClass('active');
       })
       let title = new SplitType('.cs-choose-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
       let sub = new SplitType('.cs-choose-sub', {types: 'lines words', lineClass: 'kv-line'});
@@ -2631,102 +2648,104 @@ $('.rs-blog-item').each(function () {
         .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
         .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
         .to('.cs-choose-tab', {autoAlpha: 1, x: 0, stagger: .1, duration: .4}, '<=.2')
-      let titlePice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
-      let labelPice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-label', {types: 'lines words', lineClass: 'kv-line '});
-      let labelPicelab = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-txt-label', {types: 'lines words', lineClass: 'kv-line '});
-      gsap.set(titlePice.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set(labelPice.words, {autoAlpha: 0, yPercent: 80});
-      gsap.set(labelPicelab.words, {autoAlpha: 0, yPercent: 80});
-      gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', {autoAlpha: 0});
-      gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', {autoAlpha: 0});
-      let tlPrice = new gsap.timeline({
-        scrollTrigger: {
-          trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-price',
-          start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-          once: true,
-          }
-          })
-          tlPrice
-          .to(labelPice.words, {autoAlpha: 1 , yPercent: 0, stagger: .02, duration: .6})
-          .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', {autoAlpha: 1, duration: .6},'<=.2')
-          .to(titlePice.words, {autoAlpha: 1 , yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-          .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', {autoAlpha: 1, duration: 1}, '<=.2')
-          .to(labelPicelab.words, {autoAlpha: 1, yPercent: 1, stagger: .015, duration: .4}, '<=.2')
-        let titleConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
-        let subConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-sub', {types: 'lines words', lineClass: 'kv-line'});
-        gsap.set(titleConfi.words, {autoAlpha: 0, yPercent: 60});
-        gsap.set(subConfi.words, {autoAlpha: 0, yPercent: 80});
-        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', {autoAlpha: 0, y: 30});
-        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', {autoAlpha: 0, y: 30});
-        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', {autoAlpha: 0, y: 30});
-          let tlConfi = new gsap.timeline({
+        if(viewport.w > 767){
+          let titlePice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+          let labelPice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-label', {types: 'lines words', lineClass: 'kv-line '});
+          let labelPicelab = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-txt-label', {types: 'lines words', lineClass: 'kv-line '});
+          gsap.set(titlePice.words, {autoAlpha: 0, yPercent: 60});
+          gsap.set(labelPice.words, {autoAlpha: 0, yPercent: 80});
+          gsap.set(labelPicelab.words, {autoAlpha: 0, yPercent: 80});
+          gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', {autoAlpha: 0});
+          gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', {autoAlpha: 0});
+          let tlPrice = new gsap.timeline({
             scrollTrigger: {
-              trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-confi',
+              trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-price',
               start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
               once: true,
               }
-          })
-        tlConfi
-              .to(titleConfi.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-              .to(subConfi.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-              .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', {autoAlpha: 1, y: 0, stagger: .1, duration: .6}, '<=.2')
-              .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
-              .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', {autoAlpha: 1, y: 0, duration: .6}, '<=.0')
-        let titleStudent  = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-student-title', {type: 'lines, words', lineClass: 'kv-line heading-line'})
-        $('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title').each((idx, item) => {
-          let studentTitle = new SplitType(item, {types: 'lines words', lineClass: 'kv-line'});
-          gsap.set(studentTitle.words, {autoAlpha: 0, yPercent: 100});
-        })
-        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', { autoAlpha: 0, yPercent: 60})
-        gsap.set(titleStudent.words, {autoAlpha: 0, yPercent: 60});
-        let tlStudent = new gsap.timeline({
-          scrollTrigger: {
-            trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-student',
-            start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-            once: true,
-            }
-        })
-        tlStudent
-        .to(titleStudent.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-        .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', {autoAlpha: 1, yPercent: 0, duration: .6, stagger: .2, clearProps: 'all'},'<=.2')
-        .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title .word', {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.0')
-        let titleStudy = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-study-title', {type: 'lines words', lineClass: 'kv-line heading-line'});
-        let tlStudy = new gsap.timeline({
-          scrollTrigger: {
-            trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-study',
-            start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-            once: true,
-          }
-        })
-        gsap.set(titleStudy.words, {autoAlpha: 0, yPercent: 60});
-        tlStudy.to(titleStudy.words, {autoAlpha: 1, yPercent:0, stagger: 0.02, duration: .6});
-        let studyItems = $('.cs-choose-content:nth-child(1) .cs-choose-content-study-item');
-        studyItems.each((idx, item) => {
-          let titleItem = new SplitType($(item).find('.cs-choose-content-study-item-title'), {types: 'lines words', lineClass: 'kv-line'});
-          let labelItem = '';
-          if($(item).find('.cs-choose-content-study-item-title').length > 0){
-            labelItem = new SplitType($(item).find('.cs-choose-content-study-item-label'), {types: 'lines words', lineClass: 'kv-line'});
-            gsap.set(labelItem.words, {autoAlpha: 0, yPercent: 80});
-          }
-          gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80});
-          $(item).find('.cs-choose-content-study-item-txt').each((idx, itemContent) => {
-              let contentItem = new SplitType(itemContent, {types: 'lines words', lineClass: 'kv-line'});
-              gsap.set(contentItem.words, {autoAlpha: 0, yPercent: 80});
-          });
-          let tlStudyItem = new gsap.timeline({
-            scrollTrigger: {
-              trigger: item,
-              start : viewport.w > 767 ? "top top+=75%" : "top top+=45%",
-              once: true,
-            }
-          })
-          if(labelItem != ''){
-            tlStudyItem.to(labelItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6});
-          }
-          tlStudyItem
-              .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=.2')
-              .to($(item).find('.cs-choose-content-study-item-txt .word'), {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-        })
+              })
+              tlPrice
+              .to(labelPice.words, {autoAlpha: 1 , yPercent: 0, stagger: .02, duration: .6})
+              .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', {autoAlpha: 1, duration: .6},'<=.2')
+              .to(titlePice.words, {autoAlpha: 1 , yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+              .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', {autoAlpha: 1, duration: 1}, '<=.2')
+              .to(labelPicelab.words, {autoAlpha: 1, yPercent: 1, stagger: .015, duration: .4}, '<=.2')
+            let titleConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
+            let subConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-sub', {types: 'lines words', lineClass: 'kv-line'});
+            gsap.set(titleConfi.words, {autoAlpha: 0, yPercent: 60});
+            gsap.set(subConfi.words, {autoAlpha: 0, yPercent: 80});
+            gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', {autoAlpha: 0, y: 30});
+            gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', {autoAlpha: 0, y: 30});
+            gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', {autoAlpha: 0, y: 30});
+              let tlConfi = new gsap.timeline({
+                scrollTrigger: {
+                  trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-confi',
+                  start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+                  once: true,
+                  }
+              })
+            tlConfi
+                  .to(titleConfi.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+                  .to(subConfi.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+                  .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', {autoAlpha: 1, y: 0, stagger: .1, duration: .6}, '<=.2')
+                  .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
+                  .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', {autoAlpha: 1, y: 0, duration: .6}, '<=.0')
+            let titleStudent  = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-student-title', {type: 'lines, words', lineClass: 'kv-line heading-line'})
+            $('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title').each((idx, item) => {
+              let studentTitle = new SplitType(item, {types: 'lines words', lineClass: 'kv-line'});
+              gsap.set(studentTitle.words, {autoAlpha: 0, yPercent: 100});
+            })
+            gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', { autoAlpha: 0, yPercent: 60})
+            gsap.set(titleStudent.words, {autoAlpha: 0, yPercent: 60});
+            let tlStudent = new gsap.timeline({
+              scrollTrigger: {
+                trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-student',
+                start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+                once: true,
+                }
+            })
+            tlStudent
+            .to(titleStudent.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+            .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', {autoAlpha: 1, yPercent: 0, duration: .6, stagger: .2, clearProps: 'all'},'<=.2')
+            .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title .word', {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.0')
+            let titleStudy = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-study-title', {type: 'lines words', lineClass: 'kv-line heading-line'});
+            let tlStudy = new gsap.timeline({
+              scrollTrigger: {
+                trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-study',
+                start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+                once: true,
+              }
+            })
+            gsap.set(titleStudy.words, {autoAlpha: 0, yPercent: 60});
+            tlStudy.to(titleStudy.words, {autoAlpha: 1, yPercent:0, stagger: 0.02, duration: .6});
+            let studyItems = $('.cs-choose-content:nth-child(1) .cs-choose-content-study-item');
+            studyItems.each((idx, item) => {
+              let titleItem = new SplitType($(item).find('.cs-choose-content-study-item-title'), {types: 'lines words', lineClass: 'kv-line'});
+              let labelItem = '';
+              if($(item).find('.cs-choose-content-study-item-title').length > 0){
+                labelItem = new SplitType($(item).find('.cs-choose-content-study-item-label'), {types: 'lines words', lineClass: 'kv-line'});
+                gsap.set(labelItem.words, {autoAlpha: 0, yPercent: 80});
+              }
+              gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80});
+              $(item).find('.cs-choose-content-study-item-txt').each((idx, itemContent) => {
+                  let contentItem = new SplitType(itemContent, {types: 'lines words', lineClass: 'kv-line'});
+                  gsap.set(contentItem.words, {autoAlpha: 0, yPercent: 80});
+              });
+              let tlStudyItem = new gsap.timeline({
+                scrollTrigger: {
+                  trigger: item,
+                  start : viewport.w > 767 ? "top top+=75%" : "top top+=45%",
+                  once: true,
+                }
+              })
+              if(labelItem != ''){
+                tlStudyItem.to(labelItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6});
+              }
+              tlStudyItem
+                  .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=.2')
+                  .to($(item).find('.cs-choose-content-study-item-txt .word'), {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+            })
+        }
 
       }
   }
@@ -3037,8 +3056,8 @@ setup(){
         
         gsap.to($scrollContent, {
           y: `-${randomPosition}px`, // Align to the random item's position
-          duration: 1 + idx * 0.3,
-          ease: "power4.out",onComplete: () => {
+          duration: 1.8 + idx * 0.5,
+          ease: "power3.out",onComplete: () => {
             $('.job-why-btn').removeClass('disable');
             $('.job-why-btn').find('.txt').text('Quay lại lần nữa');
             const $confettiContainer = $('.js-container'); // Sử dụng jQuery để chọn container
@@ -3166,7 +3185,7 @@ class JobProud{
       })
       }
       let titleMain = new SplitType(".job-proud-main-title", { types: 'lines words', lineClass: 'kv-line heading-line' });
-      let subMain = new SplitType(".job-proud-main-sub", { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let subMain = new SplitType(".job-proud-main-sub", { types: 'lines words', lineClass: 'kv-line ' });
       gsap.set(titleMain.words, {autoAlpha: 0, yPercent: 60});
       gsap.set(subMain.words, {autoAlpha: 0, yPercent: 80});
       gsap.set('.job-proud-main-content-item-ab', {autoAlpha: 0})
@@ -3185,7 +3204,7 @@ class JobProud{
           $('.job-proud-main-content-item.will-active').addClass('active');
           gsap.to('.job-proud-main-content-item-ab', {autoAlpha: 1, duration: .6})
         }}, '<=0')
-        .to(titleMain.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=0')
+        .to(titleMain.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=0.8')
         .to(subMain.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
         $('.job-proud-item').each((idx, item) => {
         let titleItem = new SplitType($(item).find('.job-proud-item-txt'), { types: 'lines words', lineClass: 'kv-line' });
@@ -3411,7 +3430,7 @@ $('.job-testi-item:not(.hidden)').each((idx, item) => {
       },
   })
   tlFadeItem
-    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
     .to($(item).find('.job-testi-item-avt'), {autoAlpha: 1, clipPath: 'circle(50% at 50% 50%)', duration: .6}, '>=-.2')
     .to($(item).find('.job-testi-item-info-inner'), {autoAlpha: 1, y: 0, duration: .6}, '<=0')
 })
@@ -3630,7 +3649,7 @@ class LandingpageHero{
       },
     })
     let title = new SplitType('.ld-from-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
-    let sub = new SplitType('.ld-form-sub', {types: 'lines words', lineClass: 'kv-line heading-line'});
+    let sub = new SplitType('.ld-form-sub', {types: 'lines words', lineClass: 'kv-line '});
     gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
     gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
     gsap.set('.ld-form-main', {autoAlpha: 0, y: 30});
@@ -3949,6 +3968,7 @@ let landingpageHero = new LandingpageHero();
         lenis.start();
       },
       enter(data) {
+        reinitializeWebflow();
       },
       afterEnter(data) {
         resetScroll();
