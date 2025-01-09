@@ -368,8 +368,9 @@ if ($swiper.length > 0) {
 
   })
    if( viewport.w <= 991){
-  $('.header-menu-has-sub').on('click', function () {
-    $(this).find('.header-menu-sub').slideToggle();
+  $('.header-menu-has-sub .header-menu-has-sub-inner a').on('click', function (e) {
+    e.preventDefault();
+    $(this).closest('.header-menu-has-sub').find('.header-menu-sub').slideToggle();
   })
 
    }
@@ -2825,40 +2826,40 @@ $('.rs-blog-item').each(function () {
       let title = new SplitType('.cs-faq-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       let sub = new SplitType('.cs-faq-sub', { types: 'lines words', lineClass: 'kv-line' });
       $(' .cs-faq-sub .txt-decoration').append('<div class="line"></div>')
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-      gsap.set('.cs-faq-sub .line', {width: 0});
-      gsap.set('.cs-faq-title-ic', {autoAlpha: 0, y: 30});
-      let tlFade = new gsap.timeline({
-        scrollTrigger: {
-          trigger: '.cs-faq-title-wrap',
-          start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
-          once: true,
-        }
-      })
-      tlFade
-        .to('.cs-faq-title-ic', {autoAlpha: 1, y: 0, stagger: .02, duration: .6})
-        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-        .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-        .to('.cs-faq-sub .line', {width: '100%', duration: .6}, '<=.2')
-        let tlFadeItem = new gsap.timeline({
-          scrollTrigger: {
-            trigger: '.cs-faq-list',
-            start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
-            once: true,
-          }
-          })
-      $('.cs-faq-item').each((idx, item) => {
-        let titleItem = new SplitType($(item).find('.cs-faq-item-title'), { types: 'lines words', lineClass: 'kv-line' });
-        gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
-        gsap.set($(item).find('.cs-faq-item-title-ic .ic-embed'), {autoAlpha: 0, y: 30});
-        gsap.set($(item).find('.cs-faq-item-line'), { scaleX: 0, transformOrigin: 'left'});
-          tlFadeItem
-                  .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=0')
-                  .to($(item).find('.cs-faq-item-title-ic .ic-embed'), {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
-                  .to($(item).find('.cs-faq-item-line'), {scaleX: 1, duration: .6}, '<=.2')
+      // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      // gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      // gsap.set('.cs-faq-sub .line', {width: 0});
+      // gsap.set('.cs-faq-title-ic', {autoAlpha: 0, y: 30});
+      // let tlFade = new gsap.timeline({
+      //   scrollTrigger: {
+      //     trigger: '.cs-faq-title-wrap',
+      //     start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
+      //     once: true,
+      //   }
+      // })
+      // tlFade
+      //   .to('.cs-faq-title-ic', {autoAlpha: 1, y: 0, stagger: .02, duration: .6})
+      //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+      //   .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+      //   .to('.cs-faq-sub .line', {width: '100%', duration: .6}, '<=.2')
+      //   let tlFadeItem = new gsap.timeline({
+      //     scrollTrigger: {
+      //       trigger: '.cs-faq-list',
+      //       start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
+      //       once: true,
+      //     }
+      //     })
+      // $('.cs-faq-item').each((idx, item) => {
+      //   let titleItem = new SplitType($(item).find('.cs-faq-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+      //   gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
+      //   gsap.set($(item).find('.cs-faq-item-title-ic .ic-embed'), {autoAlpha: 0, y: 30});
+      //   gsap.set($(item).find('.cs-faq-item-line'), { scaleX: 0, transformOrigin: 'left'});
+      //     tlFadeItem
+      //             .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=0')
+      //             .to($(item).find('.cs-faq-item-title-ic .ic-embed'), {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
+      //             .to($(item).find('.cs-faq-item-line'), {scaleX: 1, duration: .6}, '<=.2')
 
-      })
+      // })
       $('.cs-faq-item').removeClass('active');
       console.log('2384798')
       $('.cs-faq-item-title-wrap').on('click', function() {
@@ -2874,16 +2875,18 @@ $('.rs-blog-item').each(function () {
       this.tlFade;
     }
     setup() {
-      // const width = $(".job-marquee-inner").width();
-      // const length = Math.floor($(window).width() / width) + 1;
-      //   for (var i = 0; i < length; i++) {
-      //     let $originalListBrand = $(".job-marquee-inner").eq(0);
-      //     let $clonedListBrand = $originalListBrand.clone();
-      //     $(".job-marquee-wrap").append($clonedListBrand);
-      //   }
-      //   createMarqueeAnimation(".job-marquee-inner", ".job-marquee-wrap")
-      //   $(".job-marquee-inner").addClass('anim');
-      //   $(".job-marquee-inner").addClass('anim');
+      if(viewport.w < 767){
+        const width = $(".job-marquee-inner").width();
+      const length = Math.floor($(window).width() / width) + 1;
+        for (var i = 0; i < length; i++) {
+          let $originalListBrand = $(".job-marquee-inner").eq(0);
+          let $clonedListBrand = $originalListBrand.clone();
+          $(".job-marquee-wrap").append($clonedListBrand);
+        }
+        createMarqueeAnimation(".job-marquee-inner", ".job-marquee-wrap")
+        $(".job-marquee-inner").addClass('anim');
+        $(".job-marquee-inner").addClass('anim');
+      }
         // let label = new SplitType('.job-hero-label', { types: 'lines words', lineClass: 'kv-line' });
         // let title = new SplitType('.job-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
         // let sub = new SplitType('.job-hero-sub', { types: 'lines words', lineClass: 'kv-line' });
@@ -3849,7 +3852,7 @@ let landingpageHero = new LandingpageHero();
       namespace: 'course',
       afterEnter() {
         if(viewport.w > 767){
-          // courseFaq.setTrigger();
+          courseFaq.setTrigger();
           courseFouder.setTrigger();
           courseProcess.setTrigger();
           courseChoose.setTrigger();
@@ -3858,7 +3861,7 @@ let landingpageHero = new LandingpageHero();
           courseTime.setTrigger();
         }
         else {
-          // courseFaq.setup();
+          courseFaq.setup();
           courseFouder.setup();
           courseLevel.setup();
           courseResume.setup();
