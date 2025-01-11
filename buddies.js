@@ -1675,7 +1675,7 @@ if ($swiper.length > 0) {
     setup(){
       const titleHero = new SplitType('.rs-hero-title', { types: 'lines, words', lineClass: 'kv-line heading-line' });
       const titleForm = new SplitType('.rs-form-title', { types: 'lines, words', lineClass: 'kv-line heading-line' });
-      const subForm = new SplitType('.rs-form-sub', { types: 'lines, words', lineClass: 'kv-line heading-line' });
+      const subForm = new SplitType('.rs-form-sub', { types: 'lines, words', lineClass: 'kv-line' });
       const label = new SplitType('.rs-hero-label', { types: 'lines, words', lineClass: 'kv-line ' });
       const sub = new SplitType('.rs-hero-sub', { types: 'lines, words', lineClass: 'kv-line ' });
       gsap.set(titleHero.words, { autoAlpha: 0, yPercent: 60 });
@@ -3642,6 +3642,10 @@ class LandingpageHero{
     this.tlFade;
   }
   setup(){
+    $('.ld-form-success-close').on('click', function(){
+      $('.ld-form-success').hide();
+      $('.ld-form-content').show();
+    })
     this.tlFade = new gsap.timeline({
       paused: true,
       scrollTrigger: {
