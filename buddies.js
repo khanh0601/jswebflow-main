@@ -841,6 +841,7 @@ if ($swiper.length > 0) {
       $('.contact-form-submit').on('click', function (e) {
         
         if($('.course-price:checked').length ===0){
+          e.preventDefault();
           alert('Vui lòng chọn khóa học')
         }
         else{
@@ -856,9 +857,9 @@ if ($swiper.length > 0) {
       var urlParams = new URLSearchParams(window.location.search);
     var courseValue = urlParams.get('sc');
     if (courseValue) {
-        $('input[course="' + courseValue + '"]').prop('checked', true);
-        let price = $('input[course="' + courseValue + '"]').attr('price');
-        let name = $('input[course="' + courseValue + '"]').attr('data-name');
+        $('input[course-name="' + courseValue + '"]').prop('checked', true);
+        let price = $('input[course-name="' + courseValue + '"]').attr('price');
+        let name = $('input[course-name="' + courseValue + '"]').attr('data-name');
         let itemCourse =  $(initCourse).clone();
         $(itemCourse).find('.contact-form-tranfer-origin-title').text(name);
         $(itemCourse).find('.origin-number').text(price);
@@ -912,7 +913,7 @@ if ($swiper.length > 0) {
           
           let foundItem = this.Promotion.find(item => item.name === code)
           if (foundItem) {
-            $('.form-contact-input-promo-submit-txt').text('Đã dùng');
+            $('.form-contact-input-promo-submit-txt').text('Đã dùng code');
             setTimeout(() =>{$('.form-contact-input-promo-submit-txt').text('Dùng code')}, 3000)
             $('.contact-form-tranfer-origin-pro-wrap').fadeIn(1000)
             setTimeout(() => {
@@ -1673,6 +1674,23 @@ if ($swiper.length > 0) {
       this.tlFade;
     }
     setup(){
+      function convertDateFormat(dateString) {
+        // Tách chuỗi ngày thành các phần tử
+        let parts = dateString.split('/');
+        
+        // Kiểm tra độ dài của ngày và thêm số 0 nếu cần
+        let day = parts[0].length === 1 ? '0' + parts[0] : parts[0];
+        let month = parts[1].length === 1 ? '0' + parts[1] : parts[1];
+        let year = parts[2];
+        
+        // Kết hợp thành định dạng dd/mm/yyyy
+        return `${day}/${month}/${year}`;
+    }
+    $('.rs-event-calendar-date').each((idx, item)=> {
+      let date = $(item).text();
+      let formattedDate = convertDateFormat(date);
+      $(item).text(formattedDate);
+    })
       const titleHero = new SplitType('.rs-hero-title', { types: 'lines, words', lineClass: 'kv-line heading-line' });
       const titleForm = new SplitType('.rs-form-title', { types: 'lines, words', lineClass: 'kv-line heading-line' });
       const subForm = new SplitType('.rs-form-sub', { types: 'lines, words', lineClass: 'kv-line' });
@@ -2090,7 +2108,14 @@ $('.rs-blog-item').each(function () {
      }
      else {
       gsap.set('.rs-newletter-item', { autoAlpha: 0, y: -30 });
-
+      $('.rs-newletter-cms').addClass('swiper');
+      $('.rs-newletter-list').addClass('swiper-wrapper');
+      $('.rs-newletter-item').addClass('swiper-slide');
+      let swiperNew = new Swiper('.rs-newletter-cms', {
+        slidesPerView: 'auto',
+        spaceBetween: parseRem(20),
+        speed: 600,
+      });
      }
       gsap.set('.rs-newletter-btn', { autoAlpha: 0, y: 30 });
       let tlFade = new gsap.timeline({
@@ -2541,7 +2566,7 @@ $('.rs-blog-item').each(function () {
         gsap.set(itemTitle.words, {autoAlpha: 0, yPercent: 100});
         gsap.set($(item).find('.cs-process-content-item-step-wrap'), {autoAlpha: 0});
         $(item).find('.txt-decoration').append('<div class="line"></div>')
-        gsap.set($('.txt-decoration .line'), {width: 0});
+        gsap.set($(item).find('.txt-decoration .line'), {width: 0});
       })
      let tlFadeProcess = gsap.timeline({
         scrollTrigger: {
@@ -2842,12 +2867,12 @@ $('.rs-blog-item').each(function () {
       
     }
     setup (){
-      let title = new SplitType('.cs-faq-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      let sub = new SplitType('.cs-faq-sub', { types: 'lines words', lineClass: 'kv-line' });
+      // let title = new SplitType('.cs-faq-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      // let sub = new SplitType('.cs-faq-sub', { types: 'lines words', lineClass: 'kv-line' });
       $(' .cs-faq-sub .txt-decoration').append('<div class="line"></div>')
       // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
       // gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-      // gsap.set('.cs-faq-sub .line', {width: 0});
+      gsap.set('.cs-faq-sub .line', {width: '100%'});
       // gsap.set('.cs-faq-title-ic', {autoAlpha: 0, y: 30});
       // let tlFade = new gsap.timeline({
       //   scrollTrigger: {
@@ -3875,7 +3900,7 @@ let landingpageHero = new LandingpageHero();
       namespace: 'course',
       afterEnter() {
         if(viewport.w > 767){
-          courseFaq.setTrigger();
+          courseFaq.setup();
           courseFouder.setTrigger();
           courseProcess.setTrigger();
           courseChoose.setTrigger();
