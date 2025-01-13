@@ -2649,17 +2649,19 @@ $('.rs-blog-item').each(function () {
       setTimeout(() =>{
         ScrollTrigger.refresh();
       },1000)
-      if(viewport.w > 768){
+      // if(viewport.w > 768){
         let height = $('.cs-choose-content').eq(0).height();
         $('.cs-choose-content-wrap').css('height', height);
-      }
+      // }
         ScrollTrigger.refresh();
       $('.cs-choose-tab').on('click', function() {
         $('.kv-header').addClass('hide-important')
         let index = $(this).index();
+       if(viewport.w > 767 ){
         $('html, body').animate({
           scrollTop: $('.cs-choose-content').eq(index).find('.cs-choose-content-price').offset().top - 100
       }, 500);
+       }
         $('.cs-choose-tab').removeClass('active');
         $(this).addClass('active');
         $('.cs-choose-content').removeClass('active');
