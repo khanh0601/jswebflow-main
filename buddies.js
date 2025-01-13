@@ -3410,7 +3410,7 @@ setup(){
           slidesPerView: 'auto',
           spaceBetween: parseRem(20),
           loop: true,
-          speed: 4000, 
+          speed: 10000, 
           autoplay: {
             delay: 0,
             reverseDirection: idx % 2 === 1,
