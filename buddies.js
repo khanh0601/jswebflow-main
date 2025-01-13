@@ -370,7 +370,7 @@ if ($swiper.length > 0) {
 
   })
    if( viewport.w <= 991){
-  $('.header-menu-has-sub .header-menu-has-sub-inner a').on('click', function (e) {
+  $('.header-menu-has-sub .header-menu-has-sub-inner').on('click', function (e) {
     e.preventDefault();
     $(this).closest('.header-menu-has-sub').find('.header-menu-sub').slideToggle();
   })
@@ -2649,13 +2649,26 @@ $('.rs-blog-item').each(function () {
       setTimeout(() =>{
         ScrollTrigger.refresh();
       },1000)
-      $('.cs-choose-tab').on('click', function() {
+      let height = $('.cs-choose-content').eq(0).height();
+        $('.cs-choose-content-wrap').css('height', height);
         ScrollTrigger.refresh();
+      $('.cs-choose-tab').on('click', function() {
+        $('.kv-header').addClass('hide-important')
         let index = $(this).index();
+        $('html, body').animate({
+          scrollTop: $('.cs-choose-content').eq(index).find('.cs-choose-content-price').offset().top - 100
+      }, 500);
         $('.cs-choose-tab').removeClass('active');
         $(this).addClass('active');
         $('.cs-choose-content').removeClass('active');
-        $('.cs-choose-content').eq(index).addClass('active');
+        $('.cs-choose-content').eq(index).addClass('active'); 
+        let height = $('.cs-choose-content').eq(index).height();
+        $('.cs-choose-content-wrap').css('height', height);
+        ScrollTrigger.refresh();
+        setTimeout(function(){
+          $('.kv-header').addClass('on-hide');
+          $('.kv-header').removeClass('hide-important');
+        },1000)
       })
       let title = new SplitType('.cs-choose-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
       let sub = new SplitType('.cs-choose-sub', {types: 'lines words', lineClass: 'kv-line'});
@@ -3421,6 +3434,9 @@ setup(){
     $('.job-testi-more').removeClass('hidden');
     $('.job-testi-item[aria-hidden="true"]').addClass('hidden');
     $('.job-testi-small-link-wrap').addClass('hidden');
+    $('html, body').animate({
+      scrollTop: $('.job-testi-main').offset().top + $('.job-testi-main').outerHeight() - $(window).height()
+  }, 500);
     setTimeout(function(){
       ScrollTrigger.refresh();
   }, 1000)
@@ -3442,23 +3458,25 @@ setup(){
 //     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
 //     .to('.job-testi-title-ic', {autoAlpha: 1, duration: .6},'<=.5')
 $('.job-testi-item:not(.hidden)').attr('aria-hidden', 'true');
-$('.job-testi-item:not(.hidden)').each((idx, item) => {
-  let title = new SplitType($(item).find('.job-testi-item-content'), { types: 'lines words', lineClass: 'kv-line ' });
-  gsap.set(title.words, {autoAlpha: 0, yPercent: 80})
-  gsap.set($(item).find('.job-testi-item-avt'), {autoAlpha: 0, clipPath: 'circle(20% at 50% 50%)'});
-  gsap.set($(item).find('.job-testi-item-info-inner'), {autoAlpha: 0, y: 20});
-  let tlFadeItem = gsap.timeline({
-    scrollTrigger: {
-      trigger: item,
-      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-      once: true,
-      },
+if(viewport.w > 991){
+  $('.job-testi-item:not(.hidden)').each((idx, item) => {
+    let title = new SplitType($(item).find('.job-testi-item-content'), { types: 'lines words', lineClass: 'kv-line ' });
+    gsap.set(title.words, {autoAlpha: 0, yPercent: 80})
+    gsap.set($(item).find('.job-testi-item-avt'), {autoAlpha: 0, clipPath: 'circle(20% at 50% 50%)'});
+    gsap.set($(item).find('.job-testi-item-info-inner'), {autoAlpha: 0, y: 20});
+    let tlFadeItem = gsap.timeline({
+      scrollTrigger: {
+        trigger: item,
+        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+        once: true,
+        },
+    })
+    tlFadeItem
+      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
+      .to($(item).find('.job-testi-item-avt'), {autoAlpha: 1, clipPath: 'circle(50% at 50% 50%)', duration: .6}, '>=-.2')
+      .to($(item).find('.job-testi-item-info-inner'), {autoAlpha: 1, y: 0, duration: .6}, '<=0')
   })
-  tlFadeItem
-    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
-    .to($(item).find('.job-testi-item-avt'), {autoAlpha: 1, clipPath: 'circle(50% at 50% 50%)', duration: .6}, '>=-.2')
-    .to($(item).find('.job-testi-item-info-inner'), {autoAlpha: 1, y: 0, duration: .6}, '<=0')
-})
+}
 }
 }
 let jobTesti = new JobTesti();
