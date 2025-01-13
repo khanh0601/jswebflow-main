@@ -2649,8 +2649,10 @@ $('.rs-blog-item').each(function () {
       setTimeout(() =>{
         ScrollTrigger.refresh();
       },1000)
-      let height = $('.cs-choose-content').eq(0).height();
+      if(viewport.w > 768){
+        let height = $('.cs-choose-content').eq(0).height();
         $('.cs-choose-content-wrap').css('height', height);
+      }
         ScrollTrigger.refresh();
       $('.cs-choose-tab').on('click', function() {
         $('.kv-header').addClass('hide-important')
@@ -2812,7 +2814,7 @@ $('.rs-blog-item').each(function () {
       let tlTitle = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-time-title-wrap',
-          start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
+          start: viewport.w > 767 ? 'top top+=65%' : 'top top+=65%',
           once: true,
         }
       })
