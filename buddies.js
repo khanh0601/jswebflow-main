@@ -22,79 +22,79 @@ const mainScript = () => {
   function isValidEmail(email) {
     var emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     return emailRegex.test(email);
-}
-  const Confettiful = function(el) {
+  }
+  const Confettiful = function (el) {
     this.el = el;
     this.containerEl = null;
-    
+
     this.confettiFrequency = 3;
-    this.confettiColors = ['#EF2964', '#00C09D', '#2D87B0', '#48485E','#EFFF1D'];
+    this.confettiColors = ['#EF2964', '#00C09D', '#2D87B0', '#48485E', '#EFFF1D'];
     this.confettiAnimations = ['slow', 'medium', 'fast'];
-    
+
     this._setupElements();
     this._renderConfetti();
   };
 
-  Confettiful.prototype._setupElements = function() {
+  Confettiful.prototype._setupElements = function () {
     const containerEl = document.createElement('div');
     const elPosition = this.el.style.position;
-    
+
     if (elPosition !== 'relative' || elPosition !== 'absolute') {
       this.el.style.position = 'relative';
     }
-    
+
     containerEl.classList.add('confetti-container');
     this.el.appendChild(containerEl);
     this.containerEl = containerEl;
   };
 
-  Confettiful.prototype._renderConfetti = function() {
+  Confettiful.prototype._renderConfetti = function () {
     this.confettiInterval = setInterval(() => {
       const confettiEl = document.createElement('div');
       const confettiSize = (Math.floor(Math.random() * 3) + 7) + 'px';
       const confettiBackground = this.confettiColors[Math.floor(Math.random() * this.confettiColors.length)];
       const confettiLeft = (Math.floor(Math.random() * this.el.offsetWidth)) + 'px';
       const confettiAnimation = this.confettiAnimations[Math.floor(Math.random() * this.confettiAnimations.length)];
-      
+
       confettiEl.classList.add('confetti', 'confetti--animation-' + confettiAnimation);
       confettiEl.style.left = confettiLeft;
       confettiEl.style.width = confettiSize;
       confettiEl.style.height = confettiSize;
       confettiEl.style.backgroundColor = confettiBackground;
-  
+
       this.containerEl.appendChild(confettiEl);
-      
+
       // Set timeout to remove the confetti after 3 seconds
-      confettiEl.removeTimeout = setTimeout(function() {
+      confettiEl.removeTimeout = setTimeout(function () {
         confettiEl.parentNode.removeChild(confettiEl);
       }, 3000);
-  
+
     }, 25);
-  
+
     // Set a timeout to stop the interval after 5 seconds
     setTimeout(() => {
       clearInterval(this.confettiInterval);
     }, 5000);
   };
-  
-  
+
+
   function createMarqueeAnimation(innerClass, wrapClass) {
     const width = $(innerClass).width();
     const length = Math.floor($(window).width() / width) + 1;
-  
+
     for (let i = 0; i < length; i++) {
       let $originalElement = $(innerClass).eq(0);
       let $clonedElement = $originalElement.clone();
       $(wrapClass).append($clonedElement);
     }
-  
+
     // $(innerClass).addClass('anim');
   }
   function reinitializeWebflow() {
     console.log('reinitialize webflow');
     window.Webflow && window.Webflow.destroy();
     window.Webflow && window.Webflow.ready();
-}
+  }
   function globalScript() {
     // loadingPage();
 
@@ -102,10 +102,10 @@ const mainScript = () => {
       $(".hide-def-div").removeClass("hide-def-div");
     }
     const $swiper = $('.swiper.home-testi-cms');
-if ($swiper.length > 0) {
-  const $paginationDiv = $('<div></div>').addClass('swiper-pagination');
-  $swiper.append($paginationDiv);
-}
+    if ($swiper.length > 0) {
+      const $paginationDiv = $('<div></div>').addClass('swiper-pagination');
+      $swiper.append($paginationDiv);
+    }
 
     var swiperTesti = new Swiper(".home-testi-cms ", {
       slidesPerView: 1,
@@ -264,11 +264,11 @@ if ($swiper.length > 0) {
       this.isLoaded = sessionStorage.getItem("isLoaded") == 'true' ? true : false;
     }
     init() {
-  let onLoadPage = sessionStorage.getItem('loading-page');
+      let onLoadPage = sessionStorage.getItem('loading-page');
       let tl = new gsap.timeline({
         onStart: () => {
-    $('.kv-header').removeClass('active');
-          if(!onLoadPage){
+          $('.kv-header').removeClass('active');
+          if (!onLoadPage) {
             gsap.to('.kv-header-wrap', { autoAlpha: 0, yPercent: -100 })
             lenis.stop();
             $(".loading-page").removeClass("loaded");
@@ -276,27 +276,27 @@ if ($swiper.length > 0) {
               $('.main-wrap').removeClass('hide-def-div')
             }, 1000)
           }
-          else{
+          else {
             $('.main-wrap').removeClass('hide-def-div')
           }
         },
         onComplete: () => {
-          if(!onLoadPage){
+          if (!onLoadPage) {
             lenis.start();
-          $(".loading-page").addClass("loaded");
+            $(".loading-page").addClass("loaded");
           }
           this.animHero();
         }
       });
-     if(!onLoadPage){
-      tl
-      .fromTo('.loading-page .loading-page-inner', { autoAlpha: 0 }, { duration: 1, autoAlpha: 1, ease: "power1.out", })
-      .to('.loading-page .loading-page-inner', { duration: 1, autoAlpha: 0, ease: "power1.out" }) 
-    }
-    else{
-      tl
-      .to('.loading-page .loading-page-inner', { duration: 1, autoAlpha: 0, ease: "power1.out" }) 
-    }
+      if (!onLoadPage) {
+        tl
+          .fromTo('.loading-page .loading-page-inner', { autoAlpha: 0 }, { duration: 1, autoAlpha: 1, ease: "power1.out", })
+          .to('.loading-page .loading-page-inner', { duration: 1, autoAlpha: 0, ease: "power1.out" })
+      }
+      else {
+        tl
+          .to('.loading-page .loading-page-inner', { duration: 1, autoAlpha: 0, ease: "power1.out" })
+      }
       sessionStorage.setItem('loading-page', 'true');
     }
     animHero() {
@@ -317,13 +317,13 @@ if ($swiper.length > 0) {
       else if ($('[data-barba-namespace="blog"]').length) {
         blogHero.play()
       }
-      else if($('[data-barba-namespace="course"]').length){
+      else if ($('[data-barba-namespace="course"]').length) {
         courseHero.play()
       }
-      else if($('[data-barba-namespace="job-couching"]').length){
+      else if ($('[data-barba-namespace="job-couching"]').length) {
         jobHero.play()
       }
-      else if($('[data-barba-namespace="landingpage"]').length){
+      else if ($('[data-barba-namespace="landingpage"]').length) {
         landingpageHero.play()
       }
     }
@@ -369,13 +369,13 @@ if ($swiper.length > 0) {
     $('.kv-header').toggleClass('active');
 
   })
-   if( viewport.w <= 991){
-  $('.header-menu-has-sub .header-menu-has-sub-inner').on('click', function (e) {
-    e.preventDefault();
-    $(this).closest('.header-menu-has-sub').find('.header-menu-sub').slideToggle();
-  })
+  if (viewport.w <= 991) {
+    $('.header-menu-has-sub .header-menu-has-sub-inner').on('click', function (e) {
+      e.preventDefault();
+      $(this).closest('.header-menu-has-sub').find('.header-menu-sub').slideToggle();
+    })
 
-   }
+  }
   class HomeHero {
     constructor() {
       this.tlFade
@@ -720,7 +720,7 @@ if ($swiper.length > 0) {
       })
     }
     setup() {
-      
+
       const title = new SplitType('.home-oppo-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
       gsap.set('.home-oppo-tags-item', { autoAlpha: 0, yPercent: 80 })
@@ -810,11 +810,11 @@ if ($swiper.length > 0) {
       let allItems = $('.home-blog-item');
       allItems.each((idx, item) => {
         let content = new SplitType($(item).find('.home-blog-item-title'), { types: 'lines, words', lineClass: 'kv-line ' });
-        
+
         if (idx <= 5) {
           gsap.set(content.words, { autoAlpha: 0, yPercent: 60 })
-        gsap.set($(item).find('.home-blog-item-thumb'), { autoAlpha: 0, y: 60 })
-        gsap.set($(item).find('.home-blog-item-date-wrap'), { autoAlpha: 0, yPercent: 60 })
+          gsap.set($(item).find('.home-blog-item-thumb'), { autoAlpha: 0, y: 60 })
+          gsap.set($(item).find('.home-blog-item-date-wrap'), { autoAlpha: 0, yPercent: 60 })
           tlFadeItem
             .to($(item).find('.home-blog-item-thumb'), { autoAlpha: 1, y: 0, duration: 1.2, clearProps: 'all' }, `${idx * .2}`)
             .to($(item).find('.home-blog-item-date-wrap'), { autoAlpha: 1, yPercent: 0, duration: .6, clearProps: 'all' }, '<=.6')
@@ -832,42 +832,42 @@ if ($swiper.length > 0) {
   class ContactHero {
     constructor() {
       this.tlFade;
-      this.Promotion=[];
-      this.persentPrice= 0;
-      this.persentName= 'No Promotion';
+      this.Promotion = [];
+      this.persentPrice = 0;
+      this.persentName = 'No Promotion';
     }
     setup() {
       let initCourse = $('.contact-form-tranfer-origin').eq(0).clone();
       $('.contact-form-submit').on('click', function (e) {
-        
-        if($('.course-price:checked').length ===0){
+
+        if ($('.course-price:checked').length === 0) {
           e.preventDefault();
           alert('Vui lòng chọn khóa học')
         }
-        else{
+        else {
           // $('.form-validation-txt').fadeOut();
           let form = $('.contact-form-inner form')[0];
 
-        if (!form.checkValidity()) {
+          if (!form.checkValidity()) {
             e.preventDefault();
             form.reportValidity();
-        } 
+          }
         }
       })
       var urlParams = new URLSearchParams(window.location.search);
-    var courseValue = urlParams.get('sc');
-    if (courseValue) {
+      var courseValue = urlParams.get('sc');
+      if (courseValue) {
         $('input[course-name="' + courseValue + '"]').prop('checked', true);
         let price = $('input[course-name="' + courseValue + '"]').attr('price');
         let name = $('input[course-name="' + courseValue + '"]').attr('data-name');
-        let itemCourse =  $(initCourse).clone();
+        let itemCourse = $(initCourse).clone();
         $(itemCourse).find('.contact-form-tranfer-origin-title').text(name);
         $(itemCourse).find('.origin-number').text(price);
         $('.contact-form-tranfer-origin-inner').html('')
         $('.contact-form-tranfer-origin-inner').append(itemCourse);
         $('.final-number').text(price);
         $('.money-number').text(price);
-    }
+      }
       $('.contact-promo-item-title-ic').on('click', function () {
 
         var textToCopy = $(this).parent().find('.contact-promo-item-title').text();
@@ -879,18 +879,18 @@ if ($swiper.length > 0) {
         document.execCommand('copy');
         tempInput.remove();
         item.find('.tooltip').text('Copied!')
-        
+
         setTimeout(function () {
-            item.find('.tooltip').text('Copy')
+          item.find('.tooltip').text('Copy')
         }, 2000)
-    });
+      });
       $('.contact-promo-item-promotion').each((idx, item) => {
         let promo = $(item).attr('data-promotion-price');
         let name = $(item).closest('.contact-promo-item').find('.contact-promo-item-title').attr('data-promotion-code').toUpperCase();
         this.Promotion.push({
           promo: promo,
           name: name
-      });
+        });
       })
       console.log(this.Promotion);
       const title = new SplitType('.contact-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
@@ -907,36 +907,37 @@ if ($swiper.length > 0) {
         .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
         .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
         .to('.contact-form', { autoAlpha: 1, y: 0, duration: 1, clearProps: 'all' }, '<=.3')
-        $('.form-contact-input-promo-submit').on('click',  () => {
-          let code = $('.input-code').val().toUpperCase();
-          console.log(this.Promotion)
-          
-          let foundItem = this.Promotion.find(item => item.name === code)
-          if (foundItem) {
-            $('.form-contact-input-promo-submit-txt').text('Đã dùng code');
-            setTimeout(() =>{$('.form-contact-input-promo-submit-txt').text('Dùng code')}, 3000)
-            $('.contact-form-tranfer-origin-pro-wrap').fadeIn(1000)
-            setTimeout(() => {
-              $('.input-code').val('')}, 1000);
-            this.persentPrice = parseInt( foundItem.promo);
-            this.persentName = parseInt( foundItem.name);
-            $('.contact-form-tranfer-promo-title').text(`${foundItem.name}  ${foundItem.promo}%`);
-            $('.ma-giam-gia').val(`${foundItem.name}  ${foundItem.promo}%`);
+      $('.form-contact-input-promo-submit').on('click', () => {
+        let code = $('.input-code').val().toUpperCase();
+        console.log(this.Promotion)
+
+        let foundItem = this.Promotion.find(item => item.name === code)
+        if (foundItem) {
+          $('.form-contact-input-promo-submit-txt').text('Đã dùng code');
+          setTimeout(() => { $('.form-contact-input-promo-submit-txt').text('Dùng code') }, 3000)
+          $('.contact-form-tranfer-origin-pro-wrap').fadeIn(1000)
+          setTimeout(() => {
+            $('.input-code').val('')
+          }, 1000);
+          this.persentPrice = parseInt(foundItem.promo);
+          this.persentName = parseInt(foundItem.name);
+          $('.contact-form-tranfer-promo-title').text(`${foundItem.name}  ${foundItem.promo}%`);
+          $('.ma-giam-gia').val(`${foundItem.name}  ${foundItem.promo}%`);
           console.log($('.final-number').text())
 
-            $('.promotion-number').text(parseInt($('.final-number').eq(0).text())*foundItem.promo/100);
-          $('.final-number').text(parseInt($('.final-number').eq(0).text()) - parseInt($('.final-number').eq(0).text())*this.persentPrice/100);
-            $('.final-price').val(parseInt($('.final-number').eq(0).text()))
-            $('.money-number').text($('.final-number').eq(0).text())
-          }
-          else{
-            alert('Invalid promo code')
-          }
-          console.log(code)
-        })
+          $('.promotion-number').text(parseInt($('.final-number').eq(0).text()) * foundItem.promo / 100);
+          $('.final-number').text(parseInt($('.final-number').eq(0).text()) - parseInt($('.final-number').eq(0).text()) * this.persentPrice / 100);
+          $('.final-price').val(parseInt($('.final-number').eq(0).text()))
+          $('.money-number').text($('.final-number').eq(0).text())
+        }
+        else {
+          alert('Invalid promo code')
+        }
+        console.log(code)
+      })
       $('.course-price').on('change', () => {
         let checkedCount = $('.course-price:not(.course-checkbox-full):checked').length;
-        if($('.course-checkbox-full:checked').length>0){
+        if ($('.course-checkbox-full:checked').length > 0) {
           $('.course-price:not(.course-checkbox-full)').prop('checked', false)
         }
         console.log(checkedCount)
@@ -945,7 +946,7 @@ if ($swiper.length > 0) {
         // let itemCourse = $('.contact-form-tranfer-origin').clone();
         if (checkedCount > 0) {
           $('.form-validation-txt').fadeOut();
-          if(this.persentPrice >0){
+          if (this.persentPrice > 0) {
             $('.contact-form-tranfer-origin-pro-wrap').fadeIn(500)
           }
           $('.contact-form-tranfer-origin-inner').html('');
@@ -953,31 +954,31 @@ if ($swiper.length > 0) {
             let priceItem = $(item).attr('price');
             price = price + parseInt(priceItem);
             let name = $(item).attr('data-name');
-            let itemCourse =  $(initCourse).clone();
+            let itemCourse = $(initCourse).clone();
             console.log($(itemCourse))
             $(itemCourse).find('.contact-form-tranfer-origin-title').text(name);
             $(itemCourse).find('.origin-number').text(priceItem);
             $('.contact-form-tranfer-origin-inner').append(itemCourse);
           })
         }
-        else{
+        else {
           $('.contact-form-tranfer-origin-pro-wrap').fadeOut(200)
           $('.contact-form-tranfer-origin-inner').html('');
           price = 0;
-          let itemCourse =  $(initCourse).clone();
-            console.log($(itemCourse))
-            $(itemCourse).find('.contact-form-tranfer-origin-title').text('Chưa chọn khóa học');
-            $(itemCourse).find('.origin-number').text(0);
-            $('.contact-form-tranfer-origin-inner').append(itemCourse);
+          let itemCourse = $(initCourse).clone();
+          console.log($(itemCourse))
+          $(itemCourse).find('.contact-form-tranfer-origin-title').text('Chưa chọn khóa học');
+          $(itemCourse).find('.origin-number').text(0);
+          $('.contact-form-tranfer-origin-inner').append(itemCourse);
         }
-        $('.money-number').text(price - price*this.persentPrice/100);
+        $('.money-number').text(price - price * this.persentPrice / 100);
         // $('.origin-number').text(price);
-        $('.final-number').text(price - price*this.persentPrice/100);
-        console.log(price - price*this.persentPrice/100);
+        $('.final-number').text(price - price * this.persentPrice / 100);
+        console.log(price - price * this.persentPrice / 100);
         console.log(this.persentPrice);
-        $('.final-price').val(price - price*this.persentPrice/100)
+        $('.final-price').val(price - price * this.persentPrice / 100)
 
-        $('.promotion-number').text(price*this.persentPrice/100);
+        $('.promotion-number').text(price * this.persentPrice / 100);
         if (checkedCount === 3) {
           $('.course-notification-wrap').addClass('active');
         }
@@ -1008,7 +1009,7 @@ if ($swiper.length > 0) {
       $('.form-success-close').on('click', function () {
         location.reload();
       })
-      $('.course-checkbox-full').on('change',  (e) => {
+      $('.course-checkbox-full').on('change', (e) => {
         if ($(e.currentTarget).is(':checked')) {
           $('.form-validation-txt').fadeOut();
           $('.course-notification-wrap').removeClass('active');
@@ -1021,13 +1022,13 @@ if ($swiper.length > 0) {
           $('.origin-number').text($(e.currentTarget).attr('price'));
           let price = parseInt($(e.currentTarget).attr('price'));
           console.log(price);
-          $('.money-number').text(price - price*this.persentPrice/100);
-          $('.final-number').text(price - price*this.persentPrice/100);
-          $('.final-price').val(price - price*this.persentPrice/100)
+          $('.money-number').text(price - price * this.persentPrice / 100);
+          $('.final-number').text(price - price * this.persentPrice / 100);
+          $('.final-price').val(price - price * this.persentPrice / 100)
 
-        $('.promotion-number').text(price*this.persentPrice/100);
+          $('.promotion-number').text(price * this.persentPrice / 100);
         }
-        else{
+        else {
           $('.contact-form-tranfer-origin-title').text('Chưa chọn khóa học');
           $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', false);
           $(e.currentTarget).closest('.contact-form-main-inner').find('.contact-form-register-course-item').removeClass('disable');
@@ -1067,10 +1068,10 @@ if ($swiper.length > 0) {
     }
   }
   let contactHero = new ContactHero();
-  class ContactPromo{
+  class ContactPromo {
     constructor() {
       this.tlTrigger,
-      this.titleFade
+        this.titleFade
     }
     setTrigger() {
       this.tlTrigger = new gsap.timeline({
@@ -1087,8 +1088,8 @@ if ($swiper.length > 0) {
     }
     setup() {
       const title = new SplitType('.contact-promo-title', { types: 'lines words', lineClass: 'kv-line heading-line' })
-      gsap.set(title.words, {autoAlpha: 0 , yPercent: 60})
-      gsap.set('.contact-promo-item', {autoAlpha: 0, y: 30});
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
+      gsap.set('.contact-promo-item', { autoAlpha: 0, y: 30 });
       this.titleFade = new gsap.timeline({
         scrollTrigger: {
           paused: true,
@@ -1098,16 +1099,16 @@ if ($swiper.length > 0) {
         }
       })
       this.titleFade
-        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .8})
-        .to('.contact-promo-item', {autoAlpha: 1, y: 0, stagger: .02, duration: .8}, '<=.2')
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .8 })
+        .to('.contact-promo-item', { autoAlpha: 1, y: 0, stagger: .02, duration: .8 }, '<=.2')
       $('.contact-promo-item-promotion').each((idx, item) => {
         let promo = $(item).attr('data-promotion-price');
         let name = $(item).closest('.contact-promo-item').find('.contact-promo-item-title').attr('data-promotion-code');
-     
+
         $(item).text(`${promo}%`)
       })
     }
-    play(){
+    play() {
       this.titleFade.play()
     }
   }
@@ -1117,16 +1118,16 @@ if ($swiper.length > 0) {
       this.tlFade;
     }
     setup() {
-      if(viewport.w <767){
+      if (viewport.w < 767) {
         $('.about-develop-main').addClass('swiper swiper-initialized');
         $('.about-develop-list').addClass('swiper-wrapper');
         $('.about-develop-item').addClass('swiper-slide');
-    
+
         // Initialize Swiper
         new Swiper('.about-develop-main', {
           slidesPerView: 'auto',
           spaceBetween: parseRem(20),
-          speed: 4000, 
+          speed: 4000,
         });
       }
       const title = new SplitType('.about-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
@@ -1305,53 +1306,53 @@ if ($swiper.length > 0) {
         .to('.about-journey-item-content-title-wrap', { autoAlpha: 1, yPercent: 0, duration: .6, clearProps: 'all' })
         .to(journeyEndSub.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .4 }, '<=.3')
       let allItems = $('.about-journey-item-wrap')
-    if(viewport.w > 767){
-      allItems.each((idx, item) => {
-        let tlFade = new gsap.timeline({
-          scrollTrigger: {
-            trigger: item,
-            start: 'top+=55% center',
-            end: 'bottom+=45% center',
-            scrub: true,
-          }
+      if (viewport.w > 767) {
+        allItems.each((idx, item) => {
+          let tlFade = new gsap.timeline({
+            scrollTrigger: {
+              trigger: item,
+              start: 'top+=55% center',
+              end: 'bottom+=45% center',
+              scrub: true,
+            }
+          })
+          tlFade.to(item, { autoAlpha: 0, scale: .9 })
         })
-        tlFade.to(item, { autoAlpha: 0, scale: .9 })
-      })
-      $('.about-journey-item-line-label').each((idx, item) => {
-        console.log($(item).height())
-        let tlFadeLabel = new gsap.timeline({
-          scrollTrigger: {
-            trigger: $(item).closest('.about-journey-item-wrap'),
-            start: 'top center',
-            end: 'bottom+=45% center',
-            scrub: true,
-          }
+        $('.about-journey-item-line-label').each((idx, item) => {
+          console.log($(item).height())
+          let tlFadeLabel = new gsap.timeline({
+            scrollTrigger: {
+              trigger: $(item).closest('.about-journey-item-wrap'),
+              start: 'top center',
+              end: 'bottom+=45% center',
+              scrub: true,
+            }
+          })
+          tlFadeLabel.fromTo(item, { scaleY: 0, transformOrigin: 'top' }, { scaleY: 1 })
         })
-        tlFadeLabel.fromTo(item, { scaleY: 0, transformOrigin: 'top' }, { scaleY: 1 })
-      })
-      $('.line-abl').each((idx, item) => {
-        let tlFadeLine = new gsap.timeline({
-          scrollTrigger: {
-            trigger: $(item).closest('.about-journey-item-wrap'),
-            start: 'top  center',
-            end: 'bottom+=45% center',
-            scrub: true,
-          }
-        })
-        let height = $(item).find('svg').height();
+        $('.line-abl').each((idx, item) => {
+          let tlFadeLine = new gsap.timeline({
+            scrollTrigger: {
+              trigger: $(item).closest('.about-journey-item-wrap'),
+              start: 'top  center',
+              end: 'bottom+=45% center',
+              scrub: true,
+            }
+          })
+          let height = $(item).find('svg').height();
 
-        tlFadeLine.fromTo(item, { 'strokeDasharray': `0 ${height}` }, { 'strokeDasharray': `${height} ${height}` })
-      })
-      let tlFadeLineEnd = new gsap.timeline({
-        scrollTrigger: {
-          trigger: $(' .about-journey-item-wrap-end .about-journey-item'),
-          start: 'top center',
-          end: 'center center',
-          scrub: true,
-        }
-      })
-      tlFadeLineEnd
-        .fromTo($('.about-journey-item-wrap-end .about-journey-item-time'), { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0 },)
+          tlFadeLine.fromTo(item, { 'strokeDasharray': `0 ${height}` }, { 'strokeDasharray': `${height} ${height}` })
+        })
+        let tlFadeLineEnd = new gsap.timeline({
+          scrollTrigger: {
+            trigger: $(' .about-journey-item-wrap-end .about-journey-item'),
+            start: 'top center',
+            end: 'center center',
+            scrub: true,
+          }
+        })
+        tlFadeLineEnd
+          .fromTo($('.about-journey-item-wrap-end .about-journey-item-time'), { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0 },)
         $('.line-abl-top').each((idx, item) => {
           console.log($(item).height())
           if ($(item).closest('.about-journey-item-wrap').length > 0) {
@@ -1384,9 +1385,9 @@ if ($swiper.length > 0) {
 
             tlFadeLine.fromTo(item, { 'strokeDasharray': `0 ${height * 2}` }, { 'strokeDasharray': `${height * 2} ${height * 2}` })
           }
-      })
-    }
-      
+        })
+      }
+
       $('.about-journey-item-year').each((idx, item) => {
         let tlFadeLine = new gsap.timeline({
           scrollTrigger: {
@@ -1399,7 +1400,7 @@ if ($swiper.length > 0) {
         tlFadeLine
           .fromTo(item, { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0 },)
       })
-     
+
     }
   }
   let aboutFounder = new AboutFounder();
@@ -1669,28 +1670,28 @@ if ($swiper.length > 0) {
 
     }
   }
-  class ResourceHero{
-    constructor(){
+  class ResourceHero {
+    constructor() {
       this.tlFade;
     }
-    setup(){
+    setup() {
       function convertDateFormat(dateString) {
         // Tách chuỗi ngày thành các phần tử
         let parts = dateString.split('/');
-        
+
         // Kiểm tra độ dài của ngày và thêm số 0 nếu cần
         let day = parts[0].length === 1 ? '0' + parts[0] : parts[0];
         let month = parts[1].length === 1 ? '0' + parts[1] : parts[1];
         let year = parts[2];
-        
+
         // Kết hợp thành định dạng dd/mm/yyyy
         return `${day}/${month}/${year}`;
-    }
-    $('.rs-event-calendar-date').each((idx, item)=> {
-      let date = $(item).text();
-      let formattedDate = convertDateFormat(date);
-      $(item).text(formattedDate);
-    })
+      }
+      $('.rs-event-calendar-date').each((idx, item) => {
+        let date = $(item).text();
+        let formattedDate = convertDateFormat(date);
+        $(item).text(formattedDate);
+      })
       const titleHero = new SplitType('.rs-hero-title', { types: 'lines, words', lineClass: 'kv-line heading-line' });
       const titleForm = new SplitType('.rs-form-title', { types: 'lines, words', lineClass: 'kv-line heading-line' });
       const subForm = new SplitType('.rs-form-sub', { types: 'lines, words', lineClass: 'kv-line' });
@@ -1708,38 +1709,38 @@ if ($swiper.length > 0) {
           trigger: '.rs-hero-title-wrap',
           start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
-          },
-        });
-        this.tlFade
-              .to(label.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .6 })
-              .to(titleHero.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .4 }, '<=.2')
-              .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
-              .to(titleForm.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
-              .to(subForm.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
-              .to('.rs-form-register', { autoAlpha: 1, yPercent: 0, duration: .4, clearProps: 'all' }, '<=.2')
+        },
+      });
+      this.tlFade
+        .to(label.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .6 })
+        .to(titleHero.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .4 }, '<=.2')
+        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+        .to(titleForm.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+        .to(subForm.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+        .to('.rs-form-register', { autoAlpha: 1, yPercent: 0, duration: .4, clearProps: 'all' }, '<=.2')
     }
-    play(){
+    play() {
       this.tlFade.play();
     }
   }
   let resourceHero = new ResourceHero();
-   class ResourceForm {
-    constructor(){
+  class ResourceForm {
+    constructor() {
       // this.tlTrigger;
     }
-    setup(){
-      $('.rs-form-submit').on('click', function(e){
+    setup() {
+      $('.rs-form-submit').on('click', function (e) {
         e.preventDefault();
         let email = $('.rs-form-input').val();
-        if(email == ''){
+        if (email == '') {
           $('.email-validation').text("Vui lòng nhập Email.")
           $('.email-validation').addClass('active')
         }
-        else if( !isValidEmail(email)){
+        else if (!isValidEmail(email)) {
           $('.email-validation').addClass('active')
           $('.email-validation').text("Email không hợp lệ.")
         }
-        else{
+        else {
           $('.email-validation').removeClass('active')
           $('.rs-form-inner-main form').submit();
         }
@@ -1758,7 +1759,7 @@ if ($swiper.length > 0) {
                 settings.data.includes(
                   getSanitizedFormName(onlyWorkOnThisFormName)
                 );
-  
+
               if (isWorkOnAllForm) {
                 if (isSuccessful) {
                   onSuccess?.();
@@ -1786,7 +1787,7 @@ if ($swiper.length > 0) {
         onlyWorkOnThisFormName: "Email Form",
         onSuccess: () => {
           $('.rs-form-submit-inner').addClass('done')
-          $(".rs-form-submit").val( "");
+          $(".rs-form-submit").val("");
           $('.rs-form-input').val('');
           $('.rs-form-input').attr('placeholder', 'Cảm ơn bạn đã đăng ký! Stay tuned.');
           $('.rs-form-input').addClass('done');
@@ -1798,8 +1799,8 @@ if ($swiper.length > 0) {
         },
       });
     }
-   }
-   let resourceForm = new ResourceForm();
+  }
+  let resourceForm = new ResourceForm();
   class ResourceCalendar {
     constructor() {
     }
@@ -1814,12 +1815,12 @@ if ($swiper.length > 0) {
       })
       const title = new SplitType('.rs-event-title', { types: 'lines words', lineClass: 'kv-line heading-line' })
       gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
-      gsap.set ('.rs-event-calendar-iframe', { autoAlpha: 0, y: 100 })
-      gsap.set('.rs-event-calendar',  { autoAlpha: 0, y: 100 })
+      gsap.set('.rs-event-calendar-iframe', { autoAlpha: 0, y: 100 })
+      gsap.set('.rs-event-calendar', { autoAlpha: 0, y: 100 })
       tlFade
-          .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
-          .to('.rs-event-calendar', { autoAlpha: 1, y: 0, stagger: .02, duration: 1 }, '<=.2')
-          .to('.rs-event-calendar-iframe', { autoAlpha: 1, y: 0, stagger: .02, duration: 1 }, '<=.0')
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to('.rs-event-calendar', { autoAlpha: 1, y: 0, stagger: .02, duration: 1 }, '<=.2')
+        .to('.rs-event-calendar-iframe', { autoAlpha: 1, y: 0, stagger: .02, duration: 1 }, '<=.0')
       let link_calendar = $('.rs-event-calendar-date').eq(0).attr('link');
       $('.iframe-luna').attr('src', link_calendar);
       $('<iframe>', {
@@ -1830,7 +1831,7 @@ if ($swiper.length > 0) {
         'aria-hidden': 'false',
         tabindex: '0',
         id: 'lu-ma-iframe' // Đặt ID cho iframe để dễ quản lý
-    }).appendTo('.rs-event-calendar-iframe .embed-ic'); ;
+      }).appendTo('.rs-event-calendar-iframe .embed-ic');;
       let date = new Date();
       let year = date.getFullYear();
       let month = date.getMonth();
@@ -1839,7 +1840,7 @@ if ($swiper.length > 0) {
         .querySelector(".calendar-current-date");
       const prenexIcons = document
         .querySelectorAll(".calendar-navigation span");
-       
+
       const months = [
         "01/",
         "02/",
@@ -1860,17 +1861,17 @@ if ($swiper.length > 0) {
         let dayend = new Date(year, month, lastdate).getDay();
         let monthlastdate = new Date(year, month, 0).getDate();
         let lit = "";
-      
+
         for (let i = dayone; i > 0; i--) {
           lit += `<li class="inactive">${monthlastdate - i + 1}</li>`;
         }
         for (let i = 1; i <= lastdate; i++) {
           let isToday = i === date.getDate() &&
-                        month === new Date().getMonth() &&
-                        year === new Date().getFullYear()
-                        ? "active"
-                        : "";
-      
+            month === new Date().getMonth() &&
+            year === new Date().getFullYear()
+            ? "active"
+            : "";
+
           lit += `<li class="${isToday}" data-date="${i}.${month + 1}.${year.toString().slice(-2)}">${i}</li>`;
         }
         for (let i = dayend; i < 6; i++) {
@@ -1878,26 +1879,26 @@ if ($swiper.length > 0) {
         }
         currdate.innerText = `${months[month]} ${year}`;
         day.innerHTML = lit;
-      
+
         addEventDates(); // Gọi hàm để thêm class cho các ngày có sự kiện
       };
-      
+
       // Hàm để thêm class .event-date cho các ngày có sự kiện
       const addEventDates = () => {
         let allEvents = $('.rs-event-calendar-date');
-        
+
         allEvents.each((idx, item) => {
           let eventDate = $(item).attr('time');
           console.log(eventDate)
           // Convert eventDate from "dd.mm.yy" to Date object
           let [day, month, year] = eventDate.split('.');
           let formattedDate = `${parseInt(day)}.${parseInt(month)}.${parseInt(year)}`;
-          
+
           // Tìm các ngày trong lịch trùng với event date và thêm class .event-date
           $(`li[data-date="${formattedDate}"]`).addClass('event-date').attr('link', $(item).attr('link'));
         });
       };
-    
+
       manipulate();
       prenexIcons.forEach(icon => {
         icon.addEventListener("click", () => {
@@ -1913,24 +1914,24 @@ if ($swiper.length > 0) {
           manipulate();
         });
       });
-      $(document).on('click', '.event-date', function() {
+      $(document).on('click', '.event-date', function () {
         $('#lu-ma-iframe').attr('src', $(this).attr('link'));
         console.log('khanh');
-    });
-    $(document).on('click', '.rs-event-calendar-item-inner', function(e) {
-      if(viewport.w > 767){
-        e.preventDefault();
-        $('#lu-ma-iframe').attr('src', $(this).attr('href'));
-      }
-  });
+      });
+      $(document).on('click', '.rs-event-calendar-item-inner', function (e) {
+        if (viewport.w > 767) {
+          e.preventDefault();
+          $('#lu-ma-iframe').attr('src', $(this).attr('href'));
+        }
+      });
     }
   }
   let resourceCalendar = new ResourceCalendar();
   class ResourceBlog {
-    constructor (){
+    constructor() {
       this.tlTrigger;
     }
-    setTrigger(){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-blog',
@@ -1947,7 +1948,7 @@ if ($swiper.length > 0) {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-blog-title',
-          start : viewport.w>767 ? "top top+=65%" : "top top+=45%",
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
@@ -1955,43 +1956,41 @@ if ($swiper.length > 0) {
       // gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
       gsap.set('.rs-blog-cate-item', { autoAlpha: 0, x: 10 });
       tlFade
-            // .to(title.words, { autoAlpha: 1, yPercent: 0, duration: .6})
-            .to('.rs-blog-cate-item', { autoAlpha: 1, x: 0,stagger: .1, duration: .4})
-      if(viewport.w > 767){
+        // .to(title.words, { autoAlpha: 1, yPercent: 0, duration: .6})
+        .to('.rs-blog-cate-item', { autoAlpha: 1, x: 0, stagger: .1, duration: .4 })
+      if (viewport.w > 767) {
         gsap.set('.rs-blog-item', { autoAlpha: 0, y: 50 });
-      $('.rs-blog-item').each((idx, item) => {
-        let tlFadeItem = new gsap.timeline({
-          scrollTrigger: {
-            trigger: viewport.w > 767 ? item : '.rs-blog-cms',
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
-            once: true,
-          }
-        })
-        tlFadeItem
-                .to(item, { autoAlpha: 1, y: 0, duration: 1 })
-      })
+          let tlFadeItem = new gsap.timeline({
+            scrollTrigger: {
+              trigger:   '.rs-blog-cms',
+              start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
+              once: true,
+            }
+          })
+          tlFadeItem
+            .to('.rs-blog-item', { autoAlpha: 1, y: 0, duration: 1, stagger: .3 })
       }
       let swiperNew;
-      if(viewport.w < 767){
+      if (viewport.w < 767) {
         $('.rs-blog-cms').append('<div class="rs-blog-scrollbar swiper-scrollbar"></div>');
         $('.rs-blog-cms').addClass('swiper');
         $('.rs-blog-list').addClass('swiper-wrapper');
-       $('.rs-blog-item').addClass('swiper-slide');
-       swiperNew = new Swiper('.rs-blog-cms', {
-        spaceBetween: parseRem(20),
-        slidesPerView: 1,
-        grid: {
+        $('.rs-blog-item').addClass('swiper-slide');
+        swiperNew = new Swiper('.rs-blog-cms', {
+          spaceBetween: parseRem(20),
+          slidesPerView: 1,
+          grid: {
             rows: 3,
           },
-        scrollbar: {
-          el: $('.rs-blog-scrollbar')
-        },
-        speed: 600,
-        effect: "fade",
-        fadeEffect: {
+          scrollbar: {
+            el: $('.rs-blog-scrollbar')
+          },
+          speed: 600,
+          effect: "fade",
+          fadeEffect: {
             crossFade: true,
           },
-      })
+        })
         $('.rs-blog-cate-cms').addClass('swiper');
         $('.rs-blog-cate-list').addClass('swiper-wrapper');
         $('.rs-blog-cate-item').addClass('swiper-slide');
@@ -2000,15 +1999,14 @@ if ($swiper.length > 0) {
           spaceBetween: parseRem(0),
         });
       }
-      if(viewport.w>767){
-      $('.rs-blog-item.active').eq(0).addClass('child11');
-
+      if (viewport.w > 767) {
+        $('.rs-blog-item.active').eq(0).addClass('child11');
       }
       $('.rs-blog-cate-item').eq(0).addClass('active');
-      function activeItem(category){
+      function activeItem(category) {
         $('.rs-blog-item').each((idx, item) => {
           console.log($(item).attr('category'));
-          if($(item).attr('category') == category){
+          if ($(item).attr('category') == category) {
             $(item).addClass('active');
           }
           else {
@@ -2017,80 +2015,103 @@ if ($swiper.length > 0) {
         })
       }
       const allBlogs = [];
-
-// Đưa tất cả các bài blog hiện tại vào mảng `allBlogs` khi trang được load
-$('.rs-blog-item').each(function () {
-    allBlogs.push($(this).clone()); // Clone để tránh thao tác trực tiếp trên DOM
-});
+      $('.rs-blog-item').each(function () {
+        allBlogs.push($(this).clone());
+      });
+      const itemsPerPage = 7;
+      const totalItems = $('.rs-blog-item').length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const $items = $('.rs-blog-item');
+      for (let i = 1; i <= totalPages; i++) {
+        $('.rs-blog-pag-cus').append(`<div class="rs-blog-pag-item" data-page="${i}"><span class="rs-blog-pag-item-txt txt txt-20 txt-semi">${i}</span></div>`);
+      }
+      $('.rs-blog-pag-item').eq(0).addClass('active');
+      function showPage(page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        $items.removeClass('active');
+        $items.removeClass('child11');
+        $items.eq(start).addClass('child11');
+        $items.slice(start, end).addClass('active');
+        $('.rs-blog-pag-item').removeClass('active');
+        $(`.rs-blog-pag-item[data-page=${page}]`).addClass('active');
+        ScrollTrigger.refresh();
+      }
+      if (viewport.w > 767) {
+        $('.rs-blog-pag-cus').on('click', '.rs-blog-pag-item', function () {
+          const page = $(this).data('page');
+          showPage(page);
+        });
+        showPage(1);
+      }
       $('.rs-blog-cate-item').on('click', function () {
         $('.rs-blog-cate-item').removeClass('active');
-          $(this).addClass('active');
-          let category = $(this).find('.txt').text();
-          console.log(category)
-          let index = $(this).index();
-        if(viewport.w > 767){
-          if(index == 0){
-            $('.rs-blog-item').removeClass('active').addClass('active');
-            $('.rs-blog-item.active').removeClass('child11');
+        $(this).addClass('active');
+        let category = $(this).find('.txt').text();
+        console.log(category)
+        let index = $(this).index();
+        if (viewport.w > 767) {
+          if (index == 0) {
+            // $('.rs-blog-item').removeClass('active').addClass('active');
+            showPage(1);
+            $('.rs-blog-pag-cus').fadeIn(500);
+            // $('.rs-blog-item.active').removeClass('child11');
+            // $('.rs-blog-item.active').eq(0).addClass('child11');
+          }
+          else {
+            $('.rs-blog-pag-cus').fadeOut(500);
+            activeItem(category);
             $('.rs-blog-item.active').eq(0).addClass('child11');
           }
-          else{
-            activeItem(category);
-          }
-          $('.rs-blog-item.active').eq(0).addClass('child11');
         }
-        else{
-          setTimeout(function(){
-           ScrollTrigger.refresh();
+        else {
+          setTimeout(function () {
+            ScrollTrigger.refresh();
           }, 2000)
-          const filteredBlogs = category == 'Tất cả Blog'
-        ? allBlogs 
-        : allBlogs.filter(blog => $(blog).attr('category') === category);
+          const filteredBlogs = category == 'Tất cả Blog' ? allBlogs : allBlogs.filter(blog => $(blog).attr('category') === category);
           if (swiperNew) {
             swiperNew.destroy(true, true); // Hủy Swiper và xóa toàn bộ cấu hình liên quan
-        }
-        console.log(filteredBlogs);
-        const swiperWrapper = $('.rs-blog-list.swiper-wrapper');
-    swiperWrapper.empty(); // Xóa toàn bộ nội dung hiện tại
-    filteredBlogs.forEach(blog => {
-        swiperWrapper.append(blog); // Thêm các blog đã lọc vào DOM
-    });
-        if(index == 0){
-          $('.rs-blog-item').removeClass('active').addClass('active');
-        }
-        else{
-          activeItem(category);
-        }
-
+          }
+          const swiperWrapper = $('.rs-blog-list.swiper-wrapper');
+          swiperWrapper.empty(); // Xóa toàn bộ nội dung hiện tại
+          filteredBlogs.forEach(blog => {
+            swiperWrapper.append(blog); // Thêm các blog đã lọc vào DOM
+          });
+          if (index == 0) {
+            $('.rs-blog-item').removeClass('active').addClass('active');
+          }
+          else {
+            activeItem(category);
+          }
           swiperNew = new Swiper('.rs-blog-cms', {
             spaceBetween: parseRem(20),
             slidesPerView: 1,
             grid: {
-                rows: 3,
+              rows: 3,
             },
             scrollbar: {
-                el: $('.rs-blog-scrollbar'),
+              el: $('.rs-blog-scrollbar'),
             },
             speed: 600,
             effect: "fade",
             fadeEffect: {
-                crossFade: true,
+              crossFade: true,
             },
-        });
+          });
         }
       })
     }
   }
   let resourceBlog = new ResourceBlog();
   class ResourceLetter {
-    constructor(){
+    constructor() {
       this.tlTrigger;
       this.tlFade;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.rs-newletter',
+        scrollTrigger: {
+          trigger: '.rs-newletter',
           start: "top bottom+=50%",
           end: "bottom+=50% top",
           once: true,
@@ -2100,54 +2121,83 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-  setup(){
+    setup() {
+      const itemsPerPage = 3;
+      const totalItems = $('.rs-newletter-item').length;
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const $items = $('.rs-newletter-item');
+      for (let i = 1; i <= totalPages; i++) {
+        $('.rs-newletter-pag').append(`<div class="rs-newletter-pag-item" data-page="${i}"><span class="rs-newletter-pag-item-txt txt txt-20 txt-semi">${i}</span></div>`);
+      }
+      $('.rs-newletter-pag-item').eq(0).addClass('active');
+      function showPage(page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        $items.hide();
+        $items.slice(start, end).show();
+        $('.rs-newletter-pag-item').removeClass('active');
+        $(`.rs-newletter-pag-item[data-page=${page}]`).addClass('active');
+        ScrollTrigger.refresh();
+      }
+      if (viewport.w > 767) {
+        if($items.length <= 3) {
+          $('.rs-newletter-pag').hide();
+        } else {
+          $('.rs-newletter-pag').show();
+        }
+        $('.rs-newletter-pag').on('click', '.rs-newletter-pag-item', function () {
+          const page = $(this).data('page');
+          showPage(page);
+        });
+        showPage(1);
+      }
       let title = new SplitType('.rs-newletter-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
-     if(viewport.w > 767){
-      gsap.set('.rs-newletter-item', { autoAlpha: 0, x: -30 });
-     }
-     else {
-      gsap.set('.rs-newletter-item', { autoAlpha: 0, y: -30 });
-      $('.rs-newletter-cms').addClass('swiper');
-      $('.rs-newletter-list').addClass('swiper-wrapper');
-      $('.rs-newletter-item').addClass('swiper-slide');
-      let swiperNew = new Swiper('.rs-newletter-cms', {
-        slidesPerView: 'auto',
-        spaceBetween: parseRem(20),
-        speed: 600,
-      });
-     }
+      if (viewport.w > 767) {
+        gsap.set('.rs-newletter-item', { autoAlpha: 0, x: -30 });
+      }
+      else {
+        gsap.set('.rs-newletter-item', { autoAlpha: 0, y: -30 });
+        $('.rs-newletter-cms').addClass('swiper');
+        $('.rs-newletter-list').addClass('swiper-wrapper');
+        $('.rs-newletter-item').addClass('swiper-slide');
+        let swiperNew = new Swiper('.rs-newletter-cms', {
+          slidesPerView: 'auto',
+          spaceBetween: parseRem(20),
+          speed: 600,
+        });
+      }
       gsap.set('.rs-newletter-btn', { autoAlpha: 0, y: 30 });
       let tlFade = new gsap.timeline({
         scrollTrigger: {
-          trigger : '.rs-newletter-title-wrap',
+          trigger: '.rs-newletter-title-wrap',
           start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
       })
       tlFade
-      .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
-      .to('.rs-newletter-btn', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' },'<=0')
-      if(viewport.w > 767){
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to('.rs-newletter-btn', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' }, '<=0')
+      if (viewport.w > 767) {
         tlFade
-        .to('.rs-newletter-item', { autoAlpha: 1, x: 0, duration: .8, clearProps: 'all', stagger: .1 },'<=.4');
+          .to('.rs-newletter-item', { autoAlpha: 1, x: 0, duration: .8, stagger: .1 }, '<=.4');
       }
       else {
         tlFade
-        .to('.rs-newletter-item', { autoAlpha: 1, y: 0, duration: .8, clearProps: 'all', stagger: .1 },'<=.4');
+          .to('.rs-newletter-item', { autoAlpha: 1, y: 0, duration: .8, clearProps: 'all', stagger: .1 }, '<=.4');
       }
-   }
+    }
   }
   let resourceLetter = new ResourceLetter()
-  class ResourceJob{
-    constructor(){
+  class ResourceJob {
+    constructor() {
       this.tlTrigger;
       this.tlFade;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.rs-job',
+        scrollTrigger: {
+          trigger: '.rs-job',
           start: "top bottom+=50%",
           end: "bottom+=50% top",
           once: true,
@@ -2157,18 +2207,18 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-    setup(){
+    setup() {
       let title = new SplitType('.rs-job-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set('.rs-job-item', {autoAlpha: 0, y: 30});
-       let tlFade = new gsap.timeline({
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set('.rs-job-item', { autoAlpha: 0, y: 30 });
+      let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-job-title',
           start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
-          }
-       })
-       tlFade
+        }
+      })
+      tlFade
         .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
         .to('.rs-job-item', { autoAlpha: 1, y: 0, stagger: .2, duration: .6 }, '<=.2')
     }
@@ -2178,150 +2228,150 @@ $('.rs-blog-item').each(function () {
     constructor() {
       this.tlTrigger;
       this.tlFade;
-      }
-      setTrigger (){
-        this.tlTrigger = new gsap.timeline({
-          scrollTrigger : {
-            trigger : '.rs-cta',
-            start: "top bottom+=50%",
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.rs-cta',
+          start: "top bottom+=50%",
           end: "bottom+=50% top",
           once: true,
-            onEnter: () => {
-              this.setup();
-            }
+          onEnter: () => {
+            this.setup();
           }
-        })
-      }
-      setup(){
-        let title = new SplitType('.rs-cta-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-        gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-        gsap.set('.rs-cta-btn', {autoAlpha: 0, y: 40});
-        let tlFade = new gsap.timeline({
-          scrollTrigger: {
-            trigger: '.rs-cta-title',
-            start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
-            once: true,
-            }
-            })
-            tlFade
-            .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
-            .to('.rs-cta-btn', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' },'<=0.3')
-      }
+        }
+      })
+    }
+    setup() {
+      let title = new SplitType('.rs-cta-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set('.rs-cta-btn', { autoAlpha: 0, y: 40 });
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.rs-cta-title',
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        }
+      })
+      tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to('.rs-cta-btn', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' }, '<=0.3')
+    }
   }
   let resourceCta = new ResourceCta();
   class BlogHero {
-    constructor(){
+    constructor() {
       this.tlFade;
     }
-    setup(){
+    setup() {
       let title = new SplitType('.blog-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set('.blog-hero-cate', {autoAlpha: 0, yPercent: 100});
-      gsap.set('.blog-hero-direct .txt', {autoAlpha: 0, x: 20});
-      gsap.set('.blog-hero-info', {autoAlpha: 0, x: 20});
-      gsap.set('.blog-hero-img', {autoAlpha: 0, y: 40});
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set('.blog-hero-cate', { autoAlpha: 0, yPercent: 100 });
+      gsap.set('.blog-hero-direct .txt', { autoAlpha: 0, x: 20 });
+      gsap.set('.blog-hero-info', { autoAlpha: 0, x: 20 });
+      gsap.set('.blog-hero-img', { autoAlpha: 0, y: 40 });
       this.tlFade = new gsap.timeline({
         scrollTrigger: {
           paused: true,
           trigger: '.blog-hero-title',
-          start:  "top bottom+=50%",
+          start: "top bottom+=50%",
           once: true,
         }
-      })  
+      })
       this.tlFade
-      .to('.blog-hero-direct .txt', { autoAlpha: 1, x: 0, duration: .6, stagger: .1})
-      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-      .to('.blog-hero-img', {autoAlpha: 1, y: 0, duration: .6}, '<=0')
-      .to('.blog-hero-cate', {autoAlpha: 1, yPercent: 0, duration: .6}, '<=.2')
-      .to('.blog-hero-info', {autoAlpha: 1, x: 0, duration: .6}, '<=.2')
+        .to('.blog-hero-direct .txt', { autoAlpha: 1, x: 0, duration: .6, stagger: .1 })
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
+        .to('.blog-hero-img', { autoAlpha: 1, y: 0, duration: .6 }, '<=0')
+        .to('.blog-hero-cate', { autoAlpha: 1, yPercent: 0, duration: .6 }, '<=.2')
+        .to('.blog-hero-info', { autoAlpha: 1, x: 0, duration: .6 }, '<=.2')
     }
-    play(){
+    play() {
       this.tlFade.play();
     }
   }
   let blogHero = new BlogHero();
-  
-  class BlogContent{
-    constructor(){
+
+  class BlogContent {
+    constructor() {
       this.tlTrigger;
     }
-    setup(){
+    setup() {
       let tocHeadings = $('.blog-content-inner h3');
 
-        let tocWrap = $('.blog-content-tab');
-        if (tocHeadings.length <= 1) {
-            tocWrap.parents('.blog-content-tab-wrap').remove();
-        }
-        tocWrap.html('');
+      let tocWrap = $('.blog-content-tab');
+      if (tocHeadings.length <= 1) {
+        tocWrap.parents('.blog-content-tab-wrap').remove();
+      }
+      tocWrap.html('');
 
-        for (let i = 0; i < tocHeadings.length; i++) {
-            tocHeadings.eq(i).attr('id', `toc-${i}`);
-            let tocItem = $('<a></a>').addClass('blog-content-tab-item').attr('href', `#toc-${i}`);
-            let tocName = $('<div></div>').addClass('txt txt-21 txt-med ').text(tocHeadings.eq(i).text());
+      for (let i = 0; i < tocHeadings.length; i++) {
+        tocHeadings.eq(i).attr('id', `toc-${i}`);
+        let tocItem = $('<a></a>').addClass('blog-content-tab-item').attr('href', `#toc-${i}`);
+        let tocName = $('<div></div>').addClass('txt txt-21 txt-med ').text(tocHeadings.eq(i).text());
 
-            tocName.appendTo(tocItem)
-            tocWrap.append(tocItem);
-        }
-        if(tocWrap.height() > $('.blog-content-tab').height()){
-          $('.blog-content-tab-wrap').attr('data-lenis-prevent', true);
-        }
-        $('.blog-content-tab-item').each((idx, el) => {
-            gsap.from(el, {
-                autoAlpha: 0, yPercent: 70, duration: .8, stagger: 0.02, delay: idx * .05, clearProps: 'all', onComplete: () => {
-                    if (idx == $('.blog-content-tab-item').length - 1) {
-                        this.interact();
-                    }
-                }
-            });
-        })
-        // gsap.from('.subs-content-inner', { autoAlpha: 0, y: 20, duration: .6 });
+        tocName.appendTo(tocItem)
+        tocWrap.append(tocItem);
+      }
+      if (tocWrap.height() > $('.blog-content-tab').height()) {
+        $('.blog-content-tab-wrap').attr('data-lenis-prevent', true);
+      }
+      $('.blog-content-tab-item').each((idx, el) => {
+        gsap.from(el, {
+          autoAlpha: 0, yPercent: 70, duration: .8, stagger: 0.02, delay: idx * .05, clearProps: 'all', onComplete: () => {
+            if (idx == $('.blog-content-tab-item').length - 1) {
+              this.interact();
+            }
+          }
+        });
+      })
+      // gsap.from('.subs-content-inner', { autoAlpha: 0, y: 20, duration: .6 });
     }
     interact() {
       let tocHeadings = $('.blog-content-inner h3');
 
       lenis.on('scroll', function (e) {
-          let currScroll = e.scroll;
-          for (let i = 0; i < tocHeadings.length; i++) {
-              let top = tocHeadings.eq(i).get(0).getBoundingClientRect().top;
-            console.log(top)
+        let currScroll = e.scroll;
+        for (let i = 0; i < tocHeadings.length; i++) {
+          let top = tocHeadings.eq(i).get(0).getBoundingClientRect().top;
+          console.log(top)
 
-              if (top > 0 && top < (viewport.h / 5)) {
-                  $(`.blog-content-tab-item[href="#toc-${i}"]`).addClass('active');
-                  $(`.blog-content-tab-item`).not(`[href="#toc-${i}"]`).removeClass('active');
-              }
+          if (top > 0 && top < (viewport.h / 5)) {
+            $(`.blog-content-tab-item[href="#toc-${i}"]`).addClass('active');
+            $(`.blog-content-tab-item`).not(`[href="#toc-${i}"]`).removeClass('active');
           }
+        }
       });
 
       $('.blog-content-tab-item').on('click', function (e) {
-          e.preventDefault();
-          let target = $(this).attr('href');
+        e.preventDefault();
+        let target = $(this).attr('href');
 
-          lenis.scrollTo(target, {
-              offset: -100,
-          })
+        lenis.scrollTo(target, {
+          offset: -100,
+        })
 
-          history.replaceState({}, '', `${window.location.pathname + target}`);
-          return false;
+        history.replaceState({}, '', `${window.location.pathname + target}`);
+        return false;
       })
 
       const currToc = window.location.hash;
       if ($(currToc).length) {
-          setTimeout(() => {
-              $(`.blog-content-tab-item[href='${currToc}']`).trigger('click');
-          }, 10)
+        setTimeout(() => {
+          $(`.blog-content-tab-item[href='${currToc}']`).trigger('click');
+        }, 10)
       }
       else {
-          history.replaceState({}, '', window.location.pathname);
+        history.replaceState({}, '', window.location.pathname);
       }
-  }
+    }
   }
   let blogContent = new BlogContent();
-  class CourseHero{
+  class CourseHero {
     constructor() {
       this.tlTrigger;
       this.tlFade;
     }
-    setup(){
+    setup() {
       this.tlFade = new gsap.timeline({
         scrollTrigger: {
           paused: true,
@@ -2329,27 +2379,27 @@ $('.rs-blog-item').each(function () {
       })
       let title = new SplitType('.cs-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       let label = new SplitType('.cs-hero-label', { types: 'lines words', lineClass: 'kv-line' });
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set(label.words, {autoAlpha: 0, yPercent: 100});
-      gsap.set('.cs-hero-btn', {autoAlpha: 0, y: 30});
-      this.tlFade 
-            .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-            .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-            .to('.cs-hero-btn', {autoAlpha: 1, y: 0, stagger: .1, duration: .4}, '<=.4')
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(label.words, { autoAlpha: 0, yPercent: 100 });
+      gsap.set('.cs-hero-btn', { autoAlpha: 0, y: 30 });
+      this.tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to(label.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
+        .to('.cs-hero-btn', { autoAlpha: 1, y: 0, stagger: .1, duration: .4 }, '<=.4')
     }
-    play(){
+    play() {
       this.tlFade.play();
     }
   }
   let courseHero = new CourseHero();
-  class CourseResume{
-    constructor(){
+  class CourseResume {
+    constructor() {
       this.tlTrigger;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.cs-resume',
+        scrollTrigger: {
+          trigger: '.cs-resume',
           start: "top bottom+=50%",
           end: "bottom top",
           once: true,
@@ -2360,35 +2410,35 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-    setup(){
+    setup() {
       let title = new SplitType('.cs-resume-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 80});
-      gsap.set('.cs-resume-title-ic', {autoAlpha: 0});
-      gsap.set('.cs-resume-title-ic-bot', {autoAlpha: 0});
-      let tlFade = new gsap.timeline({ 
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 80 });
+      gsap.set('.cs-resume-title-ic', { autoAlpha: 0 });
+      gsap.set('.cs-resume-title-ic-bot', { autoAlpha: 0 });
+      let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-resume',
           start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         },
 
-        })
-        tlFade
-          .to('.cs-resume-title-ic', {autoAlpha: 1})
-          .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-          .to('.cs-resume-title-ic-bot', {autoAlpha: 1}, '<=.4')
+      })
+      tlFade
+        .to('.cs-resume-title-ic', { autoAlpha: 1 })
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
+        .to('.cs-resume-title-ic-bot', { autoAlpha: 1 }, '<=.4')
 
     }
   }
   let courseResume = new CourseResume();
-  class CourseLevel{
-    constructor(){
+  class CourseLevel {
+    constructor() {
       this.tlTrigger;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.cs-level',
+        scrollTrigger: {
+          trigger: '.cs-level',
           start: "top bottom+=50%",
           end: "bottom top",
           once: true,
@@ -2398,46 +2448,46 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-    setup(){
-      if(viewport.w < 768){
+    setup() {
+      if (viewport.w < 768) {
         $('.cs-level-main').addClass('swiper');
-      $('.cs-level-list').addClass('swiper-wrapper');
-      $('.cs-level-item').addClass('swiper-slide');
-      let swiper = new Swiper('.cs-level-main', {
-        slidesPerView:"auto",
-        spaceBetween: parseRem(20),
-      });
-      ScrollTrigger.refresh();
+        $('.cs-level-list').addClass('swiper-wrapper');
+        $('.cs-level-item').addClass('swiper-slide');
+        let swiper = new Swiper('.cs-level-main', {
+          slidesPerView: "auto",
+          spaceBetween: parseRem(20),
+        });
+        ScrollTrigger.refresh();
       }
       $('.cs-level-item').hover(
-        function(){
+        function () {
           $(this).addClass('active');
         },
-        function(){
+        function () {
           $(this).removeClass('active');
-          }
+        }
       )
       let title = new SplitType('.cs-level-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       let sub = new SplitType('.cs-level-sub', { types: 'lines words', lineClass: 'kv-line' });
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 });
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-level-title-wrap',
           start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
-          }
+        }
       })
       tlFade
-      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-      .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.4')
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.4')
       let items = $('.cs-level-item');
-      items.each(function(idx, item){
+      items.each(function (idx, item) {
         let titleItem = new SplitType($(item).find('.cs-level-item-title'), { types: 'lines words', lineClass: 'kv-line' });
         let subItem = new SplitType($(item).find('.cs-level-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
-        gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
-        gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
-        gsap.set($(item).find('.cs-level-item-ic'), {autoAlpha: 0, y: 30});
+        gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 });
+        gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 });
+        gsap.set($(item).find('.cs-level-item-ic'), { autoAlpha: 0, y: 30 });
 
         let tlFadeItem = new gsap.timeline({
           scrollTrigger: {
@@ -2447,22 +2497,22 @@ $('.rs-blog-item').each(function () {
           }
         })
         tlFadeItem
-        .to($(item).find('.cs-level-item-ic'), {autoAlpha: 1, y: 0, duration: .6})
-        .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-        .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+          .to($(item).find('.cs-level-item-ic'), { autoAlpha: 1, y: 0, duration: .6 })
+          .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
+          .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
       })
     }
   }
   let courseLevel = new CourseLevel();
-  class CourseFouder{
-    constructor(){
+  class CourseFouder {
+    constructor() {
       this.tlTrigger;
       this.tlFade;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.cs-founder',
+        scrollTrigger: {
+          trigger: '.cs-founder',
           start: "top bottom+=50%",
           end: "bottom+=50% top",
           once: true,
@@ -2472,75 +2522,75 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-    setup(){
-      if(viewport.w < 768){
+    setup() {
+      if (viewport.w < 768) {
         $('.cs-founder-main').addClass('swiper');
-      $('.cs-founder-list').addClass('swiper-wrapper');
-      $('.cs-founder-item').addClass('swiper-slide');
-      let swiper = new Swiper('.cs-founder-main', {
-        slidesPerView:"auto",
-        spaceBetween: parseRem(20),
-      });
-      ScrollTrigger.refresh();
+        $('.cs-founder-list').addClass('swiper-wrapper');
+        $('.cs-founder-item').addClass('swiper-slide');
+        let swiper = new Swiper('.cs-founder-main', {
+          slidesPerView: "auto",
+          spaceBetween: parseRem(20),
+        });
+        ScrollTrigger.refresh();
       }
       let title = new SplitType('.cs-founder-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       let sub = new SplitType('.cs-founder-sub', { types: 'lines words', lineClass: 'kv-line' });
-      gsap.set (title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set (sub.words, {autoAlpha: 0, yPercent: 80});
-      gsap.set('.cs-founder-title-btn-wrap', {autoAlpha: 0, y: 30});
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 });
+      gsap.set('.cs-founder-title-btn-wrap', { autoAlpha: 0, y: 30 });
       this.tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-founder-title-wrap',
           start: "top top+=65%",
           once: true,
+        }
+      })
+      this.tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+        .to('.cs-founder-title-btn-wrap', { autoAlpha: 1, y: 0, duration: .6 }, '<=.2')
+      let items = $('.cs-founder-item');
+      console.log(items)
+      items.each((idx, item) => {
+        console.log(idx)
+        let titleItem = new SplitType($(item).find('.cs-founder-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+        let subItem = new SplitType($(item).find('.cs-founder-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
+        $(item).find('.cs-founder-item-ul .about-founder-main-item-li').each((idx, li) => {
+          console.log(li)
+          let liTitle = new SplitType($(li), { types: 'lines words', lineClass: 'kv-line' });
+          gsap.set(liTitle.words, { autoAlpha: 0, yPercent: 80 });
+        })
+        gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 });
+        gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 });
+        // gsap.set($(item).find('.cs-founder-item-ul .about-founder-main-item-li .word'), {autoAlpha: 0, yPercent: 80});
+        gsap.set($(item).find('.cs-founder-item-ic'), { autoAlpha: 0, y: 30 });
+        gsap.set($(item).find('.cs-founder-item-img'), { autoAlpha: 0 });
+        let tlFadeItem = new gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+            once: true,
           }
-          })
-          this.tlFade
-              .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-              .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-              .to('.cs-founder-title-btn-wrap', {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
-          let items = $('.cs-founder-item');
-          console.log(items)
-          items.each((idx, item) =>  {
-            console.log(idx)
-            let titleItem = new SplitType($(item).find('.cs-founder-item-title'), { types: 'lines words', lineClass: 'kv-line' });
-            let subItem = new SplitType($(item).find('.cs-founder-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
-            $(item).find('.cs-founder-item-ul .about-founder-main-item-li').each((idx, li) => {
-              console.log(li)
-              let liTitle = new SplitType($(li), { types: 'lines words', lineClass: 'kv-line' });
-              gsap.set(liTitle.words, {autoAlpha: 0, yPercent: 80});
-            })
-            gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
-            gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
-            // gsap.set($(item).find('.cs-founder-item-ul .about-founder-main-item-li .word'), {autoAlpha: 0, yPercent: 80});
-            gsap.set ($(item).find('.cs-founder-item-ic'), {autoAlpha: 0, y: 30});
-            gsap.set ($(item).find('.cs-founder-item-img'), {autoAlpha: 0});
-           let tlFadeItem = new gsap.timeline({
-              scrollTrigger: {
-                trigger: item,
-                start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-                once: true,
-              }
-            });
-            tlFadeItem
-            .to($(item).find('.cs-founder-item-img'), {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-            .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.4')
-            .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-            .to($(item).find('.cs-founder-item-ic'), {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
-            .to($(item).find('.cs-founder-item-ul .about-founder-main-item-li .word'), {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-          });
+        });
+        tlFadeItem
+          .to($(item).find('.cs-founder-item-img'), { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+          .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.4')
+          .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+          .to($(item).find('.cs-founder-item-ic'), { autoAlpha: 1, y: 0, duration: .6 }, '<=.2')
+          .to($(item).find('.cs-founder-item-ul .about-founder-main-item-li .word'), { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+      });
     }
   }
   let courseFouder = new CourseFouder();
-  class CourseProcess{
-    constructor(){
+  class CourseProcess {
+    constructor() {
       this.tlTrigger;
       this.tlFade;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.cs-process',
+        scrollTrigger: {
+          trigger: '.cs-process',
           start: "top bottom+=50%",
           end: "bottom top",
           once: true,
@@ -2550,75 +2600,77 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-    setup(){
-      let title  = new SplitType('.cs-process-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+    setup() {
+      let title = new SplitType('.cs-process-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
       this.tlFade = gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-process-title',
           start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
-          }
+        }
       })
-      this.tlFade.to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+      this.tlFade.to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
       $('.cs-process-content-item').each((idx, item) => {
         let itemTitle = new SplitType($(item).find('.cs-process-content-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
-        gsap.set(itemTitle.words, {autoAlpha: 0, yPercent: 100});
-        gsap.set($(item).find('.cs-process-content-item-step-wrap'), {autoAlpha: 0});
+        gsap.set(itemTitle.words, { autoAlpha: 0, yPercent: 100 });
+        gsap.set($(item).find('.cs-process-content-item-step-wrap'), { autoAlpha: 0 });
         $(item).find('.txt-decoration').append('<div class="line"></div>')
-        gsap.set($(item).find('.txt-decoration .line'), {width: 0});
+        gsap.set($(item).find('.txt-decoration .line'), { width: 0 });
       })
-     let tlFadeProcess = gsap.timeline({
+      let tlFadeProcess = gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-process-main',
-          start: $(window).width() > 767 ? "top top+=65%" :'top top+=45%',
-          }
-          })
-        if(viewport.w > 767){
-          tlFadeProcess.to('.cs-process-deco2', {xPercent: 100, duration: 4,  onUpdate: () => {
+          start: $(window).width() > 767 ? "top top+=65%" : 'top top+=45%',
+        }
+      })
+      if (viewport.w > 767) {
+        tlFadeProcess.to('.cs-process-deco2', {
+          xPercent: 100, duration: 4, onUpdate: () => {
             let progress = tlFadeProcess.progress();
-            if(progress > 0.07){
+            if (progress > 0.07) {
               fadeItem('.cs-process-content-item.item1')
             }
-            if(progress > 0.16){
+            if (progress > 0.16) {
               fadeItem('.cs-process-content-item.item2')
             }
-            if(progress > 0.35){
+            if (progress > 0.35) {
               fadeItem('.cs-process-content-item.item3')
             }
-          }})
-        }
-        else{
-          fadeItemMob('.cs-process-content-item')
-        }
-        function fadeItemMob(item) {
-          let tlItem = new gsap.timeline({
-            scrollTrigger: {
-              trigger: item,
-              start: "top top+=45%",
-              once: true
-              }
-              })
-          tlItem.to($(item).find('.cs-process-content-item-step-wrap'), {duration: viewport.w > 767 ? .3 : .6, autoAlpha: 1})
-                  .to($(item).find('.cs-process-content-item-sub .word'), {duration: .4, autoAlpha: 1, stagger: .015, yPercent: 0}, '<=.2')
-          if($(item).find('.txt-decoration .line').length > 0){
-            tlItem
-              .to($(item).find('.txt-decoration .line'), {width: '100%', duration: .5}, '>=.0');  
-  
           }
-  
+        })
+      }
+      else {
+        fadeItemMob('.cs-process-content-item')
+      }
+      function fadeItemMob(item) {
+        let tlItem = new gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: "top top+=45%",
+            once: true
+          }
+        })
+        tlItem.to($(item).find('.cs-process-content-item-step-wrap'), { duration: viewport.w > 767 ? .3 : .6, autoAlpha: 1 })
+          .to($(item).find('.cs-process-content-item-sub .word'), { duration: .4, autoAlpha: 1, stagger: .015, yPercent: 0 }, '<=.2')
+        if ($(item).find('.txt-decoration .line').length > 0) {
+          tlItem
+            .to($(item).find('.txt-decoration .line'), { width: '100%', duration: .5 }, '>=.0');
+
         }
+
+      }
       function fadeItem(item) {
         let tlItem = new gsap.timeline({
           scrollTrigger: {
             once: true
-            }
-            })
-        tlItem.to($(item).find('.cs-process-content-item-step-wrap'), {duration: .3, autoAlpha: 1})
-                .to($(item).find('.cs-process-content-item-sub .word'), {duration: .4, autoAlpha: 1, stagger: .015, yPercent: 0}, '<=.2')
-        if($(item).find('.txt-decoration .line').length > 0){
+          }
+        })
+        tlItem.to($(item).find('.cs-process-content-item-step-wrap'), { duration: .3, autoAlpha: 1 })
+          .to($(item).find('.cs-process-content-item-sub .word'), { duration: .4, autoAlpha: 1, stagger: .015, yPercent: 0 }, '<=.2')
+        if ($(item).find('.txt-decoration .line').length > 0) {
           tlItem
-            .to($(item).find('.txt-decoration .line'), {width: '100%', duration: .5}, '>=.0');  
+            .to($(item).find('.txt-decoration .line'), { width: '100%', duration: .5 }, '>=.0');
 
         }
 
@@ -2626,14 +2678,14 @@ $('.rs-blog-item').each(function () {
     }
   }
   let courseProcess = new CourseProcess();
-  class CourseChoose  {
-    constructor(){
+  class CourseChoose {
+    constructor() {
       this.tlTrigger;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.cs-choose',
+        scrollTrigger: {
+          trigger: '.cs-choose',
           start: "top bottom+=50%",
           end: "bottom top",
           once: true,
@@ -2643,163 +2695,163 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-    setup () {
+    setup() {
       // $('.cs-choose-content').fadeOut();
       $('.cs-choose-content').eq(0).addClass('active');
-      setTimeout(() =>{
+      setTimeout(() => {
         ScrollTrigger.refresh();
-      },1000)
+      }, 1000)
       // if(viewport.w > 768){
-        let height = $('.cs-choose-content').eq(0).height();
-        $('.cs-choose-content-wrap').css('height', height);
+      let height = $('.cs-choose-content').eq(0).height();
+      $('.cs-choose-content-wrap').css('height', height);
       // }
-        ScrollTrigger.refresh();
-      $('.cs-choose-tab').on('click', function() {
+      ScrollTrigger.refresh();
+      $('.cs-choose-tab').on('click', function () {
         $('.kv-header').addClass('hide-important')
         let index = $(this).index();
-       if(viewport.w > 767 ){
-        $('html, body').animate({
-          scrollTop: $('.cs-choose-content').eq(index).find('.cs-choose-content-price').offset().top - 100
-      }, 500);
-       }
+        if (viewport.w > 767) {
+          $('html, body').animate({
+            scrollTop: $('.cs-choose-content').eq(index).find('.cs-choose-content-price').offset().top - 100
+          }, 500);
+        }
         $('.cs-choose-tab').removeClass('active');
         $(this).addClass('active');
         $('.cs-choose-content').removeClass('active');
-        $('.cs-choose-content').eq(index).addClass('active'); 
+        $('.cs-choose-content').eq(index).addClass('active');
         let height = $('.cs-choose-content').eq(index).height();
         $('.cs-choose-content-wrap').css('height', height);
         ScrollTrigger.refresh();
-        setTimeout(function(){
+        setTimeout(function () {
           $('.kv-header').addClass('on-hide');
           $('.kv-header').removeClass('hide-important');
-        },1000)
+        }, 1000)
       })
-      let title = new SplitType('.cs-choose-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
-      let sub = new SplitType('.cs-choose-sub', {types: 'lines words', lineClass: 'kv-line'});
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-      gsap.set ('.cs-choose-tab', {autoAlpha: 0, x: -30});
+      let title = new SplitType('.cs-choose-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let sub = new SplitType('.cs-choose-sub', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 });
+      gsap.set('.cs-choose-tab', { autoAlpha: 0, x: -30 });
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-choose-title-wrap',
-          start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
         }
+      })
+      tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+        .to('.cs-choose-tab', { autoAlpha: 1, x: 0, stagger: .1, duration: .4 }, '<=.2')
+      if (viewport.w > 767) {
+        let titlePice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+        let labelPice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-label', { types: 'lines words', lineClass: 'kv-line ' });
+        let labelPicelab = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-txt-label', { types: 'lines words', lineClass: 'kv-line ' });
+        gsap.set(titlePice.words, { autoAlpha: 0, yPercent: 60 });
+        gsap.set(labelPice.words, { autoAlpha: 0, yPercent: 80 });
+        gsap.set(labelPicelab.words, { autoAlpha: 0, yPercent: 80 });
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', { autoAlpha: 0 });
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', { autoAlpha: 0 });
+        let tlPrice = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-price',
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+            once: true,
+          }
         })
-      tlFade 
-        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-        .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-        .to('.cs-choose-tab', {autoAlpha: 1, x: 0, stagger: .1, duration: .4}, '<=.2')
-        if(viewport.w > 767){
-          let titlePice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
-          let labelPice = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-label', {types: 'lines words', lineClass: 'kv-line '});
-          let labelPicelab = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-price-txt-label', {types: 'lines words', lineClass: 'kv-line '});
-          gsap.set(titlePice.words, {autoAlpha: 0, yPercent: 60});
-          gsap.set(labelPice.words, {autoAlpha: 0, yPercent: 80});
-          gsap.set(labelPicelab.words, {autoAlpha: 0, yPercent: 80});
-          gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', {autoAlpha: 0});
-          gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', {autoAlpha: 0});
-          let tlPrice = new gsap.timeline({
+        tlPrice
+          .to(labelPice.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', { autoAlpha: 1, duration: .6 }, '<=.2')
+          .to(titlePice.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', { autoAlpha: 1, duration: 1 }, '<=.2')
+          .to(labelPicelab.words, { autoAlpha: 1, yPercent: 1, stagger: .015, duration: .4 }, '<=.2')
+        let titleConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+        let subConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-sub', { types: 'lines words', lineClass: 'kv-line' });
+        gsap.set(titleConfi.words, { autoAlpha: 0, yPercent: 60 });
+        gsap.set(subConfi.words, { autoAlpha: 0, yPercent: 80 });
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', { autoAlpha: 0, y: 30 });
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', { autoAlpha: 0, y: 30 });
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', { autoAlpha: 0, y: 30 });
+        let tlConfi = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-confi',
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+            once: true,
+          }
+        })
+        tlConfi
+          .to(titleConfi.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+          .to(subConfi.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', { autoAlpha: 1, y: 0, stagger: .1, duration: .6 }, '<=.2')
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', { autoAlpha: 1, y: 0, duration: .6 }, '<=.2')
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', { autoAlpha: 1, y: 0, duration: .6 }, '<=.0')
+        let titleStudent = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-student-title', { type: 'lines, words', lineClass: 'kv-line heading-line' })
+        $('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title').each((idx, item) => {
+          let studentTitle = new SplitType(item, { types: 'lines words', lineClass: 'kv-line' });
+          gsap.set(studentTitle.words, { autoAlpha: 0, yPercent: 100 });
+        })
+        gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', { autoAlpha: 0, yPercent: 60 })
+        gsap.set(titleStudent.words, { autoAlpha: 0, yPercent: 60 });
+        let tlStudent = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-student',
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+            once: true,
+          }
+        })
+        tlStudent
+          .to(titleStudent.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', { autoAlpha: 1, yPercent: 0, duration: .6, stagger: .2, clearProps: 'all' }, '<=.2')
+          .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title .word', { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.0')
+        let titleStudy = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-study-title', { type: 'lines words', lineClass: 'kv-line heading-line' });
+        let tlStudy = new gsap.timeline({
+          scrollTrigger: {
+            trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-study',
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+            once: true,
+          }
+        })
+        gsap.set(titleStudy.words, { autoAlpha: 0, yPercent: 60 });
+        tlStudy.to(titleStudy.words, { autoAlpha: 1, yPercent: 0, stagger: 0.02, duration: .6 });
+        let studyItems = $('.cs-choose-content:nth-child(1) .cs-choose-content-study-item');
+        studyItems.each((idx, item) => {
+          let titleItem = new SplitType($(item).find('.cs-choose-content-study-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+          let labelItem = '';
+          if ($(item).find('.cs-choose-content-study-item-title').length > 0) {
+            labelItem = new SplitType($(item).find('.cs-choose-content-study-item-label'), { types: 'lines words', lineClass: 'kv-line' });
+            gsap.set(labelItem.words, { autoAlpha: 0, yPercent: 80 });
+          }
+          gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 80 });
+          $(item).find('.cs-choose-content-study-item-txt').each((idx, itemContent) => {
+            let contentItem = new SplitType(itemContent, { types: 'lines words', lineClass: 'kv-line' });
+            gsap.set(contentItem.words, { autoAlpha: 0, yPercent: 80 });
+          });
+          let tlStudyItem = new gsap.timeline({
             scrollTrigger: {
-              trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-price',
-              start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+              trigger: item,
+              start: viewport.w > 767 ? "top top+=75%" : "top top+=45%",
               once: true,
-              }
-              })
-              tlPrice
-              .to(labelPice.words, {autoAlpha: 1 , yPercent: 0, stagger: .02, duration: .6})
-              .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-popular', {autoAlpha: 1, duration: .6},'<=.2')
-              .to(titlePice.words, {autoAlpha: 1 , yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-              .to('.cs-choose-content:nth-child(1) .cs-choose-content-price-main', {autoAlpha: 1, duration: 1}, '<=.2')
-              .to(labelPicelab.words, {autoAlpha: 1, yPercent: 1, stagger: .015, duration: .4}, '<=.2')
-            let titleConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
-            let subConfi = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-confi-sub', {types: 'lines words', lineClass: 'kv-line'});
-            gsap.set(titleConfi.words, {autoAlpha: 0, yPercent: 60});
-            gsap.set(subConfi.words, {autoAlpha: 0, yPercent: 80});
-            gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', {autoAlpha: 0, y: 30});
-            gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', {autoAlpha: 0, y: 30});
-            gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', {autoAlpha: 0, y: 30});
-              let tlConfi = new gsap.timeline({
-                scrollTrigger: {
-                  trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-confi',
-                  start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-                  once: true,
-                  }
-              })
-            tlConfi
-                  .to(titleConfi.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-                  .to(subConfi.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-                  .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-item', {autoAlpha: 1, y: 0, stagger: .1, duration: .6}, '<=.2')
-                  .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-btn', {autoAlpha: 1, y: 0, duration: .6}, '<=.2')
-                  .to('.cs-choose-content:nth-child(1) .cs-choose-content-confi-img', {autoAlpha: 1, y: 0, duration: .6}, '<=.0')
-            let titleStudent  = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-student-title', {type: 'lines, words', lineClass: 'kv-line heading-line'})
-            $('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title').each((idx, item) => {
-              let studentTitle = new SplitType(item, {types: 'lines words', lineClass: 'kv-line'});
-              gsap.set(studentTitle.words, {autoAlpha: 0, yPercent: 100});
-            })
-            gsap.set('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', { autoAlpha: 0, yPercent: 60})
-            gsap.set(titleStudent.words, {autoAlpha: 0, yPercent: 60});
-            let tlStudent = new gsap.timeline({
-              scrollTrigger: {
-                trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-student',
-                start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-                once: true,
-                }
-            })
-            tlStudent
-            .to(titleStudent.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-            .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-ic', {autoAlpha: 1, yPercent: 0, duration: .6, stagger: .2, clearProps: 'all'},'<=.2')
-            .to('.cs-choose-content:nth-child(1) .cs-choose-content-student-item-title .word', {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.0')
-            let titleStudy = new SplitType('.cs-choose-content:nth-child(1) .cs-choose-content-study-title', {type: 'lines words', lineClass: 'kv-line heading-line'});
-            let tlStudy = new gsap.timeline({
-              scrollTrigger: {
-                trigger: '.cs-choose-content:nth-child(1) .cs-choose-content-study',
-                start : viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-                once: true,
-              }
-            })
-            gsap.set(titleStudy.words, {autoAlpha: 0, yPercent: 60});
-            tlStudy.to(titleStudy.words, {autoAlpha: 1, yPercent:0, stagger: 0.02, duration: .6});
-            let studyItems = $('.cs-choose-content:nth-child(1) .cs-choose-content-study-item');
-            studyItems.each((idx, item) => {
-              let titleItem = new SplitType($(item).find('.cs-choose-content-study-item-title'), {types: 'lines words', lineClass: 'kv-line'});
-              let labelItem = '';
-              if($(item).find('.cs-choose-content-study-item-title').length > 0){
-                labelItem = new SplitType($(item).find('.cs-choose-content-study-item-label'), {types: 'lines words', lineClass: 'kv-line'});
-                gsap.set(labelItem.words, {autoAlpha: 0, yPercent: 80});
-              }
-              gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80});
-              $(item).find('.cs-choose-content-study-item-txt').each((idx, itemContent) => {
-                  let contentItem = new SplitType(itemContent, {types: 'lines words', lineClass: 'kv-line'});
-                  gsap.set(contentItem.words, {autoAlpha: 0, yPercent: 80});
-              });
-              let tlStudyItem = new gsap.timeline({
-                scrollTrigger: {
-                  trigger: item,
-                  start : viewport.w > 767 ? "top top+=75%" : "top top+=45%",
-                  once: true,
-                }
-              })
-              if(labelItem != ''){
-                tlStudyItem.to(labelItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6});
-              }
-              tlStudyItem
-                  .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=.2')
-                  .to($(item).find('.cs-choose-content-study-item-txt .word'), {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-            })
-        }
-
+            }
+          })
+          if (labelItem != '') {
+            tlStudyItem.to(labelItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 });
+          }
+          tlStudyItem
+            .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
+            .to($(item).find('.cs-choose-content-study-item-txt .word'), { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+        })
       }
+
+    }
   }
   let courseChoose = new CourseChoose();
   class CourseTime {
-    constructor(){
+    constructor() {
       this.tlTrigger;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.cs-time',
+        scrollTrigger: {
+          trigger: '.cs-time',
           start: "top bottom+=50%",
           end: "bottom+=50% top",
           once: true,
@@ -2809,10 +2861,10 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-    setup (){
+    setup() {
       let title = new SplitType('.cs-time-title', { types: 'lines words', lineClass: 'kv-line heading-line' })
-      gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set('.cs-time-title-btn', {autoAlpha: 0, yPercent: 30});
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set('.cs-time-title-btn', { autoAlpha: 0, yPercent: 30 });
       let tlTitle = new gsap.timeline({
         scrollTrigger: {
           trigger: '.cs-time-title-wrap',
@@ -2820,24 +2872,24 @@ $('.rs-blog-item').each(function () {
           once: true,
         }
       })
-      tlTitle 
-        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-        .to('.cs-time-title-btn', {autoAlpha: 1 , yPercent: 0, stagger: .1, duration: .4}, '<=.2')
+      tlTitle
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to('.cs-time-title-btn', { autoAlpha: 1, yPercent: 0, stagger: .1, duration: .4 }, '<=.2')
       let allItems = $('.cs-time-item')
       allItems.each((idx, item) => {
         let text = new SplitType($(item).find('.txt'), { types: 'lines words', lineClass: 'kv-line ' })
-        let tlTitle = new gsap.timeline({ 
-          scrollTrigger: { 
+        let tlTitle = new gsap.timeline({
+          scrollTrigger: {
             trigger: item,
             start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
             once: true,
           }
         })
-        gsap.set(text.words, {autoAlpha: 0, yPercent: 80})
-        gsap.set($(item).find('.img-basic'), {autoAlpha: 0, y: 30})
+        gsap.set(text.words, { autoAlpha: 0, yPercent: 80 })
+        gsap.set($(item).find('.img-basic'), { autoAlpha: 0, y: 30 })
         tlTitle
-          .to(text.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-          .to($(item).find('.img-basic'), {autoAlpha: 1, y: 0, duration: .6}, '<=.0')
+          .to(text.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+          .to($(item).find('.img-basic'), { autoAlpha: 1, y: 0, duration: .6 }, '<=.0')
         $('.cs-time-item-btn').each((idx, item) => {
           let tlTitle = new gsap.timeline({
             scrollTrigger: {
@@ -2847,7 +2899,7 @@ $('.rs-blog-item').each(function () {
               scrub: true,
             }
           })
-        tlTitle.to(item, {rotate: 0, y: 0, x: 0})
+          tlTitle.to(item, { rotate: 0, y: 0, x: 0 })
         })
         gsap.to(".cs-time-item-img-ic", {
           rotation: "+=360",
@@ -2857,7 +2909,7 @@ $('.rs-blog-item').each(function () {
         });
         gsap.to(".anim-fly", {
           y: -20,
-          duration: 2, 
+          duration: 2,
           repeat: -1,    // Lặp vô hạn
           yoyo: true,    // Di chuyển ngược lại khi kết thúc
           ease: "power1.inOut" // Hiệu ứng mượt mà khi di chuyển
@@ -2869,10 +2921,10 @@ $('.rs-blog-item').each(function () {
     constructor() {
       this.tlTrigger;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.cs-faq',
+        scrollTrigger: {
+          trigger: '.cs-faq',
           start: "top bottom+=50%",
           end: "bottom+=50% top",
           once: true,
@@ -2881,15 +2933,15 @@ $('.rs-blog-item').each(function () {
           }
         }
       })
-      
+
     }
-    setup (){
+    setup() {
       // let title = new SplitType('.cs-faq-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       // let sub = new SplitType('.cs-faq-sub', { types: 'lines words', lineClass: 'kv-line' });
       $(' .cs-faq-sub .txt-decoration').append('<div class="line"></div>')
       // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
       // gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-      gsap.set('.cs-faq-sub .line', {width: '100%'});
+      gsap.set('.cs-faq-sub .line', { width: '100%' });
       // gsap.set('.cs-faq-title-ic', {autoAlpha: 0, y: 30});
       // let tlFade = new gsap.timeline({
       //   scrollTrigger: {
@@ -2923,10 +2975,10 @@ $('.rs-blog-item').each(function () {
       // })
       $('.cs-faq-item').removeClass('active');
       console.log('2384798')
-      $('.cs-faq-item-title-wrap').on('click', function() {
+      $('.cs-faq-item-title-wrap').on('click', function () {
         $(this).closest('.cs-faq-item').toggleClass('active');
         $(this).closest('.cs-faq-item').find('.cs-faq-item-content').slideToggle(300);
-        })
+      })
     }
   }
   let courseFaq = new CourseFaq();
@@ -2936,9 +2988,9 @@ $('.rs-blog-item').each(function () {
       this.tlFade;
     }
     setup() {
-      if(viewport.w < 767){
+      if (viewport.w < 767) {
         const width = $(".job-marquee-inner").width();
-      const length = Math.floor($(window).width() / width) + 1;
+        const length = Math.floor($(window).width() / width) + 1;
         for (var i = 0; i < length; i++) {
           let $originalListBrand = $(".job-marquee-inner").eq(0);
           let $clonedListBrand = $originalListBrand.clone();
@@ -2948,26 +3000,26 @@ $('.rs-blog-item').each(function () {
         $(".job-marquee-inner").addClass('anim');
         $(".job-marquee-inner").addClass('anim');
       }
-        // let label = new SplitType('.job-hero-label', { types: 'lines words', lineClass: 'kv-line' });
-        // let title = new SplitType('.job-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-        // let sub = new SplitType('.job-hero-sub', { types: 'lines words', lineClass: 'kv-line' });
-        // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-        // gsap.set(label.words, {autoAlpha: 0, yPercent: 80});
-        // gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-        // gsap.set('.job-hero-btn', {autoAlpha: 0, y: 20})
-        this.tlFade = new gsap.timeline({
-          scrollTrigger: {
-            once: true,
-          },
-         paused: true,
-        })
-        // this.tlFade
-        //   .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-        //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-        //   .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-        //   .to('.job-hero-btn', {autoAlpha: 1, y: 0, duration: .4, clearProps: 'all'}, '<=.7')
+      // let label = new SplitType('.job-hero-label', { types: 'lines words', lineClass: 'kv-line' });
+      // let title = new SplitType('.job-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      // let sub = new SplitType('.job-hero-sub', { types: 'lines words', lineClass: 'kv-line' });
+      // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
+      // gsap.set(label.words, {autoAlpha: 0, yPercent: 80});
+      // gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
+      // gsap.set('.job-hero-btn', {autoAlpha: 0, y: 20})
+      this.tlFade = new gsap.timeline({
+        scrollTrigger: {
+          once: true,
+        },
+        paused: true,
+      })
+      // this.tlFade
+      //   .to(label.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+      //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
+      //   .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
+      //   .to('.job-hero-btn', {autoAlpha: 1, y: 0, duration: .4, clearProps: 'all'}, '<=.7')
     }
-    play(){
+    play() {
       this.tlFade.play();
     }
   }
@@ -2976,10 +3028,10 @@ $('.rs-blog-item').each(function () {
     constructor() {
       this.tlTrigger;
     }
-    setTrigger (){
+    setTrigger() {
       this.tlTrigger = new gsap.timeline({
-        scrollTrigger : {
-          trigger : '.job-hero',
+        scrollTrigger: {
+          trigger: '.job-hero',
           start: "top bottom+=70%",
           end: "bottom+=50% top",
           once: true,
@@ -2989,14 +3041,14 @@ $('.rs-blog-item').each(function () {
         }
       })
     }
-  setup(){
+    setup() {
       $('.job-reason-main').addClass('swiper');
       $('.job-reason-list').addClass('swiper-wrapper');
       $('.job-reason-item').addClass('swiper-slide');
       let swiper = new Swiper('.job-reason-main', {
-        slidesPerView:viewport.w > 767 ? 3 : 1,
+        slidesPerView: viewport.w > 767 ? 3 : 1,
         spaceBetween: parseRem(24),
-        initialSlide: viewport.w > 767 ? 1: 0, 
+        initialSlide: viewport.w > 767 ? 1 : 0,
         loop: true,
         loopAdditionalSlides: 1,
         navigation: {
@@ -3018,180 +3070,180 @@ $('.rs-blog-item').each(function () {
       // tlFade
       //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
       //   .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-        let tlFadeItem = new gsap.timeline({
-          scrollTrigger: {
-            trigger: '.job-reason-main',
-            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-            once: true,
-          },
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-reason-main',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      setTimeout(function () {
+        $('.job-reason-item').each((idx, item) => {
+          gsap.set($(item).find('.job-reason-item-img'), { autoAlpha: 0, clipPath: 'inset(0 0 100% 100%)' });
+          let titleItem = new SplitType($(item).find('.job-reason-item-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+          let subItem = new SplitType($(item).find('.job-reason-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
+          gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 });
+          gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 });
+          tlFadeItem
+            .to($(item).find('.job-reason-item-img'), { autoAlpha: 1, clipPath: 'inset(0 0 0% 0%)', duration: .4, clearProps: 'all' }, '<=0')
+            .to(titleItem.words, { autoAlpha: 1, yPercent: 0, duration: .6, stagger: .02 }, '<=.1')
+            .to(subItem.words, { autoAlpha: 1, yPercent: 0, duration: .4, stagger: .015 }, '<=.3')
         })
-        setTimeout(function () {
-          $('.job-reason-item').each((idx, item) => {
-            gsap.set($(item).find('.job-reason-item-img'), {autoAlpha: 0, clipPath: 'inset(0 0 100% 100%)'});
-            let titleItem = new SplitType($(item).find('.job-reason-item-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
-            let subItem = new SplitType($(item).find('.job-reason-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
-            gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
-            gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
-            tlFadeItem
-              .to($(item).find('.job-reason-item-img'), {autoAlpha: 1,clipPath: 'inset(0 0 0% 0%)', duration: .4, clearProps: 'all'}, '<=0')
-              .to(titleItem.words, {autoAlpha: 1,yPercent: 0, duration: .6, stagger: .02}, '<=.1')
-              .to(subItem.words, {autoAlpha: 1,yPercent: 0, duration: .4, stagger: .015}, '<=.3')
-          })
-      ScrollTrigger.refresh();
+        ScrollTrigger.refresh();
 
-        },1000)
-  }
-}
-let jobReason = new JobReason();
-class JobWhy {
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-why',
-        start: "top bottom+=50%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
-      }
-    })
-  }
-setup(){
-  $('.job-why-company').each(function () {
-    const $scrollContainer = $(this); // Lấy từng hộp job-why-company
-    const $scrollContent = $scrollContainer.find('.job-why-company-list');
-    const $clone = $scrollContent.clone();
-    for (let i = 0; i < 8; i++) {
-      const $clone = $scrollContent.clone(); // Tạo bản clone mới trong mỗi lần lặp
-      $scrollContainer.append($clone);
+      }, 1000)
     }
-  });
-  $('.job-why-btn').on('click', function () {
-    $(this).addClass('disable')
-    $('.job-why-company').each( (idx, item)=> {
-      const $scrollContainer = $(item); // Lấy từng hộp job-why-company
-      const $scrollContent = $scrollContainer.find('.job-why-company-list');
-      const contentHeight = $scrollContainer.height() - $scrollContent.height(); // Calculate the height difference
-      const scrollAnimation = gsap.to($scrollContent, {
-        y: `-${contentHeight}px`, // Scroll up to the end of the content
-        duration: 1, // Adjust duration as needed
-        ease: "none",
-        repeat: -1,
-        onStart: function () {
-          console.log("Animation started!");
-          $('.job-why-info-input').addClass('active'); // Thêm class 'active' vào phần tử
-        }
-      });
-      console.log(idx)
-      // Stop the animation and align to a random position
-      setTimeout(() => {
-        scrollAnimation.kill(); // Stop the animation
-        const $items = $scrollContent.find('.job-why-company-item'); // All items in the list
-        const randomIndex = Math.floor(Math.random() * $items.length); // Random index
-        console.log(randomIndex)
-        const $randomItem = $items.eq(randomIndex); // Random item
-        const randomPosition = $randomItem.position().top ;
-        
-        gsap.to($scrollContent, {
-          y: `-${randomPosition}px`, // Align to the random item's position
-          duration: 1.8 + idx * 0.5,
-          ease: "power3.out",onComplete: () => {
-            $('.job-why-btn').removeClass('disable');
-            $('.job-why-btn').find('.txt').text('Quay lại lần nữa');
-            const $confettiContainer = $('.js-container'); // Sử dụng jQuery để chọn container
-            $('.js-container-wrap.unactive').removeClass('unactive');
-            if ($confettiContainer.length > 0) {
-              new Confettiful($confettiContainer[0]); // Truyền DOM element vào Confettiful
-            }
-            setTimeout(() =>{
-              $('.js-container-wrap').addClass('unactive');
-            },5000)
+  }
+  let jobReason = new JobReason();
+  class JobWhy {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-why',
+          start: "top bottom+=50%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
           }
-        });
-      }, 1000); // Adjust timing to stop
-    });
-  });
-  createMarqueeAnimation(".job-why-logo-list", ".job-why-logo-inner")
-  $(".job-why-logo-list").addClass('anim');
-  $('.job-why-offer-main').each((idx, item) =>{
-    console.log(idx)
-    createMarqueeAnimation($(item).find('.job-why-offer-list'), $(item))
-    $(item).find('.job-why-offer-list').addClass('anim');
-  })
-  let title = new SplitType('.job-why-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-  gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-  gsap.set('.job-why-inner', {autoAlpha: 0, y: 40});
-  gsap.set('.job-why-btn', {autoAlpha: 0, y: 30});
-  let tlFade = new gsap.timeline({
-    scrollTrigger: {
-      trigger: '.job-why-title-wrap',
-      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-      once: true,
-    },
-  })
-  let tlFadeItem = new gsap.timeline({
-    scrollTrigger: {
-      trigger: '.job-why-title-wrap',
-      start: viewport.w > 767 ? "top top+=70%" : "top top+=45%",
-      once: true,
-    },
-  })
-  tlFade
-    .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-  tlFadeItem
-  .to('.job-why-inner', {autoAlpha: 1, y: 0, duration: 2, clearProps: 'all'})
-  .to('.job-why-btn', {autoAlpha: 1, y: 0, duration: .6, clearProps: 'all'},'<=.6')
- let  tlFadeLogo = new gsap.timeline({
-    scrollTrigger: {
-      trigger: '.job-why-logo',
-      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-      once: true,
-    },
-  })
-  let titleLogo = new SplitType('.job-why-logo-title', { types: 'lines words', lineClass: 'kv-line' });
-  gsap.set(titleLogo.words, {autoAlpha: 0, yPercent: 60});
-  gsap.set('.job-why-logo-inner', {autoAlpha: 0, y: 30});
-  tlFadeLogo
-  .to(titleLogo.words, {autoAlpha: 1, yPercent: 0, stagger: .03, duration: .6})
-  .to('.job-why-logo-inner', {autoAlpha: 1, y: 0, duration: 1.2, clearProps: 'all'}, '<=.2')
-  let  tlFadeOffer = new gsap.timeline({
-    scrollTrigger: {
-      trigger: '.job-why-offer',
-      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-      once: true,
-    },
-  })
-  let titleOffer = new SplitType('.job-why-offer-title', { types: 'lines words', lineClass: 'kv-line' });
-  gsap.set(titleOffer.words, {autoAlpha: 0, yPercent: 60});
-  gsap.set('.job-why-offer-main', {autoAlpha: 0, y: 30});
-  tlFadeOffer
-  .to(titleOffer.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-  .to('.job-why-offer-main', {autoAlpha: 1, y: 0, duration: .6,stagger: .2, clearProps: 'all'}, '<=.2')
-}
-}
-let jobWhy = new JobWhy()
-class JobProud{
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-proud',
-        start: "top bottom+=50%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
         }
-      }
+      })
+    }
+    setup() {
+      $('.job-why-company').each(function () {
+        const $scrollContainer = $(this); // Lấy từng hộp job-why-company
+        const $scrollContent = $scrollContainer.find('.job-why-company-list');
+        const $clone = $scrollContent.clone();
+        for (let i = 0; i < 8; i++) {
+          const $clone = $scrollContent.clone(); // Tạo bản clone mới trong mỗi lần lặp
+          $scrollContainer.append($clone);
+        }
+      });
+      $('.job-why-btn').on('click', function () {
+        $(this).addClass('disable')
+        $('.job-why-company').each((idx, item) => {
+          const $scrollContainer = $(item); // Lấy từng hộp job-why-company
+          const $scrollContent = $scrollContainer.find('.job-why-company-list');
+          const contentHeight = $scrollContainer.height() - $scrollContent.height(); // Calculate the height difference
+          const scrollAnimation = gsap.to($scrollContent, {
+            y: `-${contentHeight}px`, // Scroll up to the end of the content
+            duration: 1, // Adjust duration as needed
+            ease: "none",
+            repeat: -1,
+            onStart: function () {
+              console.log("Animation started!");
+              $('.job-why-info-input').addClass('active'); // Thêm class 'active' vào phần tử
+            }
+          });
+          console.log(idx)
+          // Stop the animation and align to a random position
+          setTimeout(() => {
+            scrollAnimation.kill(); // Stop the animation
+            const $items = $scrollContent.find('.job-why-company-item'); // All items in the list
+            const randomIndex = Math.floor(Math.random() * $items.length); // Random index
+            console.log(randomIndex)
+            const $randomItem = $items.eq(randomIndex); // Random item
+            const randomPosition = $randomItem.position().top;
+
+            gsap.to($scrollContent, {
+              y: `-${randomPosition}px`, // Align to the random item's position
+              duration: 1.8 + idx * 0.5,
+              ease: "power3.out", onComplete: () => {
+                $('.job-why-btn').removeClass('disable');
+                $('.job-why-btn').find('.txt').text('Quay lại lần nữa');
+                const $confettiContainer = $('.js-container'); // Sử dụng jQuery để chọn container
+                $('.js-container-wrap.unactive').removeClass('unactive');
+                if ($confettiContainer.length > 0) {
+                  new Confettiful($confettiContainer[0]); // Truyền DOM element vào Confettiful
+                }
+                setTimeout(() => {
+                  $('.js-container-wrap').addClass('unactive');
+                }, 5000)
+              }
+            });
+          }, 1000); // Adjust timing to stop
+        });
+      });
+      createMarqueeAnimation(".job-why-logo-list", ".job-why-logo-inner")
+      $(".job-why-logo-list").addClass('anim');
+      $('.job-why-offer-main').each((idx, item) => {
+        console.log(idx)
+        createMarqueeAnimation($(item).find('.job-why-offer-list'), $(item))
+        $(item).find('.job-why-offer-list').addClass('anim');
+      })
+      let title = new SplitType('.job-why-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set('.job-why-inner', { autoAlpha: 0, y: 40 });
+      gsap.set('.job-why-btn', { autoAlpha: 0, y: 30 });
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-why-title-wrap',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      let tlFadeItem = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-why-title-wrap',
+          start: viewport.w > 767 ? "top top+=70%" : "top top+=45%",
+          once: true,
+        },
+      })
+      tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+      tlFadeItem
+        .to('.job-why-inner', { autoAlpha: 1, y: 0, duration: 2, clearProps: 'all' })
+        .to('.job-why-btn', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' }, '<=.6')
+      let tlFadeLogo = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-why-logo',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      let titleLogo = new SplitType('.job-why-logo-title', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(titleLogo.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set('.job-why-logo-inner', { autoAlpha: 0, y: 30 });
+      tlFadeLogo
+        .to(titleLogo.words, { autoAlpha: 1, yPercent: 0, stagger: .03, duration: .6 })
+        .to('.job-why-logo-inner', { autoAlpha: 1, y: 0, duration: 1.2, clearProps: 'all' }, '<=.2')
+      let tlFadeOffer = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-why-offer',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      let titleOffer = new SplitType('.job-why-offer-title', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(titleOffer.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set('.job-why-offer-main', { autoAlpha: 0, y: 30 });
+      tlFadeOffer
+        .to(titleOffer.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to('.job-why-offer-main', { autoAlpha: 1, y: 0, duration: .6, stagger: .2, clearProps: 'all' }, '<=.2')
+    }
+  }
+  let jobWhy = new JobWhy()
+  class JobProud {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-proud',
+          start: "top bottom+=50%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
       });
     }
-    setup(){
+    setup() {
       // let title = new SplitType('.job-proud-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
       // let sub = new SplitType('.job-proud-label', { types: 'lines words', lineClass: 'kv-line' });
       // gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
@@ -3206,33 +3258,14 @@ class JobProud{
       // tlFade
       // .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
       //   .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-     
-      if(viewport.w < 767){
-        $('.job-proud-list-wrap').addClass('swiper');
-      $('.job-proud-list').addClass('swiper-wrapper');
-      $('.job-proud-item').addClass('swiper-slide');
-     const $paginationDiv = $('<div></div>').addClass('swiper-pagination');
-      $('.job-proud-list-wrap').append($paginationDiv);
-      let swiper = new Swiper('.job-proud-list-wrap', {
-        slidesPerView:'auto',
-        spaceBetween: parseRem(24),
-        pagination: {
-          el: ".swiper-pagination",
-          // able click
-          clickable: true
-        },
-      });
-      setTimeout(function(){
-        ScrollTrigger.refresh();
-      })
-      }
+
       let titleMain = new SplitType(".job-proud-main-title", { types: 'lines words', lineClass: 'kv-line heading-line' });
       let subMain = new SplitType(".job-proud-main-sub", { types: 'lines words', lineClass: 'kv-line ' });
-      gsap.set(titleMain.words, {autoAlpha: 0, yPercent: 60});
-      gsap.set(subMain.words, {autoAlpha: 0, yPercent: 80});
-      gsap.set('.job-proud-main-content-item-ab', {autoAlpha: 0})
-      gsap.set('.job-proud-main-process', {x:viewport.w> 767?  -parseRem(200): -parseRem(144)})
-      gsap.set('.job-proud-main-content', {autoAlpha: 0, y: 10})
+      gsap.set(titleMain.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(subMain.words, { autoAlpha: 0, yPercent: 80 });
+      gsap.set('.job-proud-main-content-item-ab', { autoAlpha: 0 })
+      gsap.set('.job-proud-main-process', { x: viewport.w > 767 ? -parseRem(200) : -parseRem(144) })
+      gsap.set('.job-proud-main-content', { autoAlpha: 0, y: 10 })
       let tlFadeMain = new gsap.timeline({
         scrollTrigger: {
           trigger: '.job-proud-main',
@@ -3240,20 +3273,22 @@ class JobProud{
           once: true,
         }
       })
-      tlFadeMain 
-        .to('.job-proud-main-content', {autoAlpha: 1, y: 0, duration: .6})
-        .to('.job-proud-main-process', {x: 0, duration: 1.2, onComplete: () => {
-          $('.job-proud-main-content-item.will-active').addClass('active');
-          gsap.to('.job-proud-main-content-item-ab', {autoAlpha: 1, duration: .6})
-        }}, '<=0')
-        .to(titleMain.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=0.8')
-        .to(subMain.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-        $('.job-proud-item').each((idx, item) => {
+      tlFadeMain
+        .to('.job-proud-main-content', { autoAlpha: 1, y: 0, duration: .6 })
+        .to('.job-proud-main-process', {
+          x: 0, duration: 1.2, onComplete: () => {
+            $('.job-proud-main-content-item.will-active').addClass('active');
+            gsap.to('.job-proud-main-content-item-ab', { autoAlpha: 1, duration: .6 })
+          }
+        }, '<=0')
+        .to(titleMain.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=0.8')
+        .to(subMain.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+      $('.job-proud-item').each((idx, item) => {
         let titleItem = new SplitType($(item).find('.job-proud-item-txt'), { types: 'lines words', lineClass: 'kv-line' });
-        gsap.set($(item), {autoAlpha: 0, y: 20})
-        gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80})
-        gsap.set($(item).find('.job-svg-process-bg'), {strokeDasharray: '0, 1', autoAlpha: 0})
-        let number =parseInt($(item).find('.process-number').text());
+        gsap.set($(item), { autoAlpha: 0, y: 20 })
+        gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 80 })
+        gsap.set($(item).find('.job-svg-process-bg'), { strokeDasharray: '0, 1', autoAlpha: 0 })
+        let number = parseInt($(item).find('.process-number').text());
         let numberPercent = number / 100;
         $(item).find('.process-number').text('0')
 
@@ -3265,542 +3300,544 @@ class JobProud{
           }
         })
         tlItem
-        .to($(item), {autoAlpha: 1, y: 0, duration: .4})
-          .to($(item).find('.job-svg-process-bg'), {strokeDasharray: `${numberPercent}, 1`, duration: 1.5, ease: 'power1.inOut', onEnter: ()=>{
-            gsap.to($(item).find('.job-svg-process-bg'),{autoAlpha: 1})
-            countUpTo(number, $(item).find('.process-number'), 1500);
-          }}, '<=.2')
-          .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.4')
+          .to($(item), { autoAlpha: 1, y: 0, duration: .4 })
+          .to($(item).find('.job-svg-process-bg'), {
+            strokeDasharray: `${numberPercent}, 1`, duration: 1.5, ease: 'power1.inOut', onEnter: () => {
+              gsap.to($(item).find('.job-svg-process-bg'), { autoAlpha: 1 })
+              countUpTo(number, $(item).find('.process-number'), 1500);
+            }
+          }, '<=.2')
+          .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.4')
       })
     }
-}
-let jobProud = new JobProud();
-class JobProcess {
-  constructor() {
-    this.tlTrigger;
   }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-process',
-        start: "top bottom+=50%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
-      }
-    })
-  }
-setup(){
-$('.job-process-content').addClass('unactive');
-$('.job-process-content').eq(0).removeClass('unactive');
-$('.job-process-tab').on('click', function() {
-  let index = $(this).index()
-  $('.job-process-content').addClass('unactive');
-$('.job-process-content').eq(index).removeClass('unactive');
-  $('.job-process-tab').removeClass('active');
-  $(this).addClass('active');
-  console.log('khanh');
-  })
-  let title = new SplitType('.job-process-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-  let sub = new SplitType('.job-process-sub', { types: 'lines words', lineClass: 'kv-line' });
-  gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-  gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-  let tlFade = new gsap.timeline({
-    scrollTrigger: {
-      trigger: '.job-process-title-wrap',
-      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-      once: true,
-    },
-  })
-  tlFade
-  .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, )
-  .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4},'<=.2')
-
-  let tlFadeTab = new gsap.timeline({
-    scrollTrigger: {
-      trigger: '.job-process-tab-wrap',
-      start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-      once: true,
-    },
-  })
-  gsap.set('.job-process-tab', {autoAlpha: 0, x: -15})
-  gsap.set('.job-process-content:nth-child(1) .job-process-content-item', {autoAlpha: 0, y: 20})
-  tlFadeTab
-    .to('.job-process-tab', {autoAlpha: 1, x: 0, stagger: .02, duration: .8})
-    .to('.job-process-content:nth-child(1) .job-process-content-item', {autoAlpha: 1, y: 0, stagger: .1, duration: 1}, '<=.4')
-}
-}
-let jobProcess = new JobProcess();
-class JobResource {
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-process',
-        start: "top bottom+=50%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
-      }
-    })
-  }
-  setup(){
-  //   let title = new SplitType('.job-resource-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-  //   gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
-  //   let tlFade = new gsap.timeline({
-  //     scrollTrigger: {
-  //       trigger: '.job-resource-title-wrap',
-  //       start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-  //       once: true,
-  //       },
-  //       })
-  //   tlFade
-  //       .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-  //   $('.job-resource-item').each((idx, item) => {
-  //     let itemTitle =new SplitType($(item).find('.job-resource-item-txt'), { types: 'lines words', lineClass: 'kv-line' });
-  //     let borderRadius = $(item).find('.job-resource-item-img').css('border-radius');
-  //     gsap.set($(item).find('.job-resource-item-img'), {autoAlpha: 0, clipPath: `inset(0 0 100% 100% round ${borderRadius})`});
-  //     gsap.set(itemTitle.words, {autoAlpha: 0, yPercent: 80});
-  //     let tlFadeItem = new gsap.timeline({
-  //       scrollTrigger: {
-  //         trigger: item,
-  //         start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-  //         once: true,
-  //         },
-  //         })
-  //         tlFadeItem
-  //         .to($(item).find('.job-resource-item-img'), {autoAlpha: 1, clipPath: `inset(0 0 0% 0% round ${borderRadius})`, duration: 1, clearProps: 'all'})
-  //         .to(itemTitle.words, {autoAlpha: 1, yPercent: 0, duration : .5, stagger: .02},'<=.2')
-  //       })
-  }
-}
-let jobResource = new JobResource();
-class JobTesti {
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-detail',
-        start: "top bottom+=100%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
-      }
-    })
-  }
-setup(){
-  if(viewport.w < 767){
-    $('.job-testi-list-wrap').each((idx, item) => {
-      const $item = $(item);
-    
-      // Add Swiper classes if not already added
-      if (!$item.hasClass('swiper-initialized')) {
-        $item.addClass('swiper swiper-initialized');
-        $item.find('.job-testi-list').addClass('swiper-wrapper');
-        $item.find('.job-testi-item').addClass('swiper-slide');
-    
-        // Initialize Swiper
-        new Swiper($item[0], {
-          slidesPerView: 'auto',
-          spaceBetween: parseRem(20),
-          loop: true,
-          speed: 10000, 
-          autoplay: {
-            delay: 0,
-            reverseDirection: idx % 2 === 1,
-          },
-        });
-      }
-    });
-    
-  }
-  $('.job-testi-more-link').on('click', function(e) {
-    e.preventDefault();
-    $('.job-testi-more').addClass('hidden');
-    $('.job-testi-item.hidden').removeClass('hidden');
-    $('.job-testi-small-link-wrap').removeClass('hidden');
-    setTimeout(function(){
-      ScrollTrigger.refresh();
-  }, 1000)
-  });
-  $('.job-testi-small-link').on('click', function(e) {
-    e.preventDefault();
-    $('.job-testi-more').removeClass('hidden');
-    $('.job-testi-item[aria-hidden="true"]').addClass('hidden');
-    $('.job-testi-small-link-wrap').addClass('hidden');
-    $('html, body').animate({
-      scrollTop: $('.job-testi-main').offset().top + $('.job-testi-main').outerHeight() - $(window).height()
-  }, 500);
-    setTimeout(function(){
-      ScrollTrigger.refresh();
-  }, 1000)
-  })
-  setTimeout(function(){
-    ScrollTrigger.refresh();
-}, 1000)
-// let title = new SplitType('.job-testi-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-// gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
-// gsap.set('.job-testi-title-ic', {autoAlpha: 0})
-// let tlFade = new gsap.timeline({
-//   scrollTrigger: {
-//     trigger: '.job-testi-title-wrap',
-//     start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-//     once: true,
-//     },
-//     })
-// tlFade
-//     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-//     .to('.job-testi-title-ic', {autoAlpha: 1, duration: .6},'<=.5')
-$('.job-testi-item:not(.hidden)').attr('aria-hidden', 'true');
-if(viewport.w > 991){
-  $('.job-testi-item:not(.hidden)').each((idx, item) => {
-    let title = new SplitType($(item).find('.job-testi-item-content'), { types: 'lines words', lineClass: 'kv-line ' });
-    gsap.set(title.words, {autoAlpha: 0, yPercent: 80})
-    gsap.set($(item).find('.job-testi-item-avt'), {autoAlpha: 0, clipPath: 'circle(20% at 50% 50%)'});
-    gsap.set($(item).find('.job-testi-item-info-inner'), {autoAlpha: 0, y: 20});
-    let tlFadeItem = gsap.timeline({
-      scrollTrigger: {
-        trigger: item,
-        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-        once: true,
-        },
-    })
-    tlFadeItem
-      .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4})
-      .to($(item).find('.job-testi-item-avt'), {autoAlpha: 1, clipPath: 'circle(50% at 50% 50%)', duration: .6}, '>=-.2')
-      .to($(item).find('.job-testi-item-info-inner'), {autoAlpha: 1, y: 0, duration: .6}, '<=0')
-  })
-}
-}
-}
-let jobTesti = new JobTesti();
-class JobStep{
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-testi',
-        start: "top bottom+=100%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
-      }
-    })
-  }
-  setup(){
-    // let title = new SplitType($('.job-step-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
-    // gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
-    // let tlFade = new gsap.timeline({
-    //   scrollTrigger: {
-    //     trigger: '.job-step-title-wrap',
-    //     start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-    //     once: true,
-    //     },
-    //     })
-    // tlFade
-    //     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-    $('.job-step-item').each((idx, item) => {
-      gsap.set($(item).find('.job-step-item-ic'), {autoAlpha: 0, y: 20})
-      let titleItem = new SplitType($(item).find('.job-step-item-title'), { types: 'lines words', lineClass: 'kv-line' });
-      gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 80})
-      gsap.set($('.job-step-item-ar').eq(idx), {autoAlpha: 0, yPercent:30})
-      let tlFadeItem = new gsap.timeline({
+  let jobProud = new JobProud();
+  class JobProcess {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
-          trigger: item,
+          trigger: '.job-process',
+          start: "top bottom+=50%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup() {
+      $('.job-process-content').addClass('unactive');
+      $('.job-process-content').eq(0).removeClass('unactive');
+      $('.job-process-tab').on('click', function () {
+        let index = $(this).index()
+        $('.job-process-content').addClass('unactive');
+        $('.job-process-content').eq(index).removeClass('unactive');
+        $('.job-process-tab').removeClass('active');
+        $(this).addClass('active');
+        console.log('khanh');
+      })
+      let title = new SplitType('.job-process-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let sub = new SplitType('.job-process-sub', { types: 'lines words', lineClass: 'kv-line' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 });
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-process-title-wrap',
           start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
-          },
+        },
+      })
+      tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 },)
+        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+
+      let tlFadeTab = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-process-tab-wrap',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      gsap.set('.job-process-tab', { autoAlpha: 0, x: -15 })
+      gsap.set('.job-process-content:nth-child(1) .job-process-content-item', { autoAlpha: 0, y: 20 })
+      tlFadeTab
+        .to('.job-process-tab', { autoAlpha: 1, x: 0, stagger: .02, duration: .8 })
+        .to('.job-process-content:nth-child(1) .job-process-content-item', { autoAlpha: 1, y: 0, stagger: .1, duration: 1 }, '<=.4')
+    }
+  }
+  let jobProcess = new JobProcess();
+  class JobResource {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-process',
+          start: "top bottom+=50%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup() {
+      //   let title = new SplitType('.job-resource-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      //   gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+      //   let tlFade = new gsap.timeline({
+      //     scrollTrigger: {
+      //       trigger: '.job-resource-title-wrap',
+      //       start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      //       once: true,
+      //       },
+      //       })
+      //   tlFade
+      //       .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+      //   $('.job-resource-item').each((idx, item) => {
+      //     let itemTitle =new SplitType($(item).find('.job-resource-item-txt'), { types: 'lines words', lineClass: 'kv-line' });
+      //     let borderRadius = $(item).find('.job-resource-item-img').css('border-radius');
+      //     gsap.set($(item).find('.job-resource-item-img'), {autoAlpha: 0, clipPath: `inset(0 0 100% 100% round ${borderRadius})`});
+      //     gsap.set(itemTitle.words, {autoAlpha: 0, yPercent: 80});
+      //     let tlFadeItem = new gsap.timeline({
+      //       scrollTrigger: {
+      //         trigger: item,
+      //         start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      //         once: true,
+      //         },
+      //         })
+      //         tlFadeItem
+      //         .to($(item).find('.job-resource-item-img'), {autoAlpha: 1, clipPath: `inset(0 0 0% 0% round ${borderRadius})`, duration: 1, clearProps: 'all'})
+      //         .to(itemTitle.words, {autoAlpha: 1, yPercent: 0, duration : .5, stagger: .02},'<=.2')
+      //       })
+    }
+  }
+  let jobResource = new JobResource();
+  class JobTesti {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-detail',
+          start: "top bottom+=100%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup() {
+      if (viewport.w < 767) {
+        $('.job-testi-list-wrap').each((idx, item) => {
+          const $item = $(item);
+
+          // Add Swiper classes if not already added
+          if (!$item.hasClass('swiper-initialized')) {
+            $item.addClass('swiper swiper-initialized');
+            $item.find('.job-testi-list').addClass('swiper-wrapper');
+            $item.find('.job-testi-item').addClass('swiper-slide');
+
+            // Initialize Swiper
+            new Swiper($item[0], {
+              slidesPerView: 'auto',
+              spaceBetween: parseRem(20),
+              loop: true,
+              speed: 10000,
+              autoplay: {
+                delay: 0,
+                reverseDirection: idx % 2 === 1,
+              },
+            });
+          }
+        });
+
+      }
+      $('.job-testi-more-link').on('click', function (e) {
+        e.preventDefault();
+        $('.job-testi-more').addClass('hidden');
+        $('.job-testi-item.hidden').removeClass('hidden');
+        $('.job-testi-small-link-wrap').removeClass('hidden');
+        setTimeout(function () {
+          ScrollTrigger.refresh();
+        }, 1000)
+      });
+      $('.job-testi-small-link').on('click', function (e) {
+        e.preventDefault();
+        $('.job-testi-more').removeClass('hidden');
+        $('.job-testi-item[aria-hidden="true"]').addClass('hidden');
+        $('.job-testi-small-link-wrap').addClass('hidden');
+        $('html, body').animate({
+          scrollTop: $('.job-testi-main').offset().top + $('.job-testi-main').outerHeight() - $(window).height()
+        }, 500);
+        setTimeout(function () {
+          ScrollTrigger.refresh();
+        }, 1000)
+      })
+      setTimeout(function () {
+        ScrollTrigger.refresh();
+      }, 1000)
+      // let title = new SplitType('.job-testi-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      // gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+      // gsap.set('.job-testi-title-ic', {autoAlpha: 0})
+      // let tlFade = new gsap.timeline({
+      //   scrollTrigger: {
+      //     trigger: '.job-testi-title-wrap',
+      //     start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      //     once: true,
+      //     },
+      //     })
+      // tlFade
+      //     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+      //     .to('.job-testi-title-ic', {autoAlpha: 1, duration: .6},'<=.5')
+      $('.job-testi-item:not(.hidden)').attr('aria-hidden', 'true');
+      if (viewport.w > 991) {
+        $('.job-testi-item:not(.hidden)').each((idx, item) => {
+          let title = new SplitType($(item).find('.job-testi-item-content'), { types: 'lines words', lineClass: 'kv-line ' });
+          gsap.set(title.words, { autoAlpha: 0, yPercent: 80 })
+          gsap.set($(item).find('.job-testi-item-avt'), { autoAlpha: 0, clipPath: 'circle(20% at 50% 50%)' });
+          gsap.set($(item).find('.job-testi-item-info-inner'), { autoAlpha: 0, y: 20 });
+          let tlFadeItem = gsap.timeline({
+            scrollTrigger: {
+              trigger: item,
+              start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+              once: true,
+            },
           })
           tlFadeItem
-          .to($(item).find('.job-step-item-ic'), {autoAlpha: 1, y: 0, duration: .6})
-          .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.2')
-          .to($('.job-step-item-ar').eq(idx), {autoAlpha: 1, yPercent: 0, duration: .6}, '<=.2')
-      })
-  }
-}
-let jobStep = new JobStep();
-class JobCta {
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-step',
-        start: "top bottom+=100%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
-      }
-    })
-  }
-  setup() {
-
-    let title = new SplitType($('.job-sign-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
-    let sub = new SplitType($('.job-sign-sub'), { types: 'lines words', lineClass: 'kv-line heading-line' });
-    $(' .job-sign-sub-link.txt-decoration').append('<div class="line"></div>')
-    gsap.set('.job-sign-sub-link.txt-decoration .line', {scaleX: 0, transformOrigin: 'left'})
-    gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
-    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
-    gsap.set('.job-sign-link', {autoAlpha: 0, y: 30})
-    let tlFade = new gsap.timeline({
-      scrollTrigger: {
-        trigger: '.job-sign-inner',
-        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-        once: true,
-        },
+            .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 })
+            .to($(item).find('.job-testi-item-avt'), { autoAlpha: 1, clipPath: 'circle(50% at 50% 50%)', duration: .6 }, '>=-.2')
+            .to($(item).find('.job-testi-item-info-inner'), { autoAlpha: 1, y: 0, duration: .6 }, '<=0')
         })
-    tlFade
-        .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-        .to('.job-sign-link', {autoAlpha: 1, y: 0, duration: .6, clearProps: 'all'}, '<=.2')
-        .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-        .to('.job-sign-sub-link.txt-decoration .line', {scaleX: 1, duration: .6}, '<=.4')
-  }
-}
-let jobCta = new JobCta();
-class JobPrice{
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-resource',
-        start: "top bottom+=100%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
       }
-    })
+    }
   }
-  setup () {
-    // let title = new SplitType('.job-price-title', { types: 'lines words', lineClass: 'kv-line' });
-    let desc = new SplitType('.job-price-desc', { types: 'lines words', lineClass: 'kv-line' });
-    let sub = $('.job-price-sub')
-    // gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
-    gsap.set(sub, {autoAlpha: 0, yPercent: 80})
-    gsap.set(desc.words, {autoAlpha: 0, yPercent: 80})
-    gsap.set('.job-price-img-note', {autoAlpha: 0, y: 20})
-    let tlFade = new gsap.timeline({
-      scrollTrigger: {
-        trigger: '.job-price-content',
-        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-        once: true,
-        },
-        })
-    tlFade
-        // .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-        .to(sub, {autoAlpha: 1, yPercent: 0, duration: .8},'<=0')
-        .to(desc.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .5},'<=.3')
-    let borderRadius = $('.job-price-img-item').css('border-radius');
-    gsap.set('.job-price-img-inner .img-basic',{autoAlpha: 0})
-    gsap.set('.job-price-img-item', {autoAlpha: 0 , clipPath: `inset(100% 0% 0% 0% round ${borderRadius})`})
-    let tlFadeImg = new gsap.timeline({
-      scrollTrigger: {
-        trigger: '.job-price-img-inner',
-        start: viewport.w > 767 ? 'top top+=60%' : 'top top+=45%',
-        once: true
-      }
-    })
-    tlFadeImg.to('.job-price-img-inner .img-basic', {autoAlpha: 1, duration: 1.6})
-                    .to('.job-price-img-item', {autoAlpha: 1, clipPath : `inset(0% 0% 0% 0% round ${borderRadius})`, duration: 1.2, stagger: .2}, '<=.6')
-                    .to('.job-price-img-note', {autoAlpha: 1, y: 0, duration: .6},'<=.6')
-  }
-}
-class JobDetail {
-  constructor() {
-    this.tlTrigger;
-  }
-  setTrigger (){
-    this.tlTrigger = new gsap.timeline({
-      scrollTrigger : {
-        trigger : '.job-price',
-        start: "top bottom+=100%",
-        end: "bottom+=50% top",
-        once: true,
-        onEnter: () => {
-          this.setup();
-        }
-      }
-    })
-  }
-  setup () {
-    let title = $('.job-detail-main-txt')
-    gsap.set(title, {autoAlpha: 0, yPercent: 60})
-    gsap.set('.job-detail-btn', {autoAlpha: 0, y: 20})
-    gsap.set('.job-detail-main-inner-ic', {autoAlpha: 0})
-    let tlFade = new gsap.timeline({
-      scrollTrigger: {
-        trigger: '.job-detail-main',
-        start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
-        once: true,
-        },
-        })
-    tlFade
-        .to(title, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-        .to('.job-detail-main-inner-ic', {autoAlpha: 1, duration: .6, yPercent: 0, stagger: .02})
-        .to('.job-detail-btn', {autoAlpha: 1, y:0,  duration: .6},'<=0')
-    $('.job-detail-list').each((idx, item) => {
-      let tlFadeList = new gsap.timeline({
+  let jobTesti = new JobTesti();
+  class JobStep {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
         scrollTrigger: {
-          trigger: item,
+          trigger: '.job-testi',
+          start: "top bottom+=100%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup() {
+      // let title = new SplitType($('.job-step-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+      // gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+      // let tlFade = new gsap.timeline({
+      //   scrollTrigger: {
+      //     trigger: '.job-step-title-wrap',
+      //     start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+      //     once: true,
+      //     },
+      //     })
+      // tlFade
+      //     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+      $('.job-step-item').each((idx, item) => {
+        gsap.set($(item).find('.job-step-item-ic'), { autoAlpha: 0, y: 20 })
+        let titleItem = new SplitType($(item).find('.job-step-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+        gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 80 })
+        gsap.set($('.job-step-item-ar').eq(idx), { autoAlpha: 0, yPercent: 30 })
+        let tlFadeItem = new gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+            once: true,
+          },
+        })
+        tlFadeItem
+          .to($(item).find('.job-step-item-ic'), { autoAlpha: 1, y: 0, duration: .6 })
+          .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
+          .to($('.job-step-item-ar').eq(idx), { autoAlpha: 1, yPercent: 0, duration: .6 }, '<=.2')
+      })
+    }
+  }
+  let jobStep = new JobStep();
+  class JobCta {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-step',
+          start: "top bottom+=100%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup() {
+
+      let title = new SplitType($('.job-sign-title'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let sub = new SplitType($('.job-sign-sub'), { types: 'lines words', lineClass: 'kv-line heading-line' });
+      $(' .job-sign-sub-link.txt-decoration').append('<div class="line"></div>')
+      gsap.set('.job-sign-sub-link.txt-decoration .line', { scaleX: 0, transformOrigin: 'left' })
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
+      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 })
+      gsap.set('.job-sign-link', { autoAlpha: 0, y: 30 })
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-sign-inner',
           start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
           once: true,
+        },
+      })
+      tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to('.job-sign-link', { autoAlpha: 1, y: 0, duration: .6, clearProps: 'all' }, '<=.2')
+        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+        .to('.job-sign-sub-link.txt-decoration .line', { scaleX: 1, duration: .6 }, '<=.4')
+    }
+  }
+  let jobCta = new JobCta();
+  class JobPrice {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-resource',
+          start: "top bottom+=100%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup() {
+      // let title = new SplitType('.job-price-title', { types: 'lines words', lineClass: 'kv-line' });
+      let desc = new SplitType('.job-price-desc', { types: 'lines words', lineClass: 'kv-line' });
+      let sub = $('.job-price-sub')
+      // gsap.set(title.words, {autoAlpha: 0, yPercent: 60})
+      gsap.set(sub, { autoAlpha: 0, yPercent: 80 })
+      gsap.set(desc.words, { autoAlpha: 0, yPercent: 80 })
+      gsap.set('.job-price-img-note', { autoAlpha: 0, y: 20 })
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-price-content',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      tlFade
+        // .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+        .to(sub, { autoAlpha: 1, yPercent: 0, duration: .8 }, '<=0')
+        .to(desc.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .5 }, '<=.3')
+      let borderRadius = $('.job-price-img-item').css('border-radius');
+      gsap.set('.job-price-img-inner .img-basic', { autoAlpha: 0 })
+      gsap.set('.job-price-img-item', { autoAlpha: 0, clipPath: `inset(100% 0% 0% 0% round ${borderRadius})` })
+      let tlFadeImg = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-price-img-inner',
+          start: viewport.w > 767 ? 'top top+=60%' : 'top top+=45%',
+          once: true
+        }
+      })
+      tlFadeImg.to('.job-price-img-inner .img-basic', { autoAlpha: 1, duration: 1.6 })
+        .to('.job-price-img-item', { autoAlpha: 1, clipPath: `inset(0% 0% 0% 0% round ${borderRadius})`, duration: 1.2, stagger: .2 }, '<=.6')
+        .to('.job-price-img-note', { autoAlpha: 1, y: 0, duration: .6 }, '<=.6')
+    }
+  }
+  class JobDetail {
+    constructor() {
+      this.tlTrigger;
+    }
+    setTrigger() {
+      this.tlTrigger = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-price',
+          start: "top bottom+=100%",
+          end: "bottom+=50% top",
+          once: true,
+          onEnter: () => {
+            this.setup();
+          }
+        }
+      })
+    }
+    setup() {
+      let title = $('.job-detail-main-txt')
+      gsap.set(title, { autoAlpha: 0, yPercent: 60 })
+      gsap.set('.job-detail-btn', { autoAlpha: 0, y: 20 })
+      gsap.set('.job-detail-main-inner-ic', { autoAlpha: 0 })
+      let tlFade = new gsap.timeline({
+        scrollTrigger: {
+          trigger: '.job-detail-main',
+          start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+          once: true,
+        },
+      })
+      tlFade
+        .to(title, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to('.job-detail-main-inner-ic', { autoAlpha: 1, duration: .6, yPercent: 0, stagger: .02 })
+        .to('.job-detail-btn', { autoAlpha: 1, y: 0, duration: .6 }, '<=0')
+      $('.job-detail-list').each((idx, item) => {
+        let tlFadeList = new gsap.timeline({
+          scrollTrigger: {
+            trigger: item,
+            start: viewport.w > 767 ? "top top+=65%" : "top top+=45%",
+            once: true,
           },
-          })
-          
-          $(item).find('.job-detail-item').each((idx, itemInner) => {
-            let titleItem = new SplitType($(itemInner).find('.job-detail-item-title'), { types: 'lines words', lineClass: 'kv-line' });
-            let subItem = new SplitType($(itemInner).find('.job-detail-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
-            gsap.set(titleItem.words, {autoAlpha: 0, yPercent: 60});
-            gsap.set(subItem.words, {autoAlpha: 0, yPercent: 80});
-            gsap.set($(itemInner).find('.job-detail-item-ic'), {autoAlpha: 0, y: 20})
-            tlFadeList
-               .to($(itemInner).find('.job-detail-item-ic'), {autoAlpha: 1, y: 0, duration: .6},'<=.2')
-              .to(titleItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6},'<=0')
-              .to(subItem.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6}, '<=.3')
-      
-          })
-    })
+        })
+
+        $(item).find('.job-detail-item').each((idx, itemInner) => {
+          let titleItem = new SplitType($(itemInner).find('.job-detail-item-title'), { types: 'lines words', lineClass: 'kv-line' });
+          let subItem = new SplitType($(itemInner).find('.job-detail-item-sub'), { types: 'lines words', lineClass: 'kv-line' });
+          gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 });
+          gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 });
+          gsap.set($(itemInner).find('.job-detail-item-ic'), { autoAlpha: 0, y: 20 })
+          tlFadeList
+            .to($(itemInner).find('.job-detail-item-ic'), { autoAlpha: 1, y: 0, duration: .6 }, '<=.2')
+            .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=0')
+            .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.3')
+
+        })
+      })
+    }
   }
-}
-let jobDetail = new JobDetail();
-let jobPrice = new JobPrice();
-class LandingpageHero{
-  constructor(){
-    this.tlFade;
+  let jobDetail = new JobDetail();
+  let jobPrice = new JobPrice();
+  class LandingpageHero {
+    constructor() {
+      this.tlFade;
+    }
+    setup() {
+      $('.ld-form-success-close').on('click', function () {
+        $('.ld-form-success').hide();
+        $('.ld-form-content').show();
+      })
+      this.tlFade = new gsap.timeline({
+        paused: true,
+        scrollTrigger: {
+          once: true,
+        },
+      })
+      let title = new SplitType('.ld-from-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      let sub = new SplitType('.ld-form-sub', { types: 'lines words', lineClass: 'kv-line ' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 });
+      gsap.set('.ld-form-main', { autoAlpha: 0, y: 30 });
+      this.tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
+        .to('.ld-form-main', { autoAlpha: 1, y: 0, duration: .6 }, '<=.3')
+    }
+    play() {
+      this.tlFade.play();
+    }
   }
-  setup(){
-    $('.ld-form-success-close').on('click', function(){
-      $('.ld-form-success').hide();
-      $('.ld-form-content').show();
-    })
-    this.tlFade = new gsap.timeline({
-      paused: true,
-      scrollTrigger: {
-        once: true,
-      },
-    })
-    let title = new SplitType('.ld-from-title', {types: 'lines words', lineClass: 'kv-line heading-line'});
-    let sub = new SplitType('.ld-form-sub', {types: 'lines words', lineClass: 'kv-line '});
-    gsap.set(title.words, {autoAlpha: 0, yPercent: 60});
-    gsap.set(sub.words, {autoAlpha: 0, yPercent: 80});
-    gsap.set('.ld-form-main', {autoAlpha: 0, y: 30});
-    this.tlFade
-         .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-         .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.2')
-         .to('.ld-form-main', {autoAlpha: 1, y:0, duration: .6}, '<=.3')
-  }
-  play(){
-    this.tlFade.play();
-  }
-}
-let landingpageHero = new LandingpageHero();
-// class LandingpageForm {
-//   constructor() {
-//     this.tlTrigger;
-//   }
-//   setTrigger (){
-//     this.tlTrigger = new gsap.timeline({
-//       scrollTrigger : {
-//         trigger : '.ld-form',
-//         start: "top bottom+=100%",
-//         end: "bottom+=50% top",
-//         once: true,
-//         onEnter: () => {
-//           this.setup();
-//         }
-//       }
-//     })
-//   }
-//   setup () {
-//     let title = new SplitType('.ld-from-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-//     let sub = new SplitType('.ld-from-sub', { types: 'lines words', lineClass: 'kv-line' });
-//     gsap.set(title.words, {autoAlpha: 0, yPercent: 60, })
-//     gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
-//     gsap.set('.ld-from-sub-inner', {autoAlpha: 0});
-//     gsap.set('.ld-from-sub-ic', {autoAlpha: 0, y: 20});
-//     let tlFade = new gsap.timeline({
-//       scrollTrigger: {
-//         trigger: '.ld-form-title-wrap',
-//         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
-//         once: true
-//       }
-//     })
-//     tlFade
-//     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-//     .to('.ld-from-sub-inner', {autoAlpha: 1, duration: .6, clearProps: 'all'}, '<=.2')
-//     .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.3')
-//     .to('.ld-from-sub-ic', {autoAlpha: 1, y: 0, duration: .6}, '>=-.2')
-//     let tlFadeForm = new gsap.timeline({
-//       scrollTrigger: {
-//         trigger: '.ld-form-main',
-//         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
-//         once: true
-//       }
-//     })
-//     gsap.set('.ld-form-inner', {autoAlpha: 0, y: 30})
-//     let borderRadius = $('.ld-form-img').css('border-radius');
-//     gsap.set('.ld-form-img', {autoAlpha: 0, clipPath: `inset(0% 0% 100% 100% round ${borderRadius})`})
-//     tlFadeForm
-//     .to('.ld-form-inner', {autoAlpha: 1, y: 0, duration: .6})
-//     .to('.ld-form-img', {autoAlpha: 1, clipPath: `inset(0% 0% 0% 0% round ${borderRadius})`, duration: 1.2, clearProps: 'all'}, '<=.2')
-//     let tlFadeFouder = new gsap.timeline({
-//       scrollTrigger: {
-//         trigger: '.ld-form-fouder',
-//         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=55%',
-//         once: true
-//       }
-//     })
-//     let titleFouder = new SplitType('.ld-form-fouder-sub', { types: 'lines words', lineClass: 'kv-line heading-line' });
-//     gsap.set(titleFouder.words, {autoAlpha: 0, yPercent: 80})
-//     tlFadeFouder
-//             .to(titleFouder.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
-//     let mainItems = $('.about-founder-main-item');
-//     mainItems.each((idx, item) => {
-//       let titleItem = new SplitType($(item).find('.about-founder-main-item-name'), { types: 'lines words', lineClass: 'kv-line' })
-//       let subItem = new SplitType($(item).find('.about-founder-main-item-sub'), { types: 'lines words', lineClass: 'kv-line' })
-//       let decItem = new SplitType($(item).find('.about-founder-main-item-ul li'), { types: 'lines words', lineClass: 'kv-line' })
-//       let tlFadeItem = new gsap.timeline({
-//         scrollTrigger: {
-//           trigger: item,
-//           start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
-//           once: true,
-//         }
-//       })
-//       gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 })
-//       gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 })
-//       gsap.set($(item).find('.about-founder-main-item-img'), { autoAlpha: 0, clipPath: ' inset(0 0 100% 100%)' })
-//       gsap.set($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 0, yPercent: 80 })
-//       gsap.set(decItem.words, { autoAlpha: 0, yPercent: 80 })
-//       tlFadeItem
-//         .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, clipPath: 'inset(0 0 0% 0%)', duration: 1.2 , clearProps: 'all'}, `${idx * .2}`)
-//         .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 },)
-//         .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .5 }, '<=.2')
-//         .to($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 1, yPercent: 0, stagger: .05, duration: .5 }, '<=.2')
-//         .to(decItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3 }, '<=.3')
-//     })
-//   }
-// }
-// let landingpageForm = new LandingpageForm();
+  let landingpageHero = new LandingpageHero();
+  // class LandingpageForm {
+  //   constructor() {
+  //     this.tlTrigger;
+  //   }
+  //   setTrigger (){
+  //     this.tlTrigger = new gsap.timeline({
+  //       scrollTrigger : {
+  //         trigger : '.ld-form',
+  //         start: "top bottom+=100%",
+  //         end: "bottom+=50% top",
+  //         once: true,
+  //         onEnter: () => {
+  //           this.setup();
+  //         }
+  //       }
+  //     })
+  //   }
+  //   setup () {
+  //     let title = new SplitType('.ld-from-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+  //     let sub = new SplitType('.ld-from-sub', { types: 'lines words', lineClass: 'kv-line' });
+  //     gsap.set(title.words, {autoAlpha: 0, yPercent: 60, })
+  //     gsap.set(sub.words, {autoAlpha: 0, yPercent: 80})
+  //     gsap.set('.ld-from-sub-inner', {autoAlpha: 0});
+  //     gsap.set('.ld-from-sub-ic', {autoAlpha: 0, y: 20});
+  //     let tlFade = new gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: '.ld-form-title-wrap',
+  //         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
+  //         once: true
+  //       }
+  //     })
+  //     tlFade
+  //     .to(title.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+  //     .to('.ld-from-sub-inner', {autoAlpha: 1, duration: .6, clearProps: 'all'}, '<=.2')
+  //     .to(sub.words, {autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4}, '<=.3')
+  //     .to('.ld-from-sub-ic', {autoAlpha: 1, y: 0, duration: .6}, '>=-.2')
+  //     let tlFadeForm = new gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: '.ld-form-main',
+  //         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=45%',
+  //         once: true
+  //       }
+  //     })
+  //     gsap.set('.ld-form-inner', {autoAlpha: 0, y: 30})
+  //     let borderRadius = $('.ld-form-img').css('border-radius');
+  //     gsap.set('.ld-form-img', {autoAlpha: 0, clipPath: `inset(0% 0% 100% 100% round ${borderRadius})`})
+  //     tlFadeForm
+  //     .to('.ld-form-inner', {autoAlpha: 1, y: 0, duration: .6})
+  //     .to('.ld-form-img', {autoAlpha: 1, clipPath: `inset(0% 0% 0% 0% round ${borderRadius})`, duration: 1.2, clearProps: 'all'}, '<=.2')
+  //     let tlFadeFouder = new gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: '.ld-form-fouder',
+  //         start: viewport.w > 767 ? 'top top+=65%' : 'top top+=55%',
+  //         once: true
+  //       }
+  //     })
+  //     let titleFouder = new SplitType('.ld-form-fouder-sub', { types: 'lines words', lineClass: 'kv-line heading-line' });
+  //     gsap.set(titleFouder.words, {autoAlpha: 0, yPercent: 80})
+  //     tlFadeFouder
+  //             .to(titleFouder.words, {autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6})
+  //     let mainItems = $('.about-founder-main-item');
+  //     mainItems.each((idx, item) => {
+  //       let titleItem = new SplitType($(item).find('.about-founder-main-item-name'), { types: 'lines words', lineClass: 'kv-line' })
+  //       let subItem = new SplitType($(item).find('.about-founder-main-item-sub'), { types: 'lines words', lineClass: 'kv-line' })
+  //       let decItem = new SplitType($(item).find('.about-founder-main-item-ul li'), { types: 'lines words', lineClass: 'kv-line' })
+  //       let tlFadeItem = new gsap.timeline({
+  //         scrollTrigger: {
+  //           trigger: item,
+  //           start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
+  //           once: true,
+  //         }
+  //       })
+  //       gsap.set(titleItem.words, { autoAlpha: 0, yPercent: 60 })
+  //       gsap.set(subItem.words, { autoAlpha: 0, yPercent: 80 })
+  //       gsap.set($(item).find('.about-founder-main-item-img'), { autoAlpha: 0, clipPath: ' inset(0 0 100% 100%)' })
+  //       gsap.set($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 0, yPercent: 80 })
+  //       gsap.set(decItem.words, { autoAlpha: 0, yPercent: 80 })
+  //       tlFadeItem
+  //         .to($(item).find('.about-founder-main-item-img'), { autoAlpha: 1, clipPath: 'inset(0 0 0% 0%)', duration: 1.2 , clearProps: 'all'}, `${idx * .2}`)
+  //         .to(titleItem.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 },)
+  //         .to(subItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .5 }, '<=.2')
+  //         .to($(item).find('.about-founder-main-item-social-inner'), { autoAlpha: 1, yPercent: 0, stagger: .05, duration: .5 }, '<=.2')
+  //         .to(decItem.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .3 }, '<=.3')
+  //     })
+  //   }
+  // }
+  // let landingpageForm = new LandingpageForm();
   let cta = new CTA()
   const SCRIPTS = {
     home: {
@@ -3837,10 +3874,10 @@ let landingpageHero = new LandingpageHero();
       afterEnter() {
         console.log('contact afterEnter');
         contactHero.setup();
-        if(viewport.w > 767){
+        if (viewport.w > 767) {
           contactPromo.setTrigger();
         }
-        else{
+        else {
           contactPromo.setup();
         }
         // cta.setup();
@@ -3854,23 +3891,23 @@ let landingpageHero = new LandingpageHero();
       namespace: 'resource',
       afterEnter() {
         console.log('resource afterEnter');
-        if(viewport.w > 991){
+        if (viewport.w > 991) {
           resourceHero.setup();
-        resourceCalendar.setup();
-        resourceForm.setup();
-        resourceLetter.setTrigger();
-        resourceBlog.setup();
-        resourceJob.setTrigger();
-        resourceCta.setTrigger();
+          resourceCalendar.setup();
+          resourceForm.setup();
+          resourceLetter.setTrigger();
+          resourceBlog.setup();
+          resourceJob.setTrigger();
+          resourceCta.setTrigger();
         }
-        else{
+        else {
           resourceHero.setup();
-        resourceCalendar.setup();
-        resourceForm.setup();
-        resourceLetter.setup();
-        resourceBlog.setup();
-        resourceJob.setup();
-        resourceCta.setup();
+          resourceCalendar.setup();
+          resourceForm.setup();
+          resourceLetter.setup();
+          resourceBlog.setup();
+          resourceJob.setup();
+          resourceCta.setup();
         }
       },
       beforeLeave() {
@@ -3913,7 +3950,7 @@ let landingpageHero = new LandingpageHero();
         blogContent.setup();
         resourceForm.setup();
         blogHero.setup();
-        },
+      },
       beforeLeave() {
         console.log('blog clean')
       }
@@ -3921,7 +3958,7 @@ let landingpageHero = new LandingpageHero();
     course: {
       namespace: 'course',
       afterEnter() {
-        if(viewport.w > 767){
+        if (viewport.w > 767) {
           courseFaq.setup();
           courseFouder.setTrigger();
           courseProcess.setTrigger();
@@ -3940,7 +3977,7 @@ let landingpageHero = new LandingpageHero();
           courseTime.setup();
         }
         courseHero.setup();
-        },
+      },
       beforeLeave() {
       }
     },
@@ -3949,7 +3986,7 @@ let landingpageHero = new LandingpageHero();
       afterEnter() {
         console.log('jouCourse afterEnter');
         jobHero.setup();
-        if( viewport.w > 991){
+        if (viewport.w > 991) {
           courseFaq.setTrigger();
           jobReason.setTrigger();
           jobWhy.setTrigger();
@@ -3962,7 +3999,7 @@ let landingpageHero = new LandingpageHero();
           jobStep.setTrigger();
           jobCta.setTrigger();
         }
-        else{
+        else {
           courseFaq.setup();
           jobReason.setup();
           jobWhy.setup();
@@ -3977,14 +4014,14 @@ let landingpageHero = new LandingpageHero();
         }
       }
     },
-    landingPage : {
+    landingPage: {
       namespace: 'landingpage',
       afterEnter() {
         landingpageHero.setup();
-        if(viewport.w > 767){
+        if (viewport.w > 767) {
           // landingpageForm.setTrigger();
         }
-        else{
+        else {
           // landingpageForm.setup();
         }
       }
@@ -4029,7 +4066,7 @@ let landingpageHero = new LandingpageHero();
         //   console.log('before enter contact')
         //   location.reload();
         // }
-          loading.init();
+        loading.init();
         // footer.setTrigger();
       },
     }],
