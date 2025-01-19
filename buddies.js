@@ -2157,7 +2157,7 @@ const mainScript = () => {
         gsap.set('.rs-newletter-item', { autoAlpha: 0, x: -30 });
       }
       else {
-        gsap.set('.rs-newletter-item', { autoAlpha: 0, y: -30 });
+        gsap.set('.rs-newletter-item', { autoAlpha: 0, y: 30 });
         $('.rs-newletter-cms').addClass('swiper');
         $('.rs-newletter-list').addClass('swiper-wrapper');
         $('.rs-newletter-item').addClass('swiper-slide');
@@ -2184,7 +2184,7 @@ const mainScript = () => {
       }
       else {
         tlFade
-          .to('.rs-newletter-item', { autoAlpha: 1, y: 0, duration: .8, clearProps: 'all', stagger: .1 }, '<=.4');
+          .to('.rs-newletter-item', { autoAlpha: 1, y: 0, duration: .8, stagger: .1 }, '<=.4');
       }
     }
   }
@@ -2214,7 +2214,7 @@ const mainScript = () => {
       let tlFade = new gsap.timeline({
         scrollTrigger: {
           trigger: '.rs-job-title',
-          start: $(window).width() > 767 ? "top top+=65%" : "top top+=45%",
+          start: $(window).width() > 767 ? "top top+=65%" : "top top+=55%",
           once: true,
         }
       })
