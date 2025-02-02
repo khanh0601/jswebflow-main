@@ -4054,13 +4054,14 @@ const mainScript = () => {
       beforeEnter(data) {
         removeAllScrollTrigger();
         lenis.start();
+        resetScroll();
+        globalScript();
       },
       enter(data) {
         reinitializeWebflow();
       },
       afterEnter(data) {
-        resetScroll();
-        globalScript();
+        
         console.log(data.next.namespace)
         // if(data.next.namespace == 'contact' || data.next.namespace == 'resource' || data.next.namespace == 'blog'){
         //   console.log('before enter contact')
