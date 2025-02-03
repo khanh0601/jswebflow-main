@@ -90,8 +90,28 @@ const mainScript = () => {
 
     // $(innerClass).addClass('anim');
   }
+  function loadRecaptcha() {
+    if (!document.querySelector(".g-recaptcha")) return; // Nếu không có reCAPTCHA thì thoát
+  
+    let oldScript = document.querySelector("script[src*='recaptcha/api.js']");
+    if (oldScript) oldScript.remove(); // Xóa script cũ nếu có
+  
+    let script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js";
+    script.async = true;
+    script.defer = true;
+    script.onload = function () {
+      console.log("reCAPTCHA loaded!");
+    };
+    document.body.appendChild(script);
+  }
   function reinitializeWebflow() {
     console.log('reinitialize webflow');
+    console.log( grecaptcha);
+    if($('.recapcha-cus').length > 0) {
+      // grecaptcha.reset();
+      setTimeout(loadRecaptcha, 500);
+    }
     window.Webflow && window.Webflow.destroy();
     window.Webflow && window.Webflow.ready();
   }
@@ -4058,17 +4078,12 @@ const mainScript = () => {
         globalScript();
       },
       enter(data) {
-        reinitializeWebflow();
       },
       afterEnter(data) {
-        
         console.log(data.next.namespace)
-        // if(data.next.namespace == 'contact' || data.next.namespace == 'resource' || data.next.namespace == 'blog'){
-        //   console.log('before enter contact')
-        //   location.reload();
-        // }
+        reinitializeWebflow();
         loading.init();
-        // footer.setTrigger();
+
       },
     }],
     views: VIEWS
