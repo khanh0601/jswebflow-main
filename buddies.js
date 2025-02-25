@@ -346,6 +346,10 @@ const mainScript = () => {
       else if ($('[data-barba-namespace="landingpage"]').length) {
         landingpageHero.play()
       }
+      else if ($('[data-barba-namespace="contact-new"]').length) {
+        contactHeroNew.play();
+        contactPromo.play();
+      }
     }
   }
   let loading = new Loading()
@@ -1088,6 +1092,245 @@ const mainScript = () => {
     }
   }
   let contactHero = new ContactHero();
+  class ContactHeroNew {
+    constructor() {
+      this.tlFade;
+      this.Promotion = [];
+      this.persentPrice = 0;
+      this.persentName = 'No Promotion';
+    }
+    setup() {
+      let initCourse = $('.contact-form-tranfer-origin').eq(0).clone();
+      $('.contact-form-submit').on('click', function (e) {
+
+        if ($('.course-price:checked').length === 0) {
+          e.preventDefault();
+          alert('Vui lòng chọn khóa học')
+        }
+        else {
+          // $('.form-validation-txt').fadeOut();
+          let form = $('.contact-form-inner form')[0];
+
+          if (!form.checkValidity()) {
+            e.preventDefault();
+            form.reportValidity();
+          }
+        }
+      })
+      var urlParams = new URLSearchParams(window.location.search);
+      var courseValue = urlParams.get('sc');
+      if (courseValue) {
+        $('input[course-name="' + courseValue + '"]').prop('checked', true);
+        let price = $('input[course-name="' + courseValue + '"]').attr('price');
+        let name = $('input[course-name="' + courseValue + '"]').attr('data-name');
+        let itemCourse = $(initCourse).clone();
+        $(itemCourse).find('.contact-form-tranfer-origin-title').text(name);
+        $(itemCourse).find('.origin-number').text(price);
+        $('.contact-form-tranfer-origin-inner').html('')
+        $('.contact-form-tranfer-origin-inner').append(itemCourse);
+        $('.final-number').text(price);
+        $('.money-number').text(price);
+      }
+      $('.contact-promo-item-title-ic').on('click', function () {
+
+        var textToCopy = $(this).parent().find('.contact-promo-item-title').text();
+        console.log('textToCopy', $(this).parent().find('.dowload_hash'))
+        let item = $(this).parent();
+        var tempInput = $('<input>');
+        $('body').append(tempInput);
+        tempInput.val(textToCopy).select();
+        document.execCommand('copy');
+        tempInput.remove();
+        item.find('.tooltip').text('Copied!')
+
+        setTimeout(function () {
+          item.find('.tooltip').text('Copy')
+        }, 2000)
+      });
+      $('.contact-promo-item-promotion').each((idx, item) => {
+        let promo = $(item).attr('data-promotion-price');
+        let name = $(item).closest('.contact-promo-item').find('.contact-promo-item-title').attr('data-promotion-code').toUpperCase();
+        this.Promotion.push({
+          promo: promo,
+          name: name
+        });
+      })
+      console.log(this.Promotion);
+      const title = new SplitType('.contact-hero-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      const sub = new SplitType('.contact-hero-sub', { types: 'lines words', lineClass: 'kv-line ' });
+      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 })
+      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 })
+      gsap.set('.contact-form', { autoAlpha: 0, y: 100 })
+      this.tlFade = new gsap.timeline({
+        paused: true,
+        onComplete: () => {
+        }
+      })
+      this.tlFade
+        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
+        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 }, '<=.2')
+        .to('.contact-form', { autoAlpha: 1, y: 0, duration: 1, clearProps: 'all' }, '<=.3')
+      $('.form-contact-input-promo-submit').on('click', () => {
+        let code = $('.input-code').val().toUpperCase();
+        console.log(this.Promotion)
+
+        let foundItem = this.Promotion.find(item => item.name === code)
+        if (foundItem) {
+          $('.form-contact-input-promo-submit-txt').text('Đã dùng code');
+          setTimeout(() => { $('.form-contact-input-promo-submit-txt').text('Dùng code') }, 3000)
+          $('.contact-form-tranfer-origin-pro-wrap').fadeIn(1000)
+          setTimeout(() => {
+            $('.input-code').val('')
+          }, 1000);
+          this.persentPrice = parseInt(foundItem.promo);
+          this.persentName = parseInt(foundItem.name);
+          $('.contact-form-tranfer-promo-title').text(`${foundItem.name}  ${foundItem.promo}%`);
+          $('.ma-giam-gia').val(`${foundItem.name}  ${foundItem.promo}%`);
+          console.log($('.final-number').text())
+
+          $('.promotion-number').text(parseInt($('.final-number').eq(0).text()) * foundItem.promo / 100);
+          $('.final-number').text(parseInt($('.final-number').eq(0).text()) - parseInt($('.final-number').eq(0).text()) * this.persentPrice / 100);
+          $('.final-price').val(parseInt($('.final-number').eq(0).text()))
+          $('.money-number').text($('.final-number').eq(0).text())
+        }
+        else {
+          alert('Invalid promo code')
+        }
+        console.log(code)
+      })
+      $('.course-price').on('change', () => {
+        let checkedCount = $('.course-price:not(.course-checkbox-full):checked').length;
+        if ($('.course-checkbox-full:checked').length > 0) {
+          $('.course-price:not(.course-checkbox-full)').prop('checked', false)
+        }
+        console.log(checkedCount)
+        let price = 0;
+        let name = ''
+        // let itemCourse = $('.contact-form-tranfer-origin').clone();
+        if (checkedCount > 0) {
+          $('.form-validation-txt').fadeOut();
+          if (this.persentPrice > 0) {
+            $('.contact-form-tranfer-origin-pro-wrap').fadeIn(500)
+          }
+          $('.contact-form-tranfer-origin-inner').html('');
+          $('.course-price:checked').each((idx, item) => {
+            let priceItem = $(item).attr('price');
+            price = price + parseInt(priceItem);
+            let name = $(item).attr('data-name');
+            let itemCourse = $(initCourse).clone();
+            console.log($(itemCourse))
+            $(itemCourse).find('.contact-form-tranfer-origin-title').text(name);
+            $(itemCourse).find('.origin-number').text(priceItem);
+            $('.contact-form-tranfer-origin-inner').append(itemCourse);
+          })
+        }
+        else {
+          $('.contact-form-tranfer-origin-pro-wrap').fadeOut(200)
+          $('.contact-form-tranfer-origin-inner').html('');
+          price = 0;
+          let itemCourse = $(initCourse).clone();
+          console.log($(itemCourse))
+          $(itemCourse).find('.contact-form-tranfer-origin-title').text('Chưa chọn khóa học');
+          $(itemCourse).find('.origin-number').text(0);
+          $('.contact-form-tranfer-origin-inner').append(itemCourse);
+        }
+        $('.money-number').text(price - price * this.persentPrice / 100);
+        // $('.origin-number').text(price);
+        $('.final-number').text(price - price * this.persentPrice / 100);
+        console.log(price - price * this.persentPrice / 100);
+        console.log(this.persentPrice);
+        $('.final-price').val(price - price * this.persentPrice / 100)
+
+        $('.promotion-number').text(price * this.persentPrice / 100);
+        if (checkedCount === 3) {
+          $('.course-notification-wrap').addClass('active');
+        }
+        else {
+          $('.course-notification-wrap').removeClass('active');
+        }
+      })
+      $('.course-checkbox').on('change', function (e) {
+        let checkedCount = $('.course-checkbox:checked').length;
+        if (checkedCount === 3) {
+          $('.course-notification-wrap').addClass('active');
+        }
+      })
+      $('.course-notification-ic-close').on('click', function () {
+        $('.course-notification-wrap').removeClass('active');
+      })
+      let requetId;
+      function checkSuccess() {
+        if ($('.contact-form-main-inner').css('display') === 'none') {
+          $('.form-contact-success').addClass('active');
+
+        } else {
+          // console.log("Phần tử đang hiển thị.");
+        }
+        requetId = requestAnimationFrame(checkSuccess)
+      }
+      requestAnimationFrame(checkSuccess);
+      $('.form-success-close').on('click', function () {
+        location.reload();
+      })
+      $('.course-checkbox-full').on('change', (e) => {
+        if ($(e.currentTarget).is(':checked')) {
+          $('.form-validation-txt').fadeOut();
+          $('.course-notification-wrap').removeClass('active');
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('checked', false);
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', true);
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.contact-form-register-course-item').addClass('disable');
+          $('.form-contact-success-title-one').hide();
+          $('.form-contact-success-title-full').show();
+          $('.contact-form-tranfer-origin-title').text($(e.currentTarget).attr('data-name'));
+          $('.origin-number').text($(e.currentTarget).attr('price'));
+          let price = parseInt($(e.currentTarget).attr('price'));
+          console.log(price);
+          $('.money-number').text(price - price * this.persentPrice / 100);
+          $('.final-number').text(price - price * this.persentPrice / 100);
+          $('.final-price').val(price - price * this.persentPrice / 100)
+
+          $('.promotion-number').text(price * this.persentPrice / 100);
+        }
+        else {
+          $('.contact-form-tranfer-origin-title').text('Chưa chọn khóa học');
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.course-checkbox').prop('disabled', false);
+          $(e.currentTarget).closest('.contact-form-main-inner').find('.contact-form-register-course-item').removeClass('disable');
+          $('.form-contact-success-title-full').hide();
+          $('.form-contact-success-title-show').show()
+        }
+      })
+      let animSuccess = new gsap.timeline({
+        repeat: -1,
+      })
+      animSuccess
+        .fromTo('.ic-eye2', { autoAlpha: 1 }, { autoAlpha: 1, duration: .8 })
+        .fromTo('.ic-eye', { autoAlpha: 1 }, { autoAlpha: 1, duration: .8 }, "<=0")
+        .fromTo('.ic-mouse', { 'strokeDasharray': '0px 60px' }, { 'strokeDasharray': '60px 60px', duration: 1, ease: 'power1.out' }, '<=.2')
+        .fromTo('.ic-eye2', { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, '<=.8')
+        .fromTo('.ic-eye', { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, '<=.2')
+      // $('.form-contact-success-ic').each((idx, item) => {
+      //   let tlIc = gsap.timeline({
+      //     repeat: -1,
+      //   });
+      //   tlIc.fromTo(
+      //     item,
+      //     { rotation: 0 },
+      //     { rotation: 720, duration: 2, ease: 'power2.out' }
+      //   );
+      //   tlIc.fromTo(
+      //     item,
+      //     { rotation: 720 },
+      //     { rotation: 0, duration: 2, ease: 'power2.out' }
+      //   );
+      // });
+
+    }
+    play() {
+      console.log('contact play')
+      this.tlFade.play()
+    }
+  }
+  let contactHeroNew = new ContactHeroNew();
   class ContactPromo {
     constructor() {
       this.tlTrigger,
@@ -1133,6 +1376,7 @@ const mainScript = () => {
     }
   }
   let contactPromo = new ContactPromo();
+
   class AboutHero {
     constructor() {
       this.tlFade;
@@ -2059,11 +2303,16 @@ const mainScript = () => {
       }
       if (viewport.w > 767) {
         $('.rs-blog-pag-cus').on('click', '.rs-blog-pag-item', function () {
+          $('html, body').animate({
+            scrollTop: $(".rs-blog-title").offset().top
+        }, 1000);
+
           const page = $(this).data('page');
           showPage(page);
         });
         showPage(1);
       }
+      console.log('khanh12443')
       $('.rs-blog-cate-item').on('click', function () {
         $('.rs-blog-cate-item').removeClass('active');
         $(this).addClass('active');
@@ -2081,6 +2330,7 @@ const mainScript = () => {
           else {
             $('.rs-blog-pag-cus').fadeOut(500);
             activeItem(category);
+            $('.rs-blog-item').removeClass('child11');
             $('.rs-blog-item.active').eq(0).addClass('child11');
           }
         }
@@ -3894,6 +4144,24 @@ const mainScript = () => {
       afterEnter() {
         console.log('contact afterEnter');
         contactHero.setup();
+        if (viewport.w > 767) {
+          contactPromo.setTrigger();
+        }
+        else {
+          contactPromo.setup();
+        }
+        // cta.setup();
+
+      },
+      beforeLeave() {
+        console.log('contact clean')
+      }
+    },
+    contactnew: {
+      namespace: 'contact-new',
+      afterEnter() {
+        
+        contactHeroNew.setup();
         if (viewport.w > 767) {
           contactPromo.setTrigger();
         }
