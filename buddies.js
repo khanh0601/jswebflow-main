@@ -343,9 +343,9 @@ const mainScript = () => {
       else if ($('[data-barba-namespace="job-couching"]').length) {
         jobHero.play()
       }
-      else if ($('[data-barba-namespace="landingpage"]').length) {
-        landingpageHero.play()
-      }
+      // else if ($('[data-barba-namespace="landingpage"]').length) {
+      //   landingpageHero.play()
+      // }
       else if ($('[data-barba-namespace="contact-new"]').length) {
         contactHeroNew.play();
         contactPromo.play();
@@ -3996,29 +3996,33 @@ const mainScript = () => {
       this.tlFade;
     }
     setup() {
+      const video = $('.ld-video-item')[0];
+    const source = $(video).find('source');
+    source.attr('src', source.attr('data-src'));
+    video.load(); 
       $('.ld-form-success-close').on('click', function () {
         $('.ld-form-success').hide();
         $('.ld-form-content').show();
       })
-      this.tlFade = new gsap.timeline({
-        paused: true,
-        scrollTrigger: {
-          once: true,
-        },
-      })
-      let title = new SplitType('.ld-from-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
-      let sub = new SplitType('.ld-form-sub', { types: 'lines words', lineClass: 'kv-line ' });
-      gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
-      gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 });
-      gsap.set('.ld-form-main', { autoAlpha: 0, y: 30 });
-      this.tlFade
-        .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .02, duration: .6 })
-        .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 }, '<=.2')
-        .to('.ld-form-main', { autoAlpha: 1, y: 0, duration: .6 }, '<=.3')
+      // this.tlFade = new gsap.timeline({
+      //   paused: true,
+      //   scrollTrigger: {
+      //     once: true,
+      //   },
+      // })
+      // let title = new SplitType('.ld-from-title', { types: 'lines words', lineClass: 'kv-line heading-line' });
+      // let sub = new SplitType('.ld-form-sub', { types: 'lines words', lineClass: 'kv-line ' });
+      // gsap.set(title.words, { autoAlpha: 0, yPercent: 60 });
+      // gsap.set(sub.words, { autoAlpha: 0, yPercent: 80 });
+      // gsap.set('.ld-form-main', { autoAlpha: 0, y: 30 });
+      // this.tlFade
+      //   .to(title.words, { autoAlpha: 1, yPercent: 0, stagger: .015, duration: .4 })
+      //   .to(sub.words, { autoAlpha: 1, yPercent: 0, stagger: .01, duration: .4 }, '<=.2')
+      //   .to('.ld-form-main', { autoAlpha: 1, y: 0, duration: .6 }, '<=.4')
     }
-    play() {
-      this.tlFade.play();
-    }
+    // play() {
+    //   this.tlFade.play();
+    // }
   }
   let landingpageHero = new LandingpageHero();
   // class LandingpageForm {
